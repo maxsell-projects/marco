@@ -2,7 +2,6 @@
 
 @section('content')
 
-{{-- Header com Imagem de Impacto (Costa Portuguesa) --}}
 <section class="relative h-[50vh] min-h-[400px] flex items-end justify-start bg-fixed bg-cover bg-center" 
          style="background-image: url('https://images.unsplash.com/photo-1555881400-74d7acaacd81?q=80&w=2070&auto=format&fit=crop');">
     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30"></div>
@@ -24,7 +23,6 @@
     <div class="container mx-auto px-6 md:px-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
             
-            {{-- Coluna de Conteúdo --}}
             <div class="lg:col-span-8" data-aos="fade-up">
                 <div class="prose prose-lg prose-headings:font-serif prose-headings:text-brand-black prose-p:text-gray-600 prose-p:font-light prose-p:leading-relaxed prose-a:text-brand-gold max-w-none">
                     
@@ -100,18 +98,16 @@
                 </div>
             </div>
 
-            {{-- Sidebar Sticky --}}
             <div class="lg:col-span-4 space-y-12">
                 <div class="bg-gray-50 p-8 border border-gray-100 sticky top-32">
                     <h3 class="text-xl font-serif text-brand-black mb-8 pb-4 border-b border-gray-200">Mais do nosso Blog</h3>
                     
                     <div class="space-y-8">
                         
-                        {{-- Link para o Artigo 1 --}}
                         <a href="{{ route('blog.show') }}" class="group block">
                             <div class="flex gap-4">
                                 <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">
-                                    <img src="{{ asset('img/DiogoMaia2.jpeg') }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                    <img src="{{ asset('img/DiogoMaia2.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                 </div>
                                 <div>
                                     <span class="text-[9px] uppercase tracking-widest text-brand-gold mb-1 block">Tendências</span>
@@ -122,7 +118,6 @@
                             </div>
                         </a>
 
-                        {{-- Link para o Artigo 2 --}}
                         <a href="{{ route('blog.show-intelligence') }}" class="group block">
                             <div class="flex gap-4">
                                 <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">

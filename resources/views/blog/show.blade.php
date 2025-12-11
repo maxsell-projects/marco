@@ -3,7 +3,7 @@
 @section('content')
 
 <section class="relative h-[50vh] min-h-[400px] flex items-end justify-start bg-fixed bg-cover bg-center" 
-         style="background-image: url('{{ asset('img/DiogoMaia2.jpeg') }}');">
+         style="background-image: url('{{ asset('img/DiogoMaia2.jpg') }}');">
     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30"></div>
     
     <div class="relative z-10 container mx-auto px-6 pb-16" data-aos="fade-up">
@@ -99,10 +99,10 @@
                     
                     <div class="space-y-8">
                         
-                        <a href="#" class="group block">
+                        <a href="{{ route('blog.show-intelligence') }}" class="group block">
                             <div class="flex gap-4">
                                 <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">
-                                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                    <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                 </div>
                                 <div>
                                     <span class="text-[9px] uppercase tracking-widest text-brand-gold mb-1 block">Inteligência</span>
@@ -113,29 +113,15 @@
                             </div>
                         </a>
 
-                        <a href="#" class="group block">
+                        <a href="{{ route('blog.show-locations') }}" class="group block">
                             <div class="flex gap-4">
                                 <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">
-                                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                 </div>
                                 <div>
                                     <span class="text-[9px] uppercase tracking-widest text-brand-gold mb-1 block">Localização</span>
                                     <h4 class="text-sm font-serif text-brand-black leading-snug group-hover:text-brand-gold transition">
                                         Lisboa, Cascais e Algarve: Os Três Eixos de Valor
-                                    </h4>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="group block">
-                            <div class="flex gap-4">
-                                <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">
-                                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                                </div>
-                                <div>
-                                    <span class="text-[9px] uppercase tracking-widest text-brand-gold mb-1 block">Lifestyle</span>
-                                    <h4 class="text-sm font-serif text-brand-black leading-snug group-hover:text-brand-gold transition">
-                                        Arquitetura Sustentável: O Novo Padrão
                                     </h4>
                                 </div>
                             </div>

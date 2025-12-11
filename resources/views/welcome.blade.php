@@ -29,9 +29,11 @@
         <span class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4 block">
             IMÓVEIS DE LUXO | ELEGÂNCIA & EXCLUSIVIDADE
         </span>
+        
         <h2 class="text-2xl md:text-4xl font-serif text-brand-black mb-10 leading-relaxed">
             <span class="font-bold">DIOGO MAIA</span> – O acesso privilegiado aos imóveis mais exclusivos do mercado, para quem procura <span class="italic text-brand-gold">excelência</span>, <span class="italic text-brand-gold">privacidade</span> e <span class="italic text-brand-gold">distinção</span>.
         </h2>
+        
         <div class="w-[1px] h-20 bg-brand-gold mx-auto opacity-50"></div>
     </div>
 </section>
@@ -50,7 +52,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
             @forelse($properties as $index => $property)
-                <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                <a href="{{ route('properties.show', $property) }}" class="group block cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
                     <div class="relative h-[500px] overflow-hidden bg-gray-200 mb-6">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-700 z-10"></div>
                         
@@ -70,7 +72,7 @@
                     <div class="pr-4">
                         <div class="flex items-center gap-3 text-gray-500 text-[10px] uppercase tracking-widest mb-3 border-b border-gray-300 pb-3">
                             <span>{{ $property->location ?? 'Portugal' }}</span>
-                            <span class="ml-auto">{{ $property->area_gross ?? 0 }} m²</span>
+                            <span class="ml-auto">{{ $property->area_gross ? number_format($property->area_gross, 0) . ' m²' : '' }}</span>
                         </div>
                         <h4 class="text-2xl font-serif text-brand-black mb-2 leading-tight group-hover:underline decoration-1 underline-offset-4">
                             {{ $property->title }}
@@ -79,17 +81,16 @@
                             {{ $property->price ? '€ ' . number_format($property->price, 0, ',', '.') : 'Sob Consulta' }}
                         </p>
                     </div>
-                </div>
+                </a>
             @empty
                 <div class="col-span-3 text-center py-20 text-gray-400 font-serif italic">
-                    Nenhum imóvel em destaque no momento.
+                    Acervo em atualização.
                 </div>
             @endforelse
         </div>
     </div>
 </section>
 
-{{-- SEÇÃO DE BLOG MANTIDA COMO VOCÊ PEDIU --}}
 <section class="py-32 bg-white text-brand-black border-t border-gray-100">
     <div class="container mx-auto px-6 md:px-12">
         
@@ -176,7 +177,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Telefone</p>
-                            <p class="text-xl font-serif">+351 912 345 678</p>
+                            <p class="text-xl font-serif">+351 910 739 610</p>
                         </div>
                     </div>
 
@@ -188,7 +189,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Email</p>
-                            <p class="text-xl font-serif">contacto@diogomaia.pt</p>
+                            <p class="text-xl font-serif">dmgmaia@remax.pt</p>
                         </div>
                     </div>
                 </div>

@@ -122,7 +122,6 @@
                     
                     <div class="space-y-8">
                         
-                        {{-- Link para o primeiro artigo que criamos --}}
                         <a href="{{ route('blog.show') }}" class="group block">
                             <div class="flex gap-4">
                                 <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">
@@ -137,7 +136,7 @@
                             </div>
                         </a>
 
-                        <a href="#" class="group block">
+                        <a href="{{ route('blog.show-locations') }}" class="group block">
                             <div class="flex gap-4">
                                 <div class="w-20 h-20 flex-shrink-0 overflow-hidden rounded-sm">
                                     <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">

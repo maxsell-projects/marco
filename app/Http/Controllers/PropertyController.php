@@ -6,6 +6,7 @@ use App\Models\Property;
 use App\Models\PropertyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -80,8 +81,86 @@ class PropertyController extends Controller
         return redirect()->route('admin.properties.index')->with('success', 'Imóvel cadastrado com sucesso!');
     }
 
+    public function edit(Property $property)
+    {
+        return view('admin.properties.edit', compact('property'));
+    }
+
+    public function update(Request $request, Property $property)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'price' => 'nullable|numeric',
+            'type' => 'required|string',
+            'status' => 'required|string',
+            'location' => 'nullable|string',
+            'address' => 'nullable|string',
+            'floor' => 'nullable|string',
+            'orientation' => 'nullable|string',
+            'area_gross' => 'nullable|numeric',
+            'bedrooms' => 'nullable|integer',
+            'bathrooms' => 'nullable|integer',
+            'garages' => 'nullable|integer',
+            'energy_rating' => 'nullable|string',
+            'condition' => 'nullable|string',
+            'video_url' => 'nullable|url',
+            'whatsapp_number' => 'nullable|string',
+            'description' => 'nullable|string',
+            'cover_image' => 'nullable|image|max:2048',
+            'has_pool' => 'nullable',
+            'has_garden' => 'nullable',
+            'has_lift' => 'nullable',
+            'has_terrace' => 'nullable',
+            'has_air_conditioning' => 'nullable',
+            'is_furnished' => 'nullable',
+            'is_kitchen_equipped' => 'nullable',
+        ]);
+
+        if ($property->title !== $data['title']) {
+            $data['slug'] = Str::slug($data['title']) . '-' . time();
+        }
+
+        $features = [
+            'has_pool', 'has_garden', 'has_lift', 'has_terrace', 'has_air_conditioning', 
+            'is_furnished', 'is_kitchen_equipped'
+        ];
+        
+        foreach ($features as $feature) {
+            $data[$feature] = $request->has($feature);
+        }
+
+        if ($request->hasFile('cover_image')) {
+            if ($property->cover_image) {
+                Storage::disk('public')->delete($property->cover_image);
+            }
+            $data['cover_image'] = $request->file('cover_image')->store('properties', 'public');
+        }
+
+        $property->update($data);
+
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $image) {
+                $path = $image->store('properties/gallery', 'public');
+                PropertyImage::create([
+                    'property_id' => $property->id,
+                    'path' => $path
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.properties.index')->with('success', 'Imóvel atualizado com sucesso!');
+    }
+
     public function destroy(Property $property)
     {
+        if ($property->cover_image) {
+            Storage::disk('public')->delete($property->cover_image);
+        }
+        
+        foreach ($property->images as $image) {
+            Storage::disk('public')->delete($image->path);
+        }
+        
         $property->delete();
         return back()->with('success', 'Imóvel removido.');
     }
