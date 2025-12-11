@@ -18,15 +18,15 @@ Route::get('/imoveis', [PropertyController::class, 'publicIndex'])->name('portfo
 Route::get('/imoveis/{property:slug}', [PropertyController::class, 'show'])->name('properties.show');
 
 Route::get('/ferramentas/simulador-credito', function () {
-    return "Simulador de Crédito (Em Breve)";
+    return view('tools.credit');
 })->name('tools.credit');
 
 Route::get('/ferramentas/mais-valias', function () {
-    return "Simulador de Mais Valias (Em Breve)";
+    return view('tools.gains');
 })->name('tools.gains');
 
 Route::get('/ferramentas/imt', function () {
-    return "Simulador de IMT (Em Breve)";
+    return view('tools.imt');
 })->name('tools.imt');
 
 Route::get('/blog', function () {
@@ -45,17 +45,17 @@ Route::get('/blog/lisboa-cascais-algarve-eixos-valor', function () {
     return view('blog.show-locations');
 })->name('blog.show-locations');
 
+// --- ROTA DE CONTATO ATUALIZADA ---
 Route::get('/contato', function () {
-    return "Página de Contato (Em Breve)";
+    return view('contact');
 })->name('contact');
+// ----------------------------------
 
 Route::prefix('admin')->group(function () {
-    
     Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
     Route::middleware('auth')->group(function () {
-        
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
         
         Route::get('/dashboard', function () {

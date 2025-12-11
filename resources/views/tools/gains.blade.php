@@ -17,13 +17,19 @@
          x-data="capitalGainsCalculator()" 
          x-init="calculate()">
     
-    <div class="container mx-auto px-6 md:px-12">
+    <div class="container mx-auto px-6 md:px-12 relative">
+        
+        <div class="flex justify-end mb-6">
+            <button @click="showHelp = true" class="flex items-center gap-2 text-brand-gold text-xs uppercase tracking-widest font-bold hover:underline">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Entenda o Cálculo
+            </button>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
-            {{-- COLUNA ESQUERDA: FORMULÁRIO --}}
             <div class="lg:col-span-7 space-y-8">
                 
-                {{-- Card 1: Dados da Venda --}}
                 <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                     <h3 class="text-lg font-serif mb-6 text-brand-black flex items-center gap-2">
                         <span class="bg-brand-gold text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-sans">1</span>
@@ -43,7 +49,6 @@
                     </div>
                 </div>
 
-                {{-- Card 2: Dados da Aquisição --}}
                 <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                     <h3 class="text-lg font-serif mb-6 text-brand-black flex items-center gap-2">
                         <span class="bg-brand-gold text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-sans">2</span>
@@ -78,7 +83,6 @@
                     </div>
                 </div>
 
-                {{-- Card 3: Reinvestimento e IRS --}}
                 <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                     <h3 class="text-lg font-serif mb-6 text-brand-black flex items-center gap-2">
                         <span class="bg-brand-gold text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-sans">3</span>
@@ -116,7 +120,6 @@
 
             </div>
 
-            {{-- COLUNA DIREITA: RESULTADOS (STICKY) --}}
             <div class="lg:col-span-5">
                 <div class="sticky top-32 bg-brand-charcoal text-white p-8 rounded shadow-2xl">
                     <h3 class="text-xl font-serif mb-6 text-brand-gold">Resultado da Simulação</h3>
@@ -160,38 +163,87 @@
 
         </div>
     </div>
+
+    {{-- MODAL DE AJUDA --}}
+    <div x-show="showHelp" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden" @click.away="showHelp = false">
+            <div class="bg-brand-black text-white p-6 flex justify-between items-center">
+                <h3 class="text-xl font-serif">Como funciona o cálculo?</h3>
+                <button @click="showHelp = false" class="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div class="p-8 space-y-6 overflow-y-auto max-h-[70vh] text-gray-600">
+                
+                <div>
+                    <h4 class="font-bold text-brand-black mb-2">1. Fórmula Geral</h4>
+                    <p class="text-sm bg-gray-50 p-3 rounded border border-gray-200 font-mono">
+                        Mais-Valia = Valor Venda - (Valor Aquisição × Coeficiente) - Despesas
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-brand-black mb-2">2. Coeficiente de Desvalorização</h4>
+                    <p class="text-sm">
+                        O Estado aplica um multiplicador ao valor de compra para corrigir a inflação. Imóveis comprados há mais tempo têm um coeficiente maior, o que reduz o imposto a pagar. Utilizamos os coeficientes da Portaria mais recente.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-brand-black mb-2">3. Despesas Dedutíveis</h4>
+                    <p class="text-sm">
+                        Você pode abater custos como: IMT e Imposto de Selo pagos na compra, Comissões imobiliárias, Certificado energético e Obras de valorização realizadas nos últimos 12 anos.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-brand-black mb-2">4. Tributação (IRS)</h4>
+                    <p class="text-sm">
+                        Apenas 50% do lucro (mais-valia) é tributado. Este valor é somado aos seus rendimentos anuais (salários, pensões) e taxado de acordo com o seu escalão de IRS.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-brand-black mb-2">5. Isenção por Reinvestimento</h4>
+                    <p class="text-sm">
+                        Se o imóvel vendido era sua Habitação Própria e Permanente (HPP) e você usar o dinheiro para comprar outra HPP (em até 36 meses), o imposto pode ser reduzido ou anulado proporcionalmente ao valor reinvestido.
+                    </p>
+                </div>
+
+            </div>
+            <div class="p-6 border-t border-gray-100 bg-gray-50 text-right">
+                <button @click="showHelp = false" class="text-xs uppercase font-bold tracking-widest text-brand-gold hover:text-brand-black transition">Fechar</button>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <script>
     function capitalGainsCalculator() {
         return {
-            // Inputs
+            showHelp: false,
             saleValue: 0,
             saleExpenses: 0,
             purchaseValue: 0,
             purchaseYear: new Date().getFullYear(),
             purchaseExpenses: 0,
             improvements: 0,
-            
-            // Reinvestimento
             isHPP: false,
             loanValue: 0,
             reinvestmentValue: 0,
-            
-            // IRS
-            annualIncome: 30000, // Valor médio padrão
-
-            // Dados Internos
+            annualIncome: 30000,
             years: [],
-            // Coeficientes Aproximados (Baseados na Portaria 2024)
             coefficients: {
                 2024: 1.00, 2023: 1.00, 2022: 1.01, 2021: 1.01, 2020: 1.01,
                 2019: 1.01, 2018: 1.02, 2017: 1.03, 2016: 1.03, 2015: 1.04,
                 2010: 1.08, 2005: 1.15, 2000: 1.35, 1995: 1.55, 1990: 2.50
-                // Em um caso real, preencheríamos ano a ano. Usei uma lógica de fallback abaixo.
             },
-
-            // Outputs
             grossGain: 0,
             inflationDeduction: 0,
             reinvestmentBenefit: 0,
@@ -200,7 +252,6 @@
             coefficient: 1,
 
             init() {
-                // Preenche os anos de 1980 até hoje
                 const currentYear = new Date().getFullYear();
                 for (let i = currentYear; i >= 1980; i--) {
                     this.years.push(i);
@@ -208,10 +259,8 @@
             },
 
             getCoef(year) {
-                // Lógica simples para pegar ou aproximar o coeficiente
                 if (year >= 2023) return 1.00;
                 if (this.coefficients[year]) return this.coefficients[year];
-                // Fallback aproximado para anos sem dado exato na lista acima
                 if (year > 2010) return 1.05;
                 if (year > 2000) return 1.25;
                 return 2.0; 
@@ -222,7 +271,6 @@
             },
 
             calculate() {
-                // 1. Isenção 1989
                 if (this.purchaseYear < 1989) {
                     this.grossGain = 0;
                     this.taxableGain = 0;
@@ -230,44 +278,32 @@
                     return;
                 }
 
-                // 2. Coeficiente
                 this.coefficient = this.getCoef(this.purchaseYear);
                 const purchaseUpdated = this.purchaseValue * this.coefficient;
                 this.inflationDeduction = purchaseUpdated - this.purchaseValue;
 
-                // 3. Mais-Valia Bruta
-                // MV = Venda - (Compra Atualizada) - Despesas Totais
                 const totalExpenses = (this.saleExpenses || 0) + (this.purchaseExpenses || 0) + (this.improvements || 0);
                 let gain = (this.saleValue || 0) - purchaseUpdated - totalExpenses;
 
                 if (gain < 0) gain = 0;
                 this.grossGain = gain;
 
-                // 4. Reinvestimento
                 let taxableAmount = gain;
                 this.reinvestmentBenefit = 0;
 
                 if (this.isHPP && gain > 0 && this.reinvestmentValue > 0) {
-                    // Valor de Realização Líquido = Venda - Empréstimo
                     const netSaleValue = Math.max(0, (this.saleValue || 0) - (this.loanValue || 0));
-                    
                     if (netSaleValue > 0) {
-                        // Proporção Reinvestida
                         const ratio = Math.min(1, this.reinvestmentValue / netSaleValue);
                         this.reinvestmentBenefit = gain * ratio;
                         taxableAmount = gain - this.reinvestmentBenefit;
                     }
                 }
 
-                // 5. Englobamento (50% Tributável)
                 this.taxableGain = taxableAmount * 0.5;
 
-                // 6. Estimativa de IRS (Cálculo Simplificado de Taxa Marginal)
-                // Adicionamos a mais-valia ao rendimento anual para ver onde cai no escalão
                 const totalIncomeForTax = (this.annualIncome || 0) + this.taxableGain;
-                
-                // Escalões Aproximados 2024/25
-                let taxRate = 0.13; // Mínimo
+                let taxRate = 0.13;
                 if (totalIncomeForTax > 7700) taxRate = 0.1325;
                 if (totalIncomeForTax > 11600) taxRate = 0.18;
                 if (totalIncomeForTax > 16400) taxRate = 0.23;
@@ -275,9 +311,8 @@
                 if (totalIncomeForTax > 27100) taxRate = 0.32;
                 if (totalIncomeForTax > 39700) taxRate = 0.355;
                 if (totalIncomeForTax > 51900) taxRate = 0.435;
-                if (totalIncomeForTax > 81000) taxRate = 0.48; //
+                if (totalIncomeForTax > 81000) taxRate = 0.48;
 
-                // O imposto extra gerado pela mais-valia (aproximação marginal)
                 this.estimatedTax = this.taxableGain * taxRate;
             }
         }

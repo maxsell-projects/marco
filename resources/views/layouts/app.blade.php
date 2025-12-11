@@ -7,7 +7,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <script>
@@ -17,6 +17,7 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
+                        didot: ['GFS Didot', 'serif'], // Nova fonte personalizada
                     },
                     colors: {
                         'brand-black': '#0a0a0a',
@@ -46,7 +47,7 @@
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center">
                 
-                <a href="{{ route('home') }}" class="text-2xl font-serif text-white tracking-widest hover:text-brand-gold transition-colors">
+                <a href="{{ route('home') }}" class="text-2xl font-didot text-white tracking-widest hover:text-brand-gold transition-colors">
                     DIOGO MAIA
                 </a>
 
@@ -65,7 +66,7 @@
                         <div class="absolute left-1/2 -translate-x-1/2 top-full mt-0 w-56 bg-brand-charcoal border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top pt-2">
                             <div class="bg-brand-charcoal py-2">
                                 <a href="{{ route('tools.credit') }}" class="block px-6 py-3 text-[10px] uppercase tracking-widest text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Simulador de Crédito</a>
-                                <a href="{{ route('tools.gains') }}" class="block px-6 py-3 text-[10px] uppercase tracking-widest text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Simulador Mais Valias</a>
+                                <a href="{{ route('tools.gains') }}" class="block px-6 py-3 text-[10px] uppercase tracking-widest text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Mais Valias</a>
                                 <a href="{{ route('tools.imt') }}" class="block px-6 py-3 text-[10px] uppercase tracking-widest text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Simulador IMT</a>
                             </div>
                         </div>
@@ -125,7 +126,7 @@
         <div class="container mx-auto px-6 text-center md:text-left">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div>
-                    <h4 class="text-2xl font-serif mb-6">DIOGO MAIA</h4>
+                    <h4 class="text-2xl font-didot mb-6">DIOGO MAIA</h4>
                     <p class="text-gray-500 text-sm leading-relaxed">
                         Consultoria imobiliária especializada em ativos de luxo e investimentos estratégicos em Portugal.
                     </p>
@@ -141,9 +142,9 @@
                 <div>
                     <h5 class="text-xs font-bold uppercase tracking-widest mb-6 text-brand-gold">Contato</h5>
                     <ul class="space-y-3 text-sm text-gray-400">
-                        <li>+351 912 345 678</li>
-                        <li>contacto@diogomaia.pt</li>
-                        <li>Lisboa, Portugal</li>
+                        <li>+351 910 739 610</li>
+                        <li>dmgmaia@remax.pt</li>
+                        <li>Av. Casal Ribeiro 12B</li>
                     </ul>
                 </div>
                 <div>
