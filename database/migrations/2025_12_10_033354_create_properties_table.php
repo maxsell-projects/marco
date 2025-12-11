@@ -10,27 +10,60 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->string('external_id')->nullable()->index();
+            
             $table->string('title');
             $table->string('slug')->unique();
-            $table->longText('description')->nullable();
+            $table->text('description')->nullable();
+            $table->string('type')->default('Apartamento');
+            $table->string('status')->default('Venda');
+            
+            $table->string('location')->nullable();
+            $table->string('address')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('city')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+
             $table->decimal('price', 15, 2)->nullable();
-            $table->string('type')->default('venda');
+            $table->decimal('area_gross', 10, 2)->nullable();
+            $table->decimal('area_useful', 10, 2)->nullable();
+            $table->decimal('area_land', 10, 2)->nullable();
+
             $table->integer('bedrooms')->nullable();
             $table->integer('bathrooms')->nullable();
-            $table->integer('garage')->nullable();
-            $table->decimal('area', 10, 2)->nullable();
-            $table->string('address')->nullable();
-            $table->json('features')->nullable();
-            $table->boolean('active')->default(true);
+            $table->integer('garages')->nullable();
+            $table->string('floor')->nullable(); 
+            $table->string('orientation')->nullable();
+            $table->year('built_year')->nullable();
+            $table->string('condition')->default('used');
+            $table->string('energy_rating')->nullable();
+
+            $table->boolean('has_lift')->default(false);
+            $table->boolean('has_garden')->default(false);
+            $table->boolean('has_pool')->default(false);
+            $table->boolean('has_terrace')->default(false);
+            $table->boolean('has_balcony')->default(false);
+            $table->boolean('has_air_conditioning')->default(false);
+            $table->boolean('has_heating')->default(false);
+            $table->boolean('is_accessible')->default(false);
+            $table->boolean('is_furnished')->default(false);
+            $table->boolean('is_kitchen_equipped')->default(false);
+
+            $table->string('cover_image')->nullable();
+            $table->string('video_url')->nullable();
+            $table->string('whatsapp_number')->nullable();
+
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_visible')->default(true);
+            
             $table->timestamps();
         });
 
         Schema::create('property_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->string('path');
-            $table->boolean('is_cover')->default(false);
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }
