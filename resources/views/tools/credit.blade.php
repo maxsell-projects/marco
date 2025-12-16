@@ -149,15 +149,15 @@
             <div class="lg:col-span-5" id="results-area">
                 <div class="sticky top-24 space-y-6">
                     
-                    {{-- Cartão Principal: Mensalidade --}}
+                    {{-- Cartão Principal: Mensalidade (Alterado para mostrar apenas Capital + Juros) --}}
                     <div class="bg-brand-charcoal text-white p-8 rounded-xl shadow-2xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-10">
-                            <svg class="w-24 h-24 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg class="w-24 h-24 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0-2.08.402-2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
 
-                        <h3 class="text-lg font-serif text-brand-gold mb-1">Prestação Mensal Estimada</h3>
+                        <h3 class="text-lg font-serif text-brand-gold mb-1">Prestação Crédito (Capital + Juros)</h3>
                         <div class="text-4xl font-bold mb-6">
-                            € <span x-text="formatMoney(monthlyTotal)"></span>
+                            € <span x-text="formatMoney(monthlyPayment)"></span>
                         </div>
 
                         <div class="space-y-3 text-sm font-light border-t border-white/10 pt-4">
@@ -166,7 +166,7 @@
                                 <span>€ <span x-text="formatMoney(monthlyPayment)"></span></span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-400">Imposto de Selo (Juros 4%)</span>
+                                <span class="text-gray-400">IS Juros (1º Mês) *4%</span>
                                 <span>€ <span x-text="formatMoney(monthlyStampDuty)"></span></span>
                             </div>
                             {{-- Linha de Seguros Removida --}}
@@ -185,10 +185,7 @@
                                 <span class="text-gray-600">Imposto Selo Abertura (0.6%)</span>
                                 <span class="font-medium text-red-600">€ <span x-text="formatMoney(openingStampDuty)"></span></span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Comissões Bancárias (Est.)</span>
-                                <span class="font-medium text-red-600">€ <span x-text="formatMoney(bankFees)"></span></span>
-                            </div>
+                            {{-- Linha de Comissões Bancárias (Est.) REMOVIDA --}}
                             <div class="flex justify-between border-t border-gray-100 pt-2 font-bold">
                                 <span>Total Necessário (Cash)</span>
                                 <span>€ <span x-text="formatMoney(upfrontTotal)"></span></span>
@@ -249,7 +246,7 @@
             monthlyTotal: 0, // totalInsurance removido
             
             openingStampDuty: 0,
-            bankFees: 550, // Estimativa dossiê + avaliação
+            bankFees: 0, // Estimativa dossiê + avaliação (Alterado para 0 conforme solicitado)
             upfrontTotal: 0,
             
             totalInterest: 0,
@@ -328,17 +325,17 @@
                 // 6. Custos Iniciais
                 // IS Abertura: 0.6% (para prazos > 5 anos)
                 this.openingStampDuty = this.loanAmount * 0.006;
-                this.upfrontTotal = this.downPayment + this.openingStampDuty + this.bankFees;
+                this.upfrontTotal = this.downPayment + this.openingStampDuty; // bankFees (Comissões) removido da soma
 
                 // 7. Totais Finais (Aproximados - assumindo taxa constante)
                 let totalPayments = this.monthlyPayment * n;
                 this.totalInterest = totalPayments - this.loanAmount;
                 
-                // MTIC = Total Pagamentos + IS Juros Totais + Custos Iniciais (IS Abertura + Comissões)
+                // MTIC = Total Pagamentos + IS Juros Totais + Custos Iniciais (IS Abertura) - bankFees e Seguros removidos
                 let totalStampOnInterest = this.totalInterest * 0.04;
                 
-                // Cálculo MTIC sem Seguros
-                this.mtic = totalPayments + totalStampOnInterest + this.openingStampDuty + this.bankFees;
+                // Cálculo MTIC sem Seguros e Comissões
+                this.mtic = totalPayments + totalStampOnInterest + this.openingStampDuty;
             }
         }
     }
