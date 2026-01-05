@@ -60,12 +60,19 @@
                     <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                         <h3 class="text-lg font-serif mb-6 text-[#c5a059]">1. Informações Básicas</h3>
                         <div class="grid grid-cols-1 gap-6">
-                            <div>
-                                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Título do Anúncio</label>
-                                <input type="text" name="title" value="{{ old('title', $property->title) }}" required class="w-full border border-gray-200 rounded px-4 py-3 bg-gray-50 focus:bg-white transition-colors outline-none focus:border-[#c5a059]">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Ref. Interna</label>
+                                    <input type="text" name="reference_code" value="{{ old('reference_code', $property->reference_code) }}" class="w-full border border-gray-200 rounded px-4 py-3 bg-gray-50 focus:bg-white transition" placeholder="Ex: IMO-2024">
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Título do Anúncio</label>
+                                    <input type="text" name="title" value="{{ old('title', $property->title) }}" required class="w-full border border-gray-200 rounded px-4 py-3 bg-gray-50 focus:bg-white transition-colors outline-none focus:border-[#c5a059]">
+                                </div>
                             </div>
                             
-                            <div class="grid grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Tipo</label>
                                     <select name="type" class="w-full border border-gray-200 rounded px-4 py-3 bg-white">
@@ -92,7 +99,7 @@
 
                     <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                         <h3 class="text-lg font-serif mb-6 text-[#c5a059]">2. Localização e Dimensões</h3>
-                        <div class="grid grid-cols-2 gap-6 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Concelho / Zona</label>
                                 <input type="text" name="location" value="{{ old('location', $property->location) }}" class="w-full border border-gray-200 rounded px-4 py-3">
@@ -102,7 +109,8 @@
                                 <input type="text" name="address" value="{{ old('address', $property->address) }}" class="w-full border border-gray-200 rounded px-4 py-3">
                             </div>
                         </div>
-                        <div class="grid grid-cols-4 gap-6">
+
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Área Bruta (m²)</label>
                                 <input type="number" name="area_gross" value="{{ old('area_gross', $property->area_gross) }}" class="w-full border border-gray-200 rounded px-4 py-3">
@@ -116,6 +124,10 @@
                                 <input type="number" name="bathrooms" value="{{ old('bathrooms', $property->bathrooms) }}" class="w-full border border-gray-200 rounded px-4 py-3">
                             </div>
                             <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Garagem (Lugares)</label>
+                                <input type="number" name="garages" value="{{ old('garages', $property->garages) }}" class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Ex: 2">
+                            </div>
+                            <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Cert. Energética</label>
                                 <select name="energy_rating" class="w-full border border-gray-200 rounded px-4 py-3 bg-white">
                                     <option value="">Selecione</option>
@@ -127,7 +139,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-6 mt-4">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Andar</label>
                                 <input type="text" name="floor" value="{{ old('floor', $property->floor) }}" class="w-full border border-gray-200 rounded px-4 py-3">
@@ -162,7 +175,7 @@
                     <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                         <h3 class="text-lg font-serif mb-6 text-[#c5a059]">4. Mídia e Links</h3>
                         
-                        <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">WhatsApp</label>
                                 <input type="text" name="whatsapp_number" value="{{ old('whatsapp_number', $property->whatsapp_number) }}" class="w-full border border-gray-200 rounded px-4 py-3">

@@ -7,6 +7,7 @@ use App\Models\PropertyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule; // Importante para a validação do update
 
 class PropertyController extends Controller
 {
@@ -24,6 +25,8 @@ class PropertyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            // Adicionado: validação de unicidade na criação
+            'reference_code' => 'nullable|string|max:20|unique:properties,reference_code',
             'title' => 'required|string|max:255',
             'price' => 'nullable|numeric',
             'type' => 'required|string',
@@ -93,6 +96,13 @@ class PropertyController extends Controller
     public function update(Request $request, Property $property)
     {
         $data = $request->validate([
+            // Adicionado: validação inteligente (ignora o ID atual na verificação de unique)
+            'reference_code' => [
+                'nullable', 
+                'string', 
+                'max:20', 
+                Rule::unique('properties', 'reference_code')->ignore($property->id)
+            ],
             'title' => 'required|string|max:255',
             'price' => 'nullable|numeric',
             'type' => 'required|string',
@@ -183,7 +193,8 @@ class PropertyController extends Controller
                 $q->where('location', 'like', "%{$search}%")
                   ->orWhere('city', 'like', "%{$search}%")
                   ->orWhere('title', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%");
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('reference_code', 'like', "%{$search}%"); // Adicionado: Busca pelo código também!
             });
         }
 

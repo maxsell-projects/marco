@@ -47,13 +47,20 @@
 
                     <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                         <h3 class="text-lg font-serif mb-6 text-[#c5a059]">1. Informações Básicas</h3>
+                        
                         <div class="grid grid-cols-1 gap-6">
-                            <div>
-                                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Título do Anúncio</label>
-                                <input type="text" name="title" value="{{ old('title') }}" required class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Ex: Moradia T4 de Luxo com Piscina">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div class="md:col-span-1">
+                                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Ref. Interna</label>
+                                    <input type="text" name="reference_code" value="{{ old('reference_code') }}" class="w-full border border-gray-200 rounded px-4 py-3 bg-gray-50 focus:bg-white transition" placeholder="Ex: IMO-2024">
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Título do Anúncio</label>
+                                    <input type="text" name="title" value="{{ old('title') }}" required class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Ex: Moradia T4 de Luxo com Piscina">
+                                </div>
                             </div>
                             
-                            <div class="grid grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Tipo</label>
                                     <select name="type" class="w-full border border-gray-200 rounded px-4 py-3 bg-white">
@@ -80,7 +87,7 @@
 
                     <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                         <h3 class="text-lg font-serif mb-6 text-[#c5a059]">2. Localização e Dimensões</h3>
-                        <div class="grid grid-cols-2 gap-6 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Concelho / Zona</label>
                                 <input type="text" name="location" value="{{ old('location') }}" class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Ex: Cascais, Quinta da Marinha">
@@ -90,7 +97,8 @@
                                 <input type="text" name="address" value="{{ old('address') }}" class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Rua...">
                             </div>
                         </div>
-                        <div class="grid grid-cols-4 gap-6">
+
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Área Bruta (m²)</label>
                                 <input type="number" name="area_gross" value="{{ old('area_gross') }}" class="w-full border border-gray-200 rounded px-4 py-3">
@@ -104,6 +112,10 @@
                                 <input type="number" name="bathrooms" value="{{ old('bathrooms') }}" class="w-full border border-gray-200 rounded px-4 py-3">
                             </div>
                             <div>
+                                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Garagem (Lugares)</label>
+                                <input type="number" name="garages" value="{{ old('garages') }}" class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Ex: 2">
+                            </div>
+                            <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Cert. Energética</label>
                                 <select name="energy_rating" class="w-full border border-gray-200 rounded px-4 py-3 bg-white">
                                     <option value="">Selecione</option>
@@ -115,7 +127,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-6 mt-4">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Andar</label>
                                 <input type="text" name="floor" value="{{ old('floor') }}" class="w-full border border-gray-200 rounded px-4 py-3" placeholder="Ex: 2º Esq, R/C">
@@ -164,7 +177,7 @@
                     <div class="bg-white p-8 rounded shadow-sm border border-gray-100">
                         <h3 class="text-lg font-serif mb-6 text-[#c5a059]">4. Mídia e Links</h3>
                         
-                        <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">WhatsApp (Nº Telemóvel)</label>
                                 <input type="text" name="whatsapp_number" value="{{ old('whatsapp_number') }}" class="w-full border border-gray-200 rounded px-4 py-3" placeholder="351912345678">
@@ -219,72 +232,55 @@
         document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById('gallery-input');
             const previewContainer = document.getElementById('gallery-preview');
-            const dt = new DataTransfer(); // Armazena os ficheiros acumulados
+            const dt = new DataTransfer(); 
 
             input.addEventListener('change', function() {
-                // Percorre os novos ficheiros selecionados
                 for(let i = 0; i < this.files.length; i++) {
                     const file = this.files[i];
-                    
-                    // Adiciona ao DataTransfer
                     dt.items.add(file);
 
-                    // Cria o elemento visual (Preview)
                     const div = document.createElement('div');
                     div.className = "photo-container relative h-24 w-full rounded-lg overflow-hidden border border-gray-200 shadow-sm group";
                     
                     const img = document.createElement('img');
                     img.className = "h-full w-full object-cover";
                     
-                    // Botão de Remover (X)
                     const btn = document.createElement('button');
                     btn.innerHTML = '&times;';
                     btn.className = "remove-btn absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md hover:bg-red-600 focus:outline-none";
                     btn.title = "Remover foto";
 
-                    // Ler a imagem para mostrar
                     const reader = new FileReader();
                     reader.readAsDataURL(file);
                     reader.onload = function(e) {
                         img.src = e.target.result;
                     };
 
-                    // Ação de Remover
                     btn.addEventListener('click', function(e) {
                         e.preventDefault();
-                        div.remove(); // Remove do HTML
-                        updateInputFiles(file); // Remove do Input
+                        div.remove();
+                        updateInputFiles(file);
                     });
 
                     div.appendChild(img);
                     div.appendChild(btn);
                     previewContainer.appendChild(div);
                 }
-
-                // Atualiza o input com a lista acumulada
                 this.files = dt.files;
             });
 
-            // Função para recriar a lista de ficheiros sem o removido
             function updateInputFiles(fileToRemove) {
                 const newDt = new DataTransfer();
-                
-                // Copia todos MENOS o que queremos apagar
                 for (let i = 0; i < dt.files.length; i++) {
                     const file = dt.files[i];
-                    // Compara nome e tamanho para garantir que é o mesmo ficheiro
                     if (file !== fileToRemove) {
                         newDt.items.add(file);
                     }
                 }
-
-                // Substitui o DataTransfer antigo pelo novo
                 dt.items.clear();
                 for (let i = 0; i < newDt.files.length; i++) {
                     dt.items.add(newDt.files[i]);
                 }
-                
-                // Atualiza o input real
                 input.files = dt.files;
             }
         });
