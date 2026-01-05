@@ -146,7 +146,11 @@
             </a>
         </div>
 
-        <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3" 
+        {{-- 
+            MODIFICAÇÃO: Alterado de bottom-6 para bottom-28 
+            para evitar sobreposição com o widget do Voiceflow 
+        --}}
+        <div class="fixed bottom-28 right-6 z-40 flex flex-col gap-3" 
              x-data="{ showTop: false }" 
              @scroll.window="showTop = (window.pageYOffset > 300)">
             
@@ -224,6 +228,24 @@
             once: true,
             offset: 50,
         });
+    </script>
+
+    {{-- Chatbot Widget --}}
+    <script type="text/javascript">
+      (function(d, t) {
+          var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+          v.onload = function() {
+            window.voiceflow.chat.load({
+              verify: { projectID: '67138fe9b2c68d6518611df1' },
+              url: 'https://general-runtime.voiceflow.com',
+              versionID: 'production',
+              voice: {
+                url: "https://runtime-api.voiceflow.com"
+              }
+            });
+          }
+          v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+      })(document, 'script');
     </script>
 </body>
 </html>
