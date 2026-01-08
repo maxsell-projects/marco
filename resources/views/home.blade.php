@@ -101,6 +101,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {{-- Artigos de Blog --}}
             <article class="group flex flex-col h-full" data-aos="fade-up" data-aos-delay="0">
                 <div class="h-64 overflow-hidden mb-6 bg-gray-100">
                     <img src="{{ asset('img/DiogoMaia2.jpg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Investidor">
@@ -112,7 +113,7 @@
                         </a>
                     </h4>
                     <p class="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-grow">
-                        O mercado de luxo está a mudar. Já não se define apenas pelo preço, pelo tamanho do imóvel ou pelo prestígio da localização. O verdadeiro investidor de luxo em 2025 procura algo mais profundo...
+                        O mercado de luxo está a mudar. Já não se define apenas pelo preço, pelo tamanho do imóvel ou pelo prestígio da localização...
                     </p>
                     <a href="{{ route('blog.show') }}" class="text-[10px] uppercase tracking-widest font-bold hover:text-brand-gold mt-auto inline-block">Continuar Lendo »</a>
                 </div>
@@ -129,7 +130,7 @@
                         </a>
                     </h4>
                     <p class="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-grow">
-                        O investimento imobiliário de luxo deixou de depender apenas da intuição ou da localização privilegiada. Atualmente, a diferença entre uma compra promissora e uma oportunidade perdida...
+                        O investimento imobiliário de luxo deixou de depender apenas da intuição ou da localização privilegiada...
                     </p>
                     <a href="{{ route('blog.show-intelligence') }}" class="text-[10px] uppercase tracking-widest font-bold hover:text-brand-gold mt-auto inline-block">Continuar Lendo »</a>
                 </div>
@@ -146,7 +147,7 @@
                         </a>
                     </h4>
                     <p class="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-grow">
-                        O mercado imobiliário de luxo em Portugal vive uma fase de maturidade e expansão. Zonas como Lisboa, Cascais e Algarve destacam-se como três eixos de valor...
+                        O mercado imobiliário de luxo em Portugal vive uma fase de maturidade e expansão...
                     </p>
                     <a href="{{ route('blog.show-locations') }}" class="text-[10px] uppercase tracking-widest font-bold hover:text-brand-gold mt-auto inline-block">Continuar Lendo »</a>
                 </div>
@@ -183,17 +184,21 @@
                         </div>
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Email</p>
-                            <p class="text-xl font-serif">contacto@diogomaia.pt</p>
+                            <p class="text-xl font-serif">dmgmaia@remax.pt</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <form action="#" method="POST" class="space-y-6 bg-white/5 p-8 md:p-12 border border-white/10" data-aos="fade-left">
+
+            {{-- Formulário Corrigido --}}
+            <form action="{{ route('contact.send') }}" method="POST" class="space-y-6 bg-white/5 p-8 md:p-12 border border-white/10" data-aos="fade-left">
                 @csrf
+                <input type="hidden" name="subject" value="Contacto via Formulário da Home">
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="text-[10px] uppercase tracking-widest text-gray-500">Nome</label>
-                        <input type="text" name="name" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="Seu nome">
+                        <input type="text" name="name" required class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="Seu nome">
                     </div>
                     <div class="space-y-2">
                         <label class="text-[10px] uppercase tracking-widest text-gray-500">Telemóvel</label>
@@ -202,11 +207,11 @@
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] uppercase tracking-widest text-gray-500">Email</label>
-                    <input type="email" name="email" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="seu@email.com">
+                    <input type="email" name="email" required class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="seu@email.com">
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] uppercase tracking-widest text-gray-500">Mensagem</label>
-                    <textarea name="message" rows="3" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors resize-none" placeholder="Como podemos ajudar?"></textarea>
+                    <textarea name="message" required rows="3" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors resize-none" placeholder="Como podemos ajudar?"></textarea>
                 </div>
                 <button type="submit" class="w-full bg-white text-black font-bold py-4 hover:bg-brand-gold hover:text-white transition-colors uppercase tracking-widest text-xs mt-4">
                     Enviar Mensagem
