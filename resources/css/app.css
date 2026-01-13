@@ -1,11 +1,32 @@
 @import 'tailwindcss';
 
+/* Indica ao Tailwind onde procurar as classes para gerar o CSS */
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Fontes */
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* 🎨 Paleta José Carvalho (Gerada automaticamente como classes utilitárias) */
+    
+    /* Uso: bg-brand-primary, text-brand-primary, border-brand-primary */
+    --color-brand-primary: #0F2A44;    /* Azul Profundo (Header/Footer) */
+    
+    /* Uso: bg-brand-background */
+    --color-brand-background: #F5F4F1; /* Off-White (Fundo Geral) */
+    
+    /* Uso: text-brand-secondary */
+    --color-brand-secondary: #6B8F71;  /* Verde Cinza (Ícones/Badges) */
+    
+    /* Uso: bg-brand-cta */
+    --color-brand-cta: #C46A45;        /* Terracota (Botões de Ação) */
+    
+    /* Uso: text-brand-premium */
+    --color-brand-premium: #C2A86D;    /* Dourado Fosco (Detalhes Luxo) */
+    
+    /* Uso: text-brand-text */
+    --color-brand-text: #2E2E2E;       /* Cinza Grafite (Leitura) */
 }

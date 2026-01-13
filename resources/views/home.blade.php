@@ -2,228 +2,249 @@
 
 @section('content')
 
-<section class="relative h-screen min-h-[800px] flex items-center justify-center bg-fixed bg-cover bg-center" 
-         style="background-image: url('{{ asset('img/porto.jpg') }}');">
+<div class="bg-brand-primary text-white overflow-hidden">
     
-    <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
-
-    <div class="relative z-10 container mx-auto px-6 text-center" data-aos="fade-up">
-        {{-- [Alterado] Real Estate & Investments -> Imobiliário & Investimentos --}}
-        <p class="text-white/60 text-[10px] md:text-xs uppercase tracking-[0.5em] mb-6 font-light">Imobiliário & Investimentos</p>
-        <h1 class="text-5xl md:text-8xl font-serif text-white mb-10 leading-none tracking-tight">
-            Elegância & <br> <span class="italic text-brand-gold">Exclusividade</span>
-        </h1>
-
-        <form action="{{ route('portfolio') }}" method="GET" class="mt-16 inline-flex flex-col md:flex-row items-center border border-white/20 bg-black/30 backdrop-blur-md p-1 rounded-full">
-            <input type="text" name="location" placeholder="Localização, condomínio ou palavra-chave..." 
-                   class="bg-transparent text-white placeholder-white/50 px-8 py-4 outline-none w-64 md:w-96 text-sm font-light rounded-full md:rounded-l-full md:rounded-r-none">
-            
-            {{-- [Alterado] Buscar -> Pesquisar --}}
-            <button type="submit" class="bg-white text-black hover:bg-brand-gold hover:text-white transition-colors duration-500 px-10 py-4 text-[10px] uppercase tracking-widest font-bold rounded-full">
-                Pesquisar
-            </button>
-        </form>
-    </div>
-</section>
-
-<section class="py-32 bg-white text-center relative">
-    <div class="container mx-auto px-6 max-w-4xl" data-aos="fade-up">
-        <span class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4 block">
-            IMÓVEIS DE LUXO | ELEGÂNCIA & EXCLUSIVIDADE
-        </span>
+    {{-- HERO: ASSIMÉTRICO & EDITORIAL --}}
+    <section class="relative min-h-screen flex flex-col justify-center pt-32 pb-20 md:pt-0 md:pb-0">
         
-        <h2 class="text-2xl md:text-4xl font-serif text-brand-black mb-10 leading-relaxed">
-            <span class="font-bold">DIOGO MAIA</span> – O acesso privilegiado aos imóveis mais exclusivos do mercado, para quem procura <span class="italic text-brand-gold">excelência</span>, <span class="italic text-brand-gold">privacidade</span> e <span class="italic text-brand-gold">distinção</span>.
-        </h2>
-        
-        <div class="w-[1px] h-20 bg-brand-gold mx-auto opacity-50"></div>
-    </div>
-</section>
-
-<section class="py-24 bg-brand-gray text-brand-black">
-    <div class="container mx-auto px-6 md:px-12">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-black/10 pb-8" data-aos="fade-right">
-            <div>
-                <h3 class="text-5xl font-serif text-brand-black mb-2">Coleção Privada</h3>
-                <p class="text-gray-500 text-xs uppercase tracking-widest">Seleção Curada</p>
-            </div>
-            <a href="{{ route('portfolio') }}" class="mt-6 md:mt-0 text-xs font-bold uppercase tracking-widest border border-black px-6 py-3 hover:bg-black hover:text-white transition duration-300">
-                Ver Portfólio Completo
-            </a>
+        <div class="absolute top-0 right-0 w-full md:w-[45%] h-full bg-cover bg-center opacity-40 md:opacity-100 transition-all duration-1000 ease-out transform scale-105"
+             style="background-image: url('{{ asset('img/porto_dark.jpeg') }}'); clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);">
+            <div class="absolute inset-0 bg-brand-primary/30 md:bg-transparent"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
-            @forelse($properties as $index => $property)
-                <a href="{{ route('properties.show', $property) }}" class="group block cursor-pointer" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-                    <div class="relative h-[500px] overflow-hidden bg-gray-200 mb-6">
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-700 z-10"></div>
-                        
-                        <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/porto.jpg') }}" 
-                             alt="{{ $property->title }}" 
-                             class="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition duration-[1.2s] ease-out grayscale-[20%] group-hover:grayscale-0">
-                        
-                        <div class="absolute top-0 left-0 bg-black text-white text-[9px] uppercase tracking-widest px-4 py-3">
-                            {{ $property->type }}
-                        </div>
-                        
-                        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-brand-black text-[9px] uppercase tracking-widest px-3 py-1 font-bold">
-                            {{ $property->status }}
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl">
+                <p class="text-brand-premium font-mono text-xs uppercase tracking-[0.3em] mb-6 animate-pulse" data-aos="fade-right">
+                    Real Estate & Investment Strategy
+                </p>
+                
+                <h1 class="font-didot text-6xl md:text-9xl leading-[0.85] tracking-tight mb-8" data-aos="fade-up" data-aos-duration="1200">
+                    PARA ALÉM <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-premium to-white italic pr-4">DO ÓBVIO.</span>
+                </h1>
+                
+                <div class="flex flex-col md:flex-row gap-8 items-start md:items-center max-w-2xl" data-aos="fade-up" data-aos-delay="300">
+                    <p class="text-gray-300 font-light text-lg md:text-xl leading-relaxed border-l border-brand-premium/50 pl-6">
+                        Não vendemos apenas metros quadrados. Criamos património, desenhamos futuros e asseguramos o seu legado em Portugal.
+                    </p>
+                </div>
+
+                <div class="mt-12 flex flex-wrap gap-6" data-aos="fade-up" data-aos-delay="500">
+                    <a href="#portfolio-start" class="group relative px-8 py-4 bg-white text-brand-primary font-bold uppercase tracking-widest overflow-hidden">
+                        <span class="relative z-10 group-hover:text-white transition-colors duration-300">Explorar Espólio</span>
+                        <div class="absolute inset-0 bg-brand-cta transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out"></div>
+                    </a>
+                    <a href="#contact-form" class="px-8 py-4 border border-white/20 hover:border-brand-premium text-white font-bold uppercase tracking-widest transition-all">
+                        Consultoria Privada
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- SCROLL INDICATOR --}}
+        <div class="absolute bottom-10 left-6 md:left-1/2 transform md:-translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+            <span class="text-[10px] uppercase tracking-widest">Descobrir</span>
+            <div class="w-[1px] h-12 bg-white"></div>
+        </div>
+    </section>
+
+    {{-- MARQUEE INFINITO (LUXO MODERNO) --}}
+    <div class="border-y border-white/10 bg-brand-primary py-6 overflow-hidden relative z-20">
+        <div class="whitespace-nowrap flex animate-marquee">
+            @for($i = 0; $i < 10; $i++)
+                <span class="text-4xl md:text-6xl font-didot text-white/5 mx-8 uppercase">Investimento • Exclusividade • Legado •</span>
+            @endfor
+        </div>
+    </div>
+
+    {{-- A AUTORIDADE (DARK MODE) --}}
+    <section class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                
+                <div class="md:col-span-5 relative" data-aos="fade-right">
+                    <div class="relative z-10 aspect-[3/4] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+                         {{-- Placeholder Criativo para Foto --}}
+                        <div class="w-full h-full bg-gray-800 flex items-center justify-center border border-white/10">
+                            <span class="text-brand-premium font-mono text-xs uppercase text-center">
+                                [FOTO JOSÉ CARVALHO]<br>PB / Alto Contraste
+                            </span>
                         </div>
                     </div>
+                    {{-- Elemento Gráfico --}}
+                    <div class="absolute -bottom-10 -right-10 w-40 h-40 border border-brand-premium rounded-full animate-spin-slow opacity-30"></div>
+                </div>
 
-                    <div class="pr-4">
-                        <div class="flex items-center gap-3 text-gray-500 text-[10px] uppercase tracking-widest mb-3 border-b border-gray-300 pb-3">
-                            <span>{{ $property->location ?? 'Portugal' }}</span>
-                            <span class="ml-auto">{{ $property->area_gross ? number_format($property->area_gross, 0) . ' m²' : '' }}</span>
-                        </div>
-                        <h4 class="text-2xl font-serif text-brand-black mb-2 leading-tight group-hover:underline decoration-1 underline-offset-4">
-                            {{ $property->title }}
-                        </h4>
-                        <p class="text-xl font-light text-gray-600">
-                            {{ $property->price ? '€ ' . number_format($property->price, 0, ',', '.') : 'Sob Consulta' }}
+                <div class="md:col-span-7 md:pl-12">
+                    <h2 class="text-xs font-bold text-brand-cta uppercase tracking-[0.3em] mb-6">O Consultor</h2>
+                    <h3 class="font-didot text-5xl md:text-7xl mb-8 leading-none">
+                        A Estratégia <br>
+                        <span class="text-brand-gray-500 opacity-50">Por Detrás do Negócio.</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-400 font-light leading-relaxed mb-12">
+                        <p>
+                            Num mercado saturado de intermediários, destaco-me como o seu parceiro estratégico. A minha abordagem combina análise de dados rigorosa, inteligência de mercado e um acesso privilegiado a ativos *off-market*.
+                        </p>
+                        <p>
+                            O meu foco não reside na transação isolada, mas sim na valorização do seu portfólio a longo prazo. Especialista em vistos Gold, fundos de investimento e propriedades de alto rendimento.
                         </p>
                     </div>
-                </a>
-            @empty
-                <div class="col-span-3 text-center py-20 text-gray-400 font-serif italic">
-                    {{-- [Alterado] Acervo -> Portfólio --}}
-                    Portfólio em atualização.
-                </div>
-            @endforelse
-        </div>
-    </div>
-</section>
 
-<section class="py-32 bg-white text-brand-black border-t border-gray-100">
-    <div class="container mx-auto px-6 md:px-12">
-        <div class="text-center max-w-4xl mx-auto mb-20" data-aos="fade-up">
-            <h3 class="text-4xl font-serif mb-6">Excelência, Exclusividade e Discrição: <br> A Visão de Diogo Maia</h3>
-            <p class="text-gray-500 font-light leading-relaxed text-lg">
-                Descubra análises estratégicas, tendências do mercado imobiliário e oportunidades reservadas a investidores criteriosos. Mais do que informação — <span class="text-black font-medium">inteligência aplicada</span> para decisões que elevam e preservam <span class="text-black font-medium">patrimónios</span>.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {{-- Artigos de Blog --}}
-            <article class="group flex flex-col h-full" data-aos="fade-up" data-aos-delay="0">
-                <div class="h-64 overflow-hidden mb-6 bg-gray-100">
-                    <img src="{{ asset('img/DiogoMaia2.jpg') }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Investidor">
-                </div>
-                <div class="border-t border-black pt-6 flex-grow flex flex-col">
-                    <h4 class="text-xl font-serif mt-3 mb-4 leading-snug group-hover:text-brand-gold transition">
-                        <a href="{{ route('blog.show') }}">
-                            O Novo Perfil do Investidor de Luxo: Discrição, Património e Propósito
-                        </a>
-                    </h4>
-                    <p class="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-grow">
-                        O mercado de luxo está a mudar. Já não se define apenas pelo preço, pelo tamanho do imóvel ou pelo prestígio da localização...
-                    </p>
-                    <a href="{{ route('blog.show') }}" class="text-[10px] uppercase tracking-widest font-bold hover:text-brand-gold mt-auto inline-block">Continuar a ler»</a>
-                </div>
-            </article>
-
-            <article class="group flex flex-col h-full" data-aos="fade-up" data-aos-delay="100">
-                <div class="h-64 overflow-hidden mb-6 bg-gray-100">
-                    <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Dados">
-                </div>
-                <div class="border-t border-black pt-6 flex-grow flex flex-col">
-                    <h4 class="text-xl font-serif mt-3 mb-4 leading-snug group-hover:text-brand-gold transition">
-                        <a href="{{ route('blog.show-intelligence') }}">
-                            Como a Inteligência de Mercado Redefine o Investimento Imobiliário
-                        </a>
-                    </h4>
-                    <p class="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-grow">
-                        O investimento imobiliário de luxo deixou de depender apenas da intuição ou da localização privilegiada...
-                    </p>
-                    <a href="{{ route('blog.show-intelligence') }}" class="text-[10px] uppercase tracking-widest font-bold hover:text-brand-gold mt-auto inline-block">Continuar a ler »</a>
-                </div>
-            </article>
-
-            <article class="group flex flex-col h-full" data-aos="fade-up" data-aos-delay="200">
-                <div class="h-64 overflow-hidden mb-6 bg-gray-100">
-                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Portugal">
-                </div>
-                <div class="border-t border-black pt-6 flex-grow flex flex-col">
-                    <h4 class="text-xl font-serif mt-3 mb-4 leading-snug group-hover:text-brand-gold transition">
-                        <a href="{{ route('blog.show-locations') }}">
-                            Lisboa, Cascais e Algarve: Os Três Eixos de Valor em 2025
-                        </a>
-                    </h4>
-                    <p class="text-sm text-gray-500 font-light leading-relaxed mb-6 flex-grow">
-                        O mercado imobiliário de luxo em Portugal vive uma fase de maturidade e expansão...
-                    </p>
-                    <a href="{{ route('blog.show-locations') }}" class="text-[10px] uppercase tracking-widest font-bold hover:text-brand-gold mt-auto inline-block">Continuar a ler »</a>
-                </div>
-            </article>
-        </div>
-    </div>
-</section>
-
-<section class="py-24 bg-brand-charcoal text-white relative">
-    <div class="container mx-auto px-6 md:px-12">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div data-aos="fade-right">
-                <h3 class="text-3xl md:text-5xl font-serif mb-6">Entre em Contacto</h3>
-                <p class="text-gray-400 mb-10 text-lg font-light">
-                    Estamos à disposição para apresentar as propriedades mais exclusivas ou discutir a gestão do seu património imobiliário.
-                </p>
-                <div class="space-y-8">
-                    <div class="flex items-center gap-6">
-                        <div class="p-4 border border-white/20 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
+                    <div class="flex gap-12 border-t border-white/10 pt-8">
+                        <div>
+                            <span class="block text-4xl font-didot text-white">15+</span>
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500">Anos de Exp.</span>
                         </div>
                         <div>
-                            <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Telefone</p>
-                            <p class="text-xl font-serif">+351 912 345 678</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <div class="p-4 border border-white/20 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Email</p>
-                            <p class="text-xl font-serif">dmgmaia@remax.pt</p>
+                            <span class="block text-4xl font-didot text-white">€35M</span>
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500">Transacionados</span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{-- Formulário Corrigido --}}
-            <form action="{{ route('contact.send') }}" method="POST" class="space-y-6 bg-white/5 p-8 md:p-12 border border-white/10" data-aos="fade-left">
-                @csrf
-                <input type="hidden" name="subject" value="Contacto via Formulário da Home">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500">Nome</label>
-                        {{-- [Alterado] Seu nome -> O seu nome --}}
-                        <input type="text" name="name" required class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="O seu nome">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] uppercase tracking-widest text-gray-500">Telemóvel</label>
-                        <input type="tel" name="phone" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="+351">
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-widest text-gray-500">Email</label>
-                    {{-- [Alterado] seu@email.com -> o-seu@email.com --}}
-                    <input type="email" name="email" required class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors" placeholder="o-seu@email.com">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-widest text-gray-500">Mensagem</label>
-                    <textarea name="message" required rows="3" class="w-full bg-transparent border-b border-white/20 py-3 text-white focus:border-brand-gold focus:outline-none transition-colors resize-none" placeholder="Como podemos ajudar?"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-white text-black font-bold py-4 hover:bg-brand-gold hover:text-white transition-colors uppercase tracking-widest text-xs mt-4">
-                    Enviar Mensagem
-                </button>
-            </form>
         </div>
-    </div>
-</section>
+    </section>
 
-@endsection
+    {{-- PORTFOLIO (GRID MAGAZINE - ASSIMÉTRICO) --}}
+    <section id="portfolio-start" class="py-32 bg-[#F5F4F1] text-brand-primary">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20">
+                <h2 class="font-didot text-5xl md:text-6xl leading-none">
+                    Curadoria <br>de Ativos
+                </h2>
+                <a href="{{ route('portfolio') }}" class="group flex items-center gap-4 text-xs font-bold uppercase tracking-widest mt-8 md:mt-0">
+                    Ver Coleção Completa
+                    <span class="w-12 h-[1px] bg-brand-primary group-hover:w-20 transition-all duration-300"></span>
+                </a>
+            </div>
+
+            <div class="space-y-32">
+                @foreach($properties as $index => $property)
+                    <div class="group grid grid-cols-1 md:grid-cols-12 gap-8 items-center {{ $index % 2 == 1 ? 'md:flex-row-reverse' : '' }}" data-aos="fade-up">
+                        
+                        {{-- IMAGEM --}}
+                        <div class="{{ $index % 2 == 1 ? 'md:col-start-6 md:col-span-7' : 'md:col-span-7' }} relative overflow-hidden">
+                            <a href="{{ route('properties.show', $property->slug) }}" class="block overflow-hidden">
+                                <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/placeholder.jpg') }}" 
+                                     alt="{{ $property->title }}" 
+                                     class="w-full h-[500px] object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                            </a>
+                            <div class="absolute top-6 right-6 bg-white/90 backdrop-blur px-4 py-2">
+                                <span class="font-mono text-xs font-bold">{{ number_format($property->price, 0, ',', '.') }} €</span>
+                            </div>
+                        </div>
+
+                        {{-- TEXTO --}}
+                        <div class="{{ $index % 2 == 1 ? 'md:col-start-1 md:col-span-4 md:row-start-1' : 'md:col-start-9 md:col-span-4' }} relative">
+                            <span class="text-brand-cta text-[10px] font-bold uppercase tracking-[0.2em] mb-4 block">
+                                {{ $property->location }}
+                            </span>
+                            <h3 class="text-3xl font-serif mb-6 group-hover:text-brand-cta transition-colors">
+                                <a href="{{ route('properties.show', $property->slug) }}">
+                                    {{ $property->title }}
+                                </a>
+                            </h3>
+                            <p class="text-gray-500 font-light text-sm leading-relaxed mb-8 line-clamp-3">
+                                {{ $property->description }}
+                            </p>
+                            <ul class="flex gap-6 text-xs font-bold text-brand-primary border-t border-brand-primary/10 pt-6">
+                                <li>{{ $property->bedrooms }} Quartos</li>
+                                <li>{{ $property->area_gross }}m²</li>
+                                <li>{{ $property->type }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- CTA / CONVITE (VIBE DE CLUBE PRIVADO) --}}
+    <section id="contact-form" class="py-32 bg-brand-primary relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-5xl mx-auto border border-white/10 bg-white/5 backdrop-blur-md p-8 md:p-16">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div>
+                        <h2 class="font-didot text-4xl md:text-5xl text-white mb-6">
+                            Private <span class="text-brand-premium italic">Office.</span>
+                        </h2>
+                        <p class="text-gray-400 font-light mb-8">
+                            O acesso às melhores oportunidades inicia-se com uma conversa. Sem algoritmos, apenas consultoria personalizada.
+                        </p>
+                        
+                        <div class="space-y-4 text-sm text-gray-300">
+                            <p class="flex items-center gap-4">
+                                <span class="w-2 h-2 bg-brand-cta rounded-full"></span>
+                                Análise de Perfil de Investidor
+                            </p>
+                            <p class="flex items-center gap-4">
+                                <span class="w-2 h-2 bg-brand-cta rounded-full"></span>
+                                Acesso a Imóveis *Off-Market*
+                            </p>
+                            <p class="flex items-center gap-4">
+                                <span class="w-2 h-2 bg-brand-cta rounded-full"></span>
+                                Estruturação Fiscal (RNH / Vistos Gold)
+                            </p>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('contact.send') }}" method="POST" class="space-y-6">
+                        @csrf
+                        <div class="group relative">
+                            <input type="text" name="name" required placeholder=" " 
+                                   class="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-brand-premium transition-colors placeholder-transparent">
+                            <label class="absolute left-0 -top-3.5 text-xs text-brand-premium transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-premium">
+                                Nome Completo
+                            </label>
+                        </div>
+
+                        <div class="group relative">
+                            <input type="email" name="email" required placeholder=" " 
+                                   class="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-brand-premium transition-colors placeholder-transparent">
+                            <label class="absolute left-0 -top-3.5 text-xs text-brand-premium transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-premium">
+                                Email
+                            </label>
+                        </div>
+
+                        <div class="group relative">
+                            <input type="tel" name="phone" required placeholder=" " 
+                                   class="peer w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-brand-premium transition-colors placeholder-transparent">
+                            <label class="absolute left-0 -top-3.5 text-xs text-brand-premium transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-brand-premium">
+                                Telefone / Telemóvel
+                            </label>
+                        </div>
+
+                        {{-- Campos Ocultos para Validação Backend --}}
+                        <input type="hidden" name="subject" value="Lead via Homepage Bold">
+                        <input type="hidden" name="message" value="Interesse iniciado através do formulário Private Office.">
+
+                        <div class="pt-4">
+                            <button type="submit" class="w-full bg-brand-premium hover:bg-white text-brand-primary hover:text-brand-primary font-bold uppercase tracking-widest py-4 transition-all duration-300">
+                                Solicitar Acesso
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<style>
+    /* Animação Marquee Personalizada */
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+    }
+</style>
+
+@endsection 

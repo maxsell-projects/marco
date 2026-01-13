@@ -1,24 +1,28 @@
 @component('mail::message')
-# Novo Pedido de Consultoria
+# Nova Oportunidade | Private Office
 
-Olá, **Diogo Maia**, você recebeu um novo contacto através do seu website oficial. Aqui estão os detalhes capturados:
+Caro **José Carvalho**,
+
+Recebeu uma nova solicitação de contacto através do seu portal oficial. Seguem os detalhes do potencial cliente:
 
 @component('mail::table')
-| Campo | Informação |
+| Dado | Informação |
 | :--- | :--- |
 | **Nome** | {{ $data['name'] }} |
-| **Assunto** | {{ $data['subject'] }} |
-| **Telefone** | {{ $data['phone'] ?? 'Não informado' }} |
 | **Email** | [{{ $data['email'] }}](mailto:{{ $data['email'] }}) |
+| **Telefone** | {{ $data['phone'] ?? 'Não indicado' }} |
+| **Interesse** | {{ $data['subject'] }} |
 @endcomponent
 
-### Mensagem do Cliente:
+### Mensagem:
 @component('mail::panel')
 {{ $data['message'] }}
 @endcomponent
 
----
+@component('mail::button', ['url' => 'mailto:' . $data['email'], 'color' => 'primary'])
+Responder ao Cliente
+@endcomponent
 
-@component('mail::button', ['url' => 'mailto:' . $data['email'], 'color' => 'success'])
-Responder ao Cliente Agora
+Atenciosamente,<br>
+**Sistema Digital José Carvalho**
 @endcomponent
