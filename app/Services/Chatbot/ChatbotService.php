@@ -18,14 +18,13 @@ class ChatbotService
 
         if (empty($apiKey)) {
             Log::critical('OpenAI API Key is missing.');
-            // Em produção não lançamos erro para não quebrar, mas logamos
             return; 
         }
 
-        // Configuração com timeout relaxado
+        // Timeout 60s para garantir geração de áudio
         $this->client = OpenAI::factory()
             ->withApiKey($apiKey)
-            ->withHttpClient(new GuzzleClient(['timeout' => 30]))
+            ->withHttpClient(new GuzzleClient(['timeout' => 60])) 
             ->make();
     }
 
@@ -33,7 +32,7 @@ class ChatbotService
     {
         if (!$this->client) {
             return [
-                'reply' => 'O assistente está em manutenção momentânea. Por favor, utilize o formulário de contacto.',
+                'reply' => 'O assistente está em manutenção momentânea.',
                 'audio' => null,
                 'data'  => null
             ];
@@ -41,23 +40,32 @@ class ChatbotService
 
         $tools = $this->getToolsDefinition();
         
+        // --- PROMPT REFINADO PARA PT-PT ---
         $systemPrompt = "
             You are the 'Private Virtual Assistant' for José Carvalho, a high-end real estate consultant in Portugal.
+            
+            CRITICAL LANGUAGE INSTRUCTION:
+            You MUST speak in EUROPEAN PORTUGUESE (Português de Portugal).
+            - Use 'estou a fazer' instead of 'estou fazendo'.
+            - Use 'connosco' instead of 'conosco'.
+            - Use 'gostaria' instead of 'queria'.
+            - Avoid the word 'você' explicitly; use the third person conjugation (e.g., 'Como está?' instead of 'Como você está?').
+            - Use formal, executive, and sophisticated vocabulary suitable for luxury real estate investors.
+            
             Your tone is: Professional, Executive, Discreet, and Expert.
-            Current Language: '{$locale}'.
             
             RULES:
-            1. Answer exclusively in '{$locale}'.
-            2. Be concise but sophisticated. Avoid emojis unless very subtle.
+            1. Answer exclusively in European Portuguese.
+            2. Be concise but sophisticated. 
             3. Use 'search_properties' when the user asks for properties, houses, or investment opportunities.
             4. Use 'schedule_meeting' if the user wants to sell, talk to José, or schedule a visit.
             5. Do not invent property data. Only use what the tool returns.
         ";
 
-        // Limpar histórico para poupar tokens e evitar erros
+        // Limpar histórico
         $cleanHistory = array_map(function($msg) {
             return ['role' => $msg['role'], 'content' => $msg['content'] ?? ''];
-        }, array_slice($history, -6)); // Mantém apenas as últimas 6 mensagens
+        }, array_slice($history, -6)); 
 
         $messages = array_merge(
             [['role' => 'system', 'content' => $systemPrompt]],
@@ -67,7 +75,7 @@ class ChatbotService
 
         try {
             $response = $this->client->chat()->create([
-                'model' => 'gpt-4o-mini', // Modelo rápido e eficiente
+                'model' => 'gpt-4o-mini',
                 'messages' => $messages,
                 'tools' => $tools,
                 'tool_choice' => 'auto', 
@@ -77,7 +85,6 @@ class ChatbotService
             $replyContent = $choice->message->content ?? '';
             $frontendData = null;
 
-            // Se a IA decidiu usar uma ferramenta (função)
             if ($choice->finishReason === 'tool_calls') {
                 $messages[] = $choice->message->toArray();
 
@@ -87,10 +94,9 @@ class ChatbotService
 
                     $toolResult = $this->executeFunction($functionName, $args);
 
-                    // Se for busca de imóveis, preparamos os dados para o Frontend (Cards)
                     if ($functionName === 'search_properties' && is_array($toolResult) && isset($toolResult['data'])) {
                         $frontendData = $toolResult['data'];
-                        $toolResult = $toolResult['summary']; // O que a IA vai "ler"
+                        $toolResult = $toolResult['summary'];
                     }
 
                     $messages[] = [
@@ -100,7 +106,6 @@ class ChatbotService
                     ];
                 }
 
-                // Segunda chamada para gerar a resposta final com os dados da ferramenta
                 $finalResponse = $this->client->chat()->create([
                     'model' => 'gpt-4o-mini',
                     'messages' => $messages,
@@ -111,9 +116,8 @@ class ChatbotService
 
             if (empty($replyContent)) $replyContent = "Compreendido. Posso ajudar com algo mais?";
             
-            // Gerar Áudio (Opcional, pode comentar se quiser poupar custos)
-            // $audioBase64 = $this->textToSpeech($replyContent);
-            $audioBase64 = null; // Desativado por padrão para velocidade
+            // --- GERAÇÃO DE ÁUDIO ---
+            $audioBase64 = $this->textToSpeech($replyContent);
 
             return [
                 'reply' => $replyContent,
@@ -131,6 +135,27 @@ class ChatbotService
         }
     }
 
+    private function textToSpeech(string $text): ?string
+    {
+        try {
+            $inputText = mb_substr($text, 0, 4096);
+
+            $response = $this->client->audio()->speech([
+                'model' => 'tts-1',
+                'input' => $inputText,
+                'voice' => 'onyx', // Voz "Onyx" é a mais neutra/profissional
+                'response_format' => 'mp3',
+                'speed' => 1.0
+            ]);
+
+            return base64_encode($response); 
+
+        } catch (\Exception $e) {
+            Log::error("Chatbot TTS Error: " . $e->getMessage());
+            return null;
+        }
+    }
+
     private function executeFunction(string $name, array $args)
     {
         try {
@@ -138,7 +163,8 @@ class ChatbotService
                 case 'search_properties':
                     $query = Property::query()
                         ->where('is_visible', true)
-                        ->where('status', '!=', 'Sold'); // Exemplo
+                        // ->where('status', '!=', 'Sold') // Descomentar se tiver coluna status
+                        ;
 
                     if (!empty($args['location'])) {
                         $query->where('location', 'LIKE', "%{$args['location']}%");
@@ -171,14 +197,14 @@ class ChatbotService
                     ];
 
                 case 'schedule_meeting':
-                    // Aqui podias enviar um email real. Por enquanto simulamos.
                     try {
                         $contact = $args['contact'] ?? 'Não informado';
                         Log::info("Lead Chatbot: " . $contact);
+                        // Aqui podes adicionar envio de email real
                     } catch (\Exception $e) {
                         Log::error("Mail Error: " . $e->getMessage());
                     }
-                    return "O pedido de agendamento foi registado. A equipa entrará em contacto.";
+                    return "O pedido de agendamento foi registado. A equipa entrará em contacto brevemente.";
 
                 default:
                     return "Função desconhecida.";

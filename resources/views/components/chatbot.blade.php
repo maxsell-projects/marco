@@ -142,6 +142,13 @@
                                 content: data.reply,
                                 data: data.data 
                             });
+
+                            // --- TOCA O ÁUDIO (NOVO) ---
+                            if (data.audio) {
+                                const audio = new Audio("data:audio/mp3;base64," + data.audio);
+                                audio.play().catch(e => console.log("Autoplay bloqueado pelo browser (interaja primeiro):", e));
+                            }
+
                         } else {
                             this.messages.push({ role: 'assistant', content: 'Lamento, ocorreu um erro de comunicação. Pode tentar novamente?' });
                         }
