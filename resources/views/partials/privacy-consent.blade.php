@@ -13,7 +13,7 @@
         <div class="text-center md:text-left">
             <p class="text-sm text-gray-300 leading-relaxed font-light">
                 Utilizamos cookies para personalizar a sua experiência exclusiva. Ao continuar a navegar, aceita a nossa 
-                <button @click="showPrivacyModal = true" class="text-brand-premium hover:text-white underline decoration-brand-premium/50 hover:decoration-white transition-all">Política de Privacidade e Cookies</button>.
+                <button @click="showPrivacyModal = true" class="text-brand-premium hover:text-white underline decoration-brand-premium/50 hover:decoration-white transition-all">Política de Privacidade, Cookies e Litígios</button>.
             </p>
         </div>
         <div class="flex gap-4">
@@ -52,16 +52,21 @@
                 </button>
             </div>
             
-            <div class="flex space-x-8">
+            <div class="flex space-x-8 overflow-x-auto scrollbar-hide">
                 <button @click="activeTab = 'privacy'" 
                         :class="activeTab === 'privacy' ? 'border-brand-premium text-brand-primary' : 'border-transparent text-gray-400 hover:text-gray-600'"
-                        class="pb-4 border-b-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300">
+                        class="pb-4 border-b-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300 whitespace-nowrap">
                     Política de Privacidade
                 </button>
                 <button @click="activeTab = 'cookies'" 
                         :class="activeTab === 'cookies' ? 'border-brand-premium text-brand-primary' : 'border-transparent text-gray-400 hover:text-gray-600'"
-                        class="pb-4 border-b-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300">
+                        class="pb-4 border-b-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300 whitespace-nowrap">
                     Política de Cookies
+                </button>
+                <button @click="activeTab = 'ral'" 
+                        :class="activeTab === 'ral' ? 'border-brand-premium text-brand-primary' : 'border-transparent text-gray-400 hover:text-gray-600'"
+                        class="pb-4 border-b-2 text-xs font-bold uppercase tracking-widest transition-colors duration-300 whitespace-nowrap">
+                    Resolução de Litígios (RAL)
                 </button>
             </div>
         </div>
@@ -71,7 +76,7 @@
             
             {{-- TAB: PRIVACIDADE --}}
             <div x-show="activeTab === 'privacy'" class="prose prose-sm max-w-none text-gray-600 font-light text-justify">
-                <p>A <strong>José Carvalho | Real Estate</strong>, com escritório na <strong>Av. da Liberdade, 100, Lisboa, Portugal</strong>, é a entidade responsável pelo domínio <strong>josecarvalho.pt</strong>, onde se encontra alojado este WEBSITE.</p>
+                <p>A <strong>José Carvalho</strong>, com escritório na <strong>R. Fernando Lopes Graça 8A, 1600-067 Lisboa, Portugal</strong>, é a entidade responsável pelo domínio <strong>josecarvalho.pt</strong>, onde se encontra alojado este WEBSITE.</p>
                 <p>ESTAMOS EMPENHADOS EM PROTEGER A PRIVACIDADE E OS DADOS PESSOAIS DOS NOSSOS CLIENTES E UTILIZADORES, PELO QUE ELABORÁMOS E ADOTÁMOS A PRESENTE POLÍTICA, EM CONFORMIDADE COM O RGPD.</p>
                 
                 <h3 class="text-brand-primary font-bold mt-6 mb-2">1. ÂMBITO DE APLICAÇÃO</h3>
@@ -110,7 +115,7 @@
                 <p>Implementamos medidas técnicas e organizativas rigorosas (protocolo HTTPS, servidores seguros, controlo de acessos) para proteger os seus dados contra perda, uso indevido ou alteração.</p>
 
                 <h3 class="text-brand-primary font-bold mt-6 mb-2">7. DIREITOS DO TITULAR</h3>
-                <p>Pode exercer os seus direitos de acesso, retificação, esquecimento, limitação ou oposição contactando-nos diretamente através do e-mail oficial: <strong>contacto@josecarvalho.pt</strong>.</p>
+                <p>Pode exercer os seus direitos de acesso, retificação, esquecimento, limitação ou oposição contactando-nos diretamente através do e-mail oficial: <strong>josecarvalho@tophousers.pt</strong>.</p>
             </div>
 
             {{-- TAB: COOKIES --}}
@@ -132,6 +137,39 @@
                 <p>Pode, a qualquer momento, desativar os cookies nas definições do seu navegador (browser), embora isso possa afetar o funcionamento correto de algumas ferramentas do site.</p>
                 
                 <p class="text-xs mt-6 pt-4 border-t border-gray-100">Para mais informações técnicas, consulte <a href="https://allaboutcookies.org" target="_blank" class="text-brand-premium hover:underline">allaboutcookies.org</a>.</p>
+            </div>
+
+            {{-- TAB: RAL (RESOLUÇÃO DE LITÍGIOS) --}}
+            <div x-show="activeTab === 'ral'" style="display: none;" class="prose prose-sm max-w-none text-gray-600 font-light text-justify">
+                <h3 class="text-brand-primary font-bold mt-0 mb-2">Resolução Alternativa de Litígios (RAL)</h3>
+                
+                <p>Nos termos e em cumprimento do disposto na Lei n.º 144/2015, de 08.09, a <strong>José Carvalho</strong> disponibiliza a informação necessária para que o cliente consumidor possa exercer o seu direito de reclamação junto de uma entidade oficial, terceira e imparcial que o ajudará a resolver o litígio em questão.</p>
+                
+                <p>A resolução alternativa de litígios é a possibilidade que todos os consumidores têm ao seu dispor de recorrer a entidades oficiais que os ajudem na resolução ou orientação, de algum conflito, antes de abrirem processos litigiosos nos Tribunais.</p>
+                
+                <p>Em regra, o procedimento pode descrever-se conforme segue:</p>
+                <ol class="list-decimal pl-5 space-y-1">
+                    <li>O cliente consumidor pede a um terceiro imparcial que intervenha como intermediário entre si e o fornecedor ou prestador de serviços que é o alvo da sua reclamação.</li>
+                    <li>O intermediário pode sugerir uma solução para a sua reclamação, impor uma solução a ambas as partes ou reunir as partes para encontrar uma solução.</li>
+                </ol>
+                
+                <p>A resolução alternativa de litígios pode traduzir-se em "mediação", "conciliação" ou "arbitragem". A resolução alternativa de litígios é, por norma, menos dispendiosa, menos formal e mais rápida do que a via judicial.</p>
+                
+                <p>Assim, em caso de litígio, o cliente consumidor pode recorrer a uma Entidade de Resolução Alternativa de Litígios de consumo:</p>
+                
+                <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg mt-4">
+                    <p class="font-bold text-brand-primary mb-1">CNIACC - Centro Nacional de Informação e Arbitragem de Conflitos de Consumo</p>
+                    <p class="text-xs text-gray-500 mb-4">Entidade de competência genérica</p>
+                    
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-brand-premium" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                            <a href="https://www.cniacc.pt" target="_blank" class="hover:text-brand-cta underline">www.cniacc.pt</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <p class="text-xs mt-4 italic">Para mais informações consulte o Portal do Consumidor em <a href="https://www.consumidor.gov.pt" target="_blank" class="hover:text-brand-primary underline">www.consumidor.gov.pt</a>.</p>
             </div>
 
         </div>

@@ -41,7 +41,10 @@
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">Atelier / Escritório</h4>
-                                <p class="text-gray-600 font-light">Av. da Liberdade, 100<br>Lisboa, Portugal</p>
+                                <p class="text-gray-600 font-light">
+                                    R. Fernando Lopes Graça 8A<br>
+                                    1600-067 Lisboa, Portugal
+                                </p>
                             </div>
                         </div>
 
@@ -52,8 +55,12 @@
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">Telefone</h4>
-                                <p class="text-gray-600 font-light cursor-pointer hover:text-brand-cta transition">+351 910 000 000</p>
-                                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">Seg - Sex, 09:00 - 18:00</p>
+                                <a href="tel:+351917000301" class="block text-gray-600 font-light cursor-pointer hover:text-brand-cta transition">
+                                    +351 917 000 301
+                                </a>
+                                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
+                                    Seg - Sex, 10:00 - 18:30
+                                </p>
                             </div>
                         </div>
 
@@ -64,16 +71,18 @@
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">Email Corporativo</h4>
-                                <p class="text-gray-600 font-light cursor-pointer hover:text-brand-cta transition">contacto@josecarvalho.pt</p>
+                                <a href="mailto:josecarvalho@tophousers.pt" class="block text-gray-600 font-light cursor-pointer hover:text-brand-cta transition">
+                                    josecarvalho@tophousers.pt
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Mapa Minimalista --}}
+                {{-- Mapa --}}
                 <div class="w-full h-64 bg-gray-200 border border-white shadow-lg overflow-hidden grayscale hover:grayscale-0 transition duration-1000">
                     <iframe 
-                        src="https://maps.google.com/maps?q=Av.+da+Liberdade,+100,+Lisboa&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3111.458962657448!2d-9.166316924294065!3d38.75317797175496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd1932d80c326087%3A0x400ebbde49036d0!2sR.%20Fernando%20Lopes-Gra%C3%A7a%208A%2C%201600-067%20Lisboa!5e0!3m2!1spt-PT!2spt!4v1700000000000!5m2!1spt-PT!2spt" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 
