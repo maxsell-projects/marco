@@ -31,7 +31,7 @@
                 <label for="email" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-premium transition-colors">Email Corporativo</label>
                 <input type="email" name="email" id="email" required autofocus
                        class="w-full bg-white/5 border border-white/10 px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-premium focus:bg-white/10 transition-all placeholder-white/20"
-                       placeholder="admin@josecarvalho.pt">
+                       placeholder="seuemail@aqui.com">
                 @error('email')
                     <span class="text-red-400 text-xs mt-2 block font-light flex items-center gap-1">
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
