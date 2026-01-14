@@ -1,4 +1,6 @@
-<div x-data="chatbot()" x-init="initBot()" class="fixed bottom-6 right-6 z-50 flex flex-col items-end print:hidden">
+<div x-data="chatbot()" x-init="initBot()" 
+     class="fixed z-[60] flex flex-col items-end print:hidden
+            bottom-4 right-4 left-4 md:left-auto md:bottom-6 md:right-6">
     
     {{-- JANELA DO CHAT --}}
     <div x-show="open" 
@@ -9,10 +11,11 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-         class="mb-4 w-[340px] md:w-[380px] h-[500px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden font-sans">
+         {{-- Largura Responsiva: Full no mobile, fixa no desktop --}}
+         class="mb-4 w-full md:w-[380px] h-[70vh] md:h-[550px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden font-sans">
         
         {{-- HEADER --}}
-        <div class="bg-brand-primary p-4 text-white flex justify-between items-center shadow-md relative overflow-hidden">
+        <div class="bg-brand-primary p-4 text-white flex justify-between items-center shadow-md relative overflow-hidden flex-shrink-0">
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
             <div class="flex items-center gap-3 relative z-10">
                 <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></div>
@@ -21,13 +24,13 @@
                     <p class="text-[10px] text-gray-400 uppercase tracking-wider">Private Assistant AI</p>
                 </div>
             </div>
-            <button @click="open = false" class="hover:text-brand-premium transition relative z-10">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button @click="open = false" class="p-2 hover:bg-white/10 rounded-full transition relative z-10">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
         </div>
 
         {{-- AREA DE MENSAGENS --}}
-        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-[#F5F7FA] space-y-4 scroll-smooth">
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto bg-[#F5F7FA] space-y-4 scroll-smooth scrollbar-hide">
             <template x-for="(msg, index) in messages" :key="index">
                 <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
                     <div :class="msg.role === 'user' 
@@ -37,7 +40,7 @@
                         
                         <p x-html="msg.content"></p>
                         
-                        {{-- CARDS DE IMÓVEIS (Se houver) --}}
+                        {{-- CARDS DE IMÓVEIS --}}
                         <template x-if="msg.data && msg.data.length > 0">
                             <div class="mt-3 space-y-2">
                                 <template x-for="prop in msg.data">
@@ -66,7 +69,7 @@
         </div>
 
         {{-- INPUT --}}
-        <div class="p-3 bg-white border-t border-gray-100">
+        <div class="p-3 bg-white border-t border-gray-100 flex-shrink-0">
             <div class="flex items-center gap-2 bg-gray-50 rounded-full px-4 py-2 border border-gray-200 focus-within:border-brand-primary/30 transition shadow-inner">
                 <input type="text" x-model="userInput" @keydown.enter="sendMessage()" 
                     placeholder="Como posso ajudar hoje?" 
@@ -84,7 +87,6 @@
     {{-- BOTÃO FLUTUANTE (TRIGGER) --}}
     <button @click="open = !open" 
         class="bg-brand-primary hover:bg-brand-charcoal text-white p-4 rounded-full shadow-2xl transition-all hover:scale-105 flex items-center justify-center group relative border-2 border-brand-premium/20">
-        {{-- Badge de Notificação --}}
         <span x-show="!open" class="absolute top-0 right-0 flex h-3 w-3">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-premium opacity-75"></span>
             <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-premium"></span>
@@ -108,7 +110,7 @@
                     this.$watch('messages', () => {
                         this.$nextTick(() => {
                             const container = document.getElementById('chat-messages');
-                            container.scrollTop = container.scrollHeight;
+                            if(container) container.scrollTop = container.scrollHeight;
                         });
                     });
                 },
@@ -143,19 +145,15 @@
                                 data: data.data 
                             });
 
-                            // --- TOCA O ÁUDIO (NOVO) ---
                             if (data.audio) {
                                 const audio = new Audio("data:audio/mp3;base64," + data.audio);
-                                audio.play().catch(e => console.log("Autoplay bloqueado pelo browser (interaja primeiro):", e));
+                                audio.play().catch(e => console.log("Audio block:", e));
                             }
-
                         } else {
-                            this.messages.push({ role: 'assistant', content: 'Lamento, ocorreu um erro de comunicação. Pode tentar novamente?' });
+                            this.messages.push({ role: 'assistant', content: 'Lamento, ocorreu um erro. Tente novamente.' });
                         }
-
                     } catch (error) {
-                        console.error(error);
-                        this.messages.push({ role: 'assistant', content: 'Erro de conexão. Verifique a sua internet.' });
+                        this.messages.push({ role: 'assistant', content: 'Erro de conexão.' });
                     } finally {
                         this.isLoading = false;
                     }
@@ -163,4 +161,4 @@
             }
         }
     </script>
-</div>
+</div>x
