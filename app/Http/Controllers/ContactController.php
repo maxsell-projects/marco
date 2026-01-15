@@ -11,30 +11,31 @@ class ContactController extends Controller
 {
     public function send(Request $request)
     {
-        Log::info('Tentativa de envio de contacto iniciada.', [
-            'ip' => $request->ip()
-        ]);
+        // Log para auditoria de tráfego
+        Log::info('Lead recebida.', ['ip' => $request->ip()]);
 
+        // Validação estrita conforme SOP 3.5
         $validated = $request->validate([
-            'name'    => 'required|string|min:3|max:255',
-            'phone'   => 'nullable|string|max:20',
-            'email'   => 'required|email|max:255',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string|min:5|max:2000',
+            'name'          => 'required|string|min:3|max:255',
+            'email'         => 'required|email|max:255',
+            'phone'         => 'required|string|min:9|max:20', // Obrigatório conforme SOP
+            'location'      => 'nullable|string|max:255',
+            'typology'      => 'nullable|string|max:50',
+            'goal'          => 'required|string', // Venda, Compra, Investimento
+            'timeline'      => 'required|string', // 0, 3, 6, +6 meses
+            'sell_to_buy'   => 'required|string', // Sim/Não
+            'privacy_check' => 'required|accepted', // Checkbox obrigatória
+            'message'       => 'nullable|string|max:2000', // Opcional, pois os campos acima já filtram
         ]);
 
         try {
-            Mail::to('contacto@josecarvalho.pt')->send(new ContactLead($validated));
+            // Envio de Email (Podes manter a Mailable atual, só garante que ela recebe o array $validated)
+            Mail::to(config('mail.from.address'))->send(new ContactLead($validated));
 
-            Log::info('Sucesso: Lead enviado.');
-
-            return back()->with('success', 'A sua mensagem foi enviada com sucesso! Entraremos em contacto brevemente.');
+            return back()->with('success', 'Pedido recebido com sucesso. Entraremos em contacto brevemente.');
         } catch (\Exception $e) {
-            Log::error('FALHA NO ENVIO: ' . $e->getMessage());
-
-            return back()
-                ->withInput()
-                ->with('error', 'Ocorreu um erro técnico. Tente novamente.');
+            Log::error('ERRO CRÍTICO NO ENVIO DE LEAD: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Erro ao enviar. Por favor, tente via WhatsApp.');
         }
     }
 }

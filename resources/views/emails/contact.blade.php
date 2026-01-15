@@ -1,9 +1,9 @@
 @component('mail::message')
-# Nova Oportunidade | Private Office
+# Nova Lead | Private Office
 
-Caro **José Carvalho**,
+Caro **Marco Moura**,
 
-Recebeu uma nova solicitação de contacto através do seu portal oficial. Seguem os detalhes do potencial cliente:
+Recebeu uma nova solicitação de consultoria através do portal digital. Segue o perfil do potencial cliente:
 
 @component('mail::table')
 | Dado | Informação |
@@ -11,18 +11,24 @@ Recebeu uma nova solicitação de contacto através do seu portal oficial. Segue
 | **Nome** | {{ $data['name'] }} |
 | **Email** | [{{ $data['email'] }}](mailto:{{ $data['email'] }}) |
 | **Telefone** | {{ $data['phone'] ?? 'Não indicado' }} |
-| **Interesse** | {{ $data['subject'] }} |
+| **Motivo** | {{ $data['subject'] ?? 'Contacto Geral' }} |
+@if(isset($data['goal']))
+| **Objetivo** | {{ $data['goal'] }} |
+@endif
+@if(isset($data['timeline']))
+| **Prazo** | {{ $data['timeline'] }} |
+@endif
 @endcomponent
 
-### Mensagem:
+### Mensagem / Notas:
 @component('mail::panel')
-{{ $data['message'] }}
+"{{ $data['message'] ?? 'Sem mensagem adicional.' }}"
 @endcomponent
 
-@component('mail::button', ['url' => 'mailto:' . $data['email'], 'color' => 'primary'])
-Responder ao Cliente
+@component('mail::button', ['url' => 'mailto:' . $data['email']])
+Iniciar Conversa
 @endcomponent
 
-Atenciosamente,<br>
-**Sistema Digital José Carvalho**
+Cumprimentos,<br>
+**Sistema Digital Marco Moura**
 @endcomponent

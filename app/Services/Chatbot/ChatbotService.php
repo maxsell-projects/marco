@@ -5,7 +5,7 @@ namespace App\Services\Chatbot;
 use OpenAI;
 use App\Models\Property;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
 use GuzzleHttp\Client as GuzzleClient;
 
 class ChatbotService
@@ -40,29 +40,36 @@ class ChatbotService
 
         $tools = $this->getToolsDefinition();
         
-        // --- PROMPT REFINADO PARA PT-PT ---
+        // --- CONTEXTO DINÂMICO ---
+        $appName = Config::get('app.name', 'Imobiliária Premium');
+        
+        // --- PROMPT REFINADO (GENERIC & BRANDED) ---
+        // Agora ele assume a postura da nova marca (Bordeaux/Verde)
         $systemPrompt = "
-            You are the 'Private Virtual Assistant' for José Carvalho, a high-end real estate consultant in Portugal.
+            You are the 'Private Virtual Assistant' for {$appName}, a high-end real estate agency.
+            
+            CONTEXT & BRANDING:
+            - Brand Identity: Exclusive, Heritage, Trust.
+            - Visual Tone: Bordeaux (Passion/Luxury) and English Green (Tradition/Nature).
+            - Your Tone: Professional, Executive, Discreet, and Expert.
             
             CRITICAL LANGUAGE INSTRUCTION:
             You MUST speak in EUROPEAN PORTUGUESE (Português de Portugal).
             - Use 'estou a fazer' instead of 'estou fazendo'.
             - Use 'connosco' instead of 'conosco'.
             - Use 'gostaria' instead of 'queria'.
-            - Avoid the word 'você' explicitly; use the third person conjugation (e.g., 'Como está?' instead of 'Como você está?').
-            - Use formal, executive, and sophisticated vocabulary suitable for luxury real estate investors.
-            
-            Your tone is: Professional, Executive, Discreet, and Expert.
+            - Treat the user with high formality (implicitly 'O senhor/A senhora').
+            - Avoid the word 'você' explicitly; use third-person conjugation.
             
             RULES:
             1. Answer exclusively in European Portuguese.
-            2. Be concise but sophisticated. 
-            3. Use 'search_properties' when the user asks for properties, houses, or investment opportunities.
-            4. Use 'schedule_meeting' if the user wants to sell, talk to José, or schedule a visit.
+            2. Be concise but sophisticated. High-net-worth clients value time.
+            3. Use 'search_properties' ONLY when the user asks for properties, houses, or investment opportunities.
+            4. Use 'schedule_meeting' if the user wants to sell, talk to an agent, or schedule a visit.
             5. Do not invent property data. Only use what the tool returns.
         ";
 
-        // Limpar histórico
+        // Limpar histórico (mantém apenas as últimas 6 mensagens para economizar tokens)
         $cleanHistory = array_map(function($msg) {
             return ['role' => $msg['role'], 'content' => $msg['content'] ?? ''];
         }, array_slice($history, -6)); 
@@ -85,6 +92,7 @@ class ChatbotService
             $replyContent = $choice->message->content ?? '';
             $frontendData = null;
 
+            // Se a IA decidiu chamar uma ferramenta (busca ou agendamento)
             if ($choice->finishReason === 'tool_calls') {
                 $messages[] = $choice->message->toArray();
 
@@ -94,6 +102,7 @@ class ChatbotService
 
                     $toolResult = $this->executeFunction($functionName, $args);
 
+                    // Se for busca, separamos os dados para o Frontend (Cards) do resumo em texto
                     if ($functionName === 'search_properties' && is_array($toolResult) && isset($toolResult['data'])) {
                         $frontendData = $toolResult['data'];
                         $toolResult = $toolResult['summary'];
@@ -106,6 +115,7 @@ class ChatbotService
                     ];
                 }
 
+                // Segunda chamada para a IA gerar a resposta final com base no resultado da ferramenta
                 $finalResponse = $this->client->chat()->create([
                     'model' => 'gpt-4o-mini',
                     'messages' => $messages,
@@ -116,7 +126,7 @@ class ChatbotService
 
             if (empty($replyContent)) $replyContent = "Compreendido. Posso ajudar com algo mais?";
             
-            // --- GERAÇÃO DE ÁUDIO ---
+            // --- GERAÇÃO DE ÁUDIO (TTS) ---
             $audioBase64 = $this->textToSpeech($replyContent);
 
             return [
@@ -138,6 +148,7 @@ class ChatbotService
     private function textToSpeech(string $text): ?string
     {
         try {
+            // Limite de caracteres para segurança da API
             $inputText = mb_substr($text, 0, 4096);
 
             $response = $this->client->audio()->speech([
@@ -162,12 +173,15 @@ class ChatbotService
             switch ($name) {
                 case 'search_properties':
                     $query = Property::query()
-                        ->where('is_visible', true)
-                        // ->where('status', '!=', 'Sold') // Descomentar se tiver coluna status
-                        ;
+                        ->where('is_visible', true);
+                        // ->where('status', '!=', 'Sold') // Ativar se necessário
 
                     if (!empty($args['location'])) {
-                        $query->where('location', 'LIKE', "%{$args['location']}%");
+                        $query->where(function($q) use ($args) {
+                            $q->where('location', 'LIKE', "%{$args['location']}%")
+                              ->orWhere('city', 'LIKE', "%{$args['location']}%")
+                              ->orWhere('title', 'LIKE', "%{$args['location']}%");
+                        });
                     }
                     
                     if (!empty($args['type'])) {
@@ -190,7 +204,8 @@ class ChatbotService
                                 'id' => $p->id,
                                 'title' => $p->title,
                                 'price' => number_format($p->price, 0, ',', '.') . ' €',
-                                'image' => $p->cover_image ? asset('storage/' . $p->cover_image) : asset('img/placeholder.jpg'),
+                                // Garante fallback de imagem se não houver capa
+                                'image' => $p->cover_image ? asset('storage/' . $p->cover_image) : 'https://placehold.co/600x400?text=Sem+Imagem',
                                 'link' => route('properties.show', $p->slug)
                             ];
                         })
@@ -199,12 +214,16 @@ class ChatbotService
                 case 'schedule_meeting':
                     try {
                         $contact = $args['contact'] ?? 'Não informado';
-                        Log::info("Lead Chatbot: " . $contact);
-                        // Aqui podes adicionar envio de email real
+                        $reason = $args['reason'] ?? 'Geral';
+                        Log::info("Lead Chatbot Capturado: [{$contact}] - Motivo: {$reason}");
+                        
+                        // TODO: Disparar Evento ou Job para envio de email assíncrono
+                        // ContactLeadJob::dispatch($contact, $reason);
+
                     } catch (\Exception $e) {
-                        Log::error("Mail Error: " . $e->getMessage());
+                        Log::error("Mail/Log Error: " . $e->getMessage());
                     }
-                    return "O pedido de agendamento foi registado. A equipa entrará em contacto brevemente.";
+                    return "O pedido de agendamento foi registado com sucesso. A nossa equipa entrará em contacto brevemente.";
 
                 default:
                     return "Função desconhecida.";
@@ -221,13 +240,13 @@ class ChatbotService
                 'type' => 'function',
                 'function' => [
                     'name' => 'search_properties',
-                    'description' => 'Procurar imóveis para venda ou investimento.',
+                    'description' => 'Procurar imóveis para venda ou investimento com base em critérios.',
                     'parameters' => [
                         'type' => 'object',
                         'properties' => [
                             'location' => ['type' => 'string', 'description' => 'Cidade ou zona (ex: Lisboa, Cascais)'],
-                            'type' => ['type' => 'string', 'description' => 'Tipo (Apartamento, Moradia)'],
-                            'max_price' => ['type' => 'number', 'description' => 'Preço máximo em euros'],
+                            'type' => ['type' => 'string', 'description' => 'Tipo de imóvel (Apartamento, Moradia, Terreno)'],
+                            'max_price' => ['type' => 'number', 'description' => 'Preço máximo ou orçamento em euros'],
                         ],
                     ],
                 ],
@@ -236,12 +255,12 @@ class ChatbotService
                 'type' => 'function',
                 'function' => [
                     'name' => 'schedule_meeting',
-                    'description' => 'Agendar reunião ou pedir contacto para vender/comprar.',
+                    'description' => 'Agendar reunião, visita ou pedir contacto comercial.',
                     'parameters' => [
                         'type' => 'object',
                         'properties' => [
                             'contact' => ['type' => 'string', 'description' => 'Email ou telefone do utilizador'],
-                            'reason' => ['type' => 'string'],
+                            'reason' => ['type' => 'string', 'description' => 'Motivo do contacto (Vender, Comprar, Visita)'],
                         ],
                         'required' => ['contact'],
                     ],

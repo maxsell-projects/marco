@@ -4,49 +4,54 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Relatório de Simulação de Mais-Valias</title>
     <style>
-        body { font-family: 'Helvetica', sans-serif; color: #2E2E2E; margin: 0; padding: 0; font-size: 12px; }
-        .container { width: 100%; max-width: 700px; margin: 0 auto; padding: 40px; }
+        @page { margin: 0; }
+        body { font-family: 'Helvetica', sans-serif; color: #333; margin: 0; padding: 0; font-size: 11px; background-color: #fff; }
         
-        .header { text-align: center; margin-bottom: 50px; border-bottom: 2px solid #C2A86D; padding-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #0F2A44; text-transform: uppercase; margin-bottom: 5px; }
-        .subtitle { font-size: 9px; text-transform: uppercase; letter-spacing: 3px; color: #C2A86D; }
+        .header { background-color: #1D4C42; color: #fff; padding: 40px 50px; }
+        .logo { font-size: 28px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; font-family: 'Times New Roman', serif; }
+        .subtitle { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #E5C2A4; }
         
-        .summary-box { background-color: #F5F4F1; padding: 30px; border-left: 5px solid #0F2A44; margin-bottom: 40px; }
-        .summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #6B8F71; margin-bottom: 5px; font-weight: bold; }
-        .summary-value { font-size: 32px; font-weight: bold; color: #0F2A44; margin-bottom: 20px; }
+        .container { padding: 50px; }
         
-        .details-table { width: 100%; border-collapse: collapse; }
-        .details-table th, .details-table td { padding: 12px 0; border-bottom: 1px solid #E0E0E0; text-align: left; }
-        .details-table th { color: #888; font-weight: normal; font-size: 11px; text-transform: uppercase; }
-        .details-table td { text-align: right; font-weight: bold; color: #2E2E2E; }
-        .details-table .highlight { color: #C2A86D; }
-        .details-table .negative { color: #C46A45; }
+        .summary-box { background-color: #F9F5F0; padding: 30px; border-left: 6px solid #8D182B; margin-bottom: 40px; }
+        .summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px; font-weight: bold; }
+        .summary-value { font-size: 36px; font-weight: bold; color: #1D4C42; margin-bottom: 20px; font-family: 'Times New Roman', serif; }
         
-        .section-title { font-size: 14px; color: #0F2A44; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .details-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .details-table th, .details-table td { padding: 12px 0; border-bottom: 1px solid #EEE; text-align: left; }
+        .details-table th { color: #999; font-weight: normal; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; width: 60%; }
+        .details-table td { text-align: right; font-weight: bold; color: #333; font-size: 12px; }
         
-        .footer { margin-top: 60px; text-align: center; font-size: 9px; color: #AAA; border-top: 1px solid #EEE; padding-top: 20px; line-height: 1.5; }
+        .highlight-row th, .highlight-row td { border-bottom: 2px solid #1D4C42; color: #1D4C42; padding-top: 20px; font-size: 14px; }
+        .negative { color: #8D182B; }
+        
+        .disclaimer { margin-top: 60px; font-size: 8px; color: #BBB; line-height: 1.6; text-align: justify; border-top: 1px solid #EEE; padding-top: 20px; }
+        
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; height: 30px; background-color: #1D4C42; color: #E5C2A4; text-align: center; line-height: 30px; font-size: 8px; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">José Carvalho</div>
-            <div class="subtitle">Private Office & Investment Strategy</div>
-        </div>
 
+    <div class="header">
+        <div class="logo">Marco Moura</div>
+        <div class="subtitle">Private Office & Investment Strategy</div>
+    </div>
+
+    <div class="container">
+        
         <div class="summary-box">
-            <div class="summary-label">Imposto Estimado a Pagar (IRS)</div>
+            <div class="summary-label">Estimativa de Imposto (IRS)</div>
             <div class="summary-value">{{ $results['estimated_tax_fmt'] }} €</div>
             
             <table width="100%">
                 <tr>
-                    <td style="font-size: 11px; color: #666;">Mais-Valia Bruta Apurada</td>
-                    <td style="text-align: right; font-weight: bold; font-size: 14px;">{{ $results['gross_gain_fmt'] }} €</td>
+                    <td style="font-size: 10px; color: #666; text-transform: uppercase;">Mais-Valia Bruta Apurada</td>
+                    <td style="text-align: right; font-weight: bold; font-size: 14px; color: #1D4C42;">{{ $results['gross_gain_fmt'] }} €</td>
                 </tr>
             </table>
         </div>
 
-        <div class="section-title">Detalhamento do Cálculo</div>
+        <div style="margin-bottom: 20px; font-size: 12px; font-weight: bold; color: #1D4C42; text-transform: uppercase; letter-spacing: 1px;">Detalhamento do Cálculo</div>
 
         <table class="details-table">
             <tr>
@@ -58,11 +63,11 @@
                 <td>{{ $data['acquisition_value'] }} €</td>
             </tr>
             <tr>
-                <th>Coeficiente de Desvalorização ({{ $data['acquisition_year'] }})</th>
+                <th>Coeficiente de Atualização ({{ $data['acquisition_year'] }})</th>
                 <td>x {{ $results['coefficient'] }}</td>
             </tr>
             <tr>
-                <th style="color: #0F2A44; font-weight: bold;">Valor de Aquisição Atualizado</th>
+                <th style="color: #1D4C42; font-weight: bold;">Valor de Aquisição Atualizado</th>
                 <td class="negative">- {{ $results['acquisition_updated_fmt'] }} €</td>
             </tr>
             <tr>
@@ -77,18 +82,22 @@
             </tr>
             @endif
 
-            <tr style="border-top: 2px solid #0F2A44;">
-                <th style="padding-top: 15px; color: #0F2A44; font-weight: bold;">Mais-Valia Líquida Tributável (50%)</th>
-                <td style="padding-top: 15px; font-size: 16px; color: #0F2A44;">{{ $results['taxable_gain_fmt'] }} €</td>
+            <tr class="highlight-row">
+                <th>Matéria Coletável (50% do Saldo)</th>
+                <td>{{ $results['taxable_gain_fmt'] }} €</td>
             </tr>
         </table>
 
-        <div class="footer">
-            <p>Simulação gerada automaticamente em {{ $date }}.</p>
-            <p>Este documento é uma estimativa baseada nos dados fornecidos e na legislação fiscal em vigor. <br>
-            Não dispensa a consulta de um contabilista certificado ou da Autoridade Tributária.</p>
-            <p><strong>José Carvalho Real Estate</strong> | Lisboa, Portugal</p>
+        <div class="disclaimer">
+            <p><strong>AVISO LEGAL:</strong> Este documento constitui uma simulação meramente indicativa, baseada nos dados fornecidos pelo utilizador e nos coeficientes de desvalorização da moeda em vigor à data da emissão. Não dispensa a consulta da legislação fiscal atualizada nem o aconselhamento profissional de um Contabilista Certificado ou da Autoridade Tributária. A Marco Moura Private Real Estate declina qualquer responsabilidade por decisões tomadas com base nesta estimativa.</p>
+            <p>Gerado automaticamente em {{ $date }}.</p>
         </div>
+
     </div>
+
+    <div class="footer">
+        Marco Moura Private Office • Lisboa • Portugal
+    </div>
+
 </body>
 </html>

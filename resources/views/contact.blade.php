@@ -1,22 +1,28 @@
 @extends('layouts.app')
 
+@section('title', 'Contactos | Marco Moura Private Office')
+
 @section('content')
 
-{{-- HERO SECTION: SÓBRIO & ELEGANTE --}}
-<div class="bg-brand-primary text-white py-32 text-center relative overflow-hidden">
+{{-- HERO SECTION: SÓBRIO & ELEGANTE (Verde Inglês) --}}
+<div class="bg-brand-secondary text-white py-32 md:py-40 text-center relative overflow-hidden">
     {{-- Textura Sutil --}}
-    <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+    <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
     
+    {{-- Elemento Decorativo --}}
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full pointer-events-none"></div>
+
     <div class="container mx-auto px-6 relative z-10" data-aos="fade-up">
-        <p class="text-brand-premium font-mono text-xs uppercase tracking-[0.4em] mb-6">
+        <p class="text-brand-sand font-mono text-xs uppercase tracking-[0.4em] mb-6 flex items-center justify-center gap-3">
+            <span class="w-8 h-[1px] bg-brand-sand"></span>
             Canais Oficiais
+            <span class="w-8 h-[1px] bg-brand-sand"></span>
         </p>
-        <h1 class="text-4xl md:text-6xl font-didot leading-tight">
+        <h1 class="text-5xl md:text-7xl font-serif leading-tight text-white mb-8">
             Estamos ao seu Dispor
         </h1>
-        <div class="w-16 h-[1px] bg-brand-premium mx-auto mt-8 mb-6"></div>
-        <p class="text-gray-300 font-light max-w-2xl mx-auto text-lg leading-relaxed">
-            Seja para comprar, vender ou avaliar o seu património, a nossa equipa está preparada para oferecer um acompanhamento de excelência.
+        <p class="text-white/60 font-light max-w-2xl mx-auto text-lg leading-relaxed">
+            Seja para comprar, vender ou avaliar o seu património, a nossa equipa está preparada para oferecer um acompanhamento de excelência e total discrição.
         </p>
     </div>
 </div>
@@ -25,38 +31,38 @@
     <div class="container mx-auto px-6 md:px-12">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
             
-            {{-- COLUNA 1: INFORMAÇÕES --}}
+            {{-- COLUNA 1: INFORMAÇÕES (Estilo Minimalista) --}}
             <div class="space-y-12" data-aos="fade-right">
                 <div>
-                    <h3 class="text-3xl font-didot text-brand-primary mb-6">Informações de Contacto</h3>
-                    <p class="text-gray-500 font-light leading-relaxed mb-10 text-justify">
-                        Privilegiamos a relação humana e o contacto personalizado. Visite-nos no nosso atelier em Lisboa ou agende uma reunião digital.
+                    <h3 class="text-3xl font-serif text-brand-secondary mb-6">Informações de Contacto</h3>
+                    <p class="text-gray-500 font-light leading-relaxed mb-10 text-justify border-l-2 border-brand-sand pl-4">
+                        Privilegiamos a relação humana e o contacto personalizado. Visite-nos no nosso escritório em Lisboa ou agende uma reunião digital privada.
                     </p>
                     
                     <div class="space-y-8">
                         {{-- Escritório --}}
                         <div class="flex items-start gap-6 group">
-                            <div class="p-4 bg-white border border-gray-100 shadow-sm text-brand-premium group-hover:bg-brand-primary group-hover:text-white transition-colors duration-300">
+                            <div class="p-4 bg-white border border-brand-sand/20 shadow-sm text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-colors duration-500">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">Atelier / Escritório</h4>
-                                <p class="text-gray-600 font-light">
-                                    R. Fernando Lopes Graça 8A<br>
-                                    1600-067 Lisboa, Portugal
+                                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-secondary mb-2">Private Office</h4>
+                                <p class="text-gray-600 font-light text-sm leading-relaxed">
+                                    Avenida da Liberdade, nº 000<br>
+                                    1250-000 Lisboa, Portugal
                                 </p>
                             </div>
                         </div>
 
                         {{-- Telefone --}}
                         <div class="flex items-start gap-6 group">
-                            <div class="p-4 bg-white border border-gray-100 shadow-sm text-brand-premium group-hover:bg-brand-primary group-hover:text-white transition-colors duration-300">
+                            <div class="p-4 bg-white border border-brand-sand/20 shadow-sm text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-colors duration-500">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">Telefone</h4>
-                                <a href="tel:+351917000301" class="block text-gray-600 font-light cursor-pointer hover:text-brand-cta transition">
-                                    +351 917 000 301
+                                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-secondary mb-2">Telefone</h4>
+                                <a href="tel:+351000000000" class="block text-gray-600 font-light cursor-pointer hover:text-brand-primary transition text-lg font-serif">
+                                    +351 000 000 000
                                 </a>
                                 <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
                                     Seg - Sex, 10:00 - 18:30
@@ -66,93 +72,113 @@
 
                         {{-- Email --}}
                         <div class="flex items-start gap-6 group">
-                            <div class="p-4 bg-white border border-gray-100 shadow-sm text-brand-premium group-hover:bg-brand-primary group-hover:text-white transition-colors duration-300">
+                            <div class="p-4 bg-white border border-brand-sand/20 shadow-sm text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-colors duration-500">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                             </div>
                             <div>
-                                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">Email Corporativo</h4>
-                                <a href="mailto:josecarvalho@tophousers.pt" class="block text-gray-600 font-light cursor-pointer hover:text-brand-cta transition">
-                                    josecarvalho@tophousers.pt
+                                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-secondary mb-2">Email Corporativo</h4>
+                                <a href="mailto:privado@marcomoura.pt" class="block text-gray-600 font-light cursor-pointer hover:text-brand-primary transition border-b border-transparent hover:border-brand-primary w-max">
+                                    privado@marcomoura.pt
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Mapa --}}
-                <div class="w-full h-64 bg-gray-200 border border-white shadow-lg overflow-hidden grayscale hover:grayscale-0 transition duration-1000">
+                {{-- Mapa (Grayscale + Overlay) --}}
+                <div class="w-full h-64 bg-gray-200 relative overflow-hidden shadow-lg group">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3111.458962657448!2d-9.166316924294065!3d38.75317797175496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd1932d80c326087%3A0x400ebbde49036d0!2sR.%20Fernando%20Lopes-Gra%C3%A7a%208A%2C%201600-067%20Lisboa!5e0!3m2!1spt-PT!2spt!4v1700000000000!5m2!1spt-PT!2spt" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.516246473673!2d-9.150387424163985!3d38.71836567176277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337b5c87c02b%3A0x6d9f75968d0d9f48!2sAv.%20da%20Liberdade%2C%20Lisboa!5e0!3m2!1spt-PT!2spt!4v1700000000000!5m2!1spt-PT!2spt" 
                         width="100%" 
                         height="100%" 
-                        style="border:0;" 
+                        style="border:0; filter: grayscale(100%) contrast(1.2);" 
                         allowfullscreen="" 
                         loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="group-hover:grayscale-0 transition-all duration-1000">
                     </iframe>
                 </div>
             </div>
 
-            {{-- COLUNA 2: FORMULÁRIO --}}
-            <div class="bg-white p-8 md:p-12 shadow-2xl border-t-4 border-brand-premium" data-aos="fade-left">
-                <h3 class="text-3xl font-didot text-brand-primary mb-8">Envie uma Mensagem</h3>
+            {{-- COLUNA 2: FORMULÁRIO (SOP COMPLIANT - 3.5) --}}
+            <div class="bg-white p-8 md:p-12 shadow-2xl border-t-8 border-brand-primary relative" data-aos="fade-left">
+                
+                {{-- Selo Decorativo --}}
+                <div class="absolute top-0 right-0 p-6 opacity-10">
+                    <span class="font-serif text-6xl text-brand-primary">MM</span>
+                </div>
+
+                <h3 class="text-3xl font-serif text-brand-secondary mb-2">Inicie a Conversa</h3>
+                <p class="text-gray-400 text-xs mb-8 uppercase tracking-widest">Resposta em até 24h úteis</p>
                 
                 @if(session('success'))
-                    <div class="mb-8 p-4 bg-[#F5F4F1] border-l-4 border-brand-secondary text-brand-primary text-sm flex items-center gap-3">
-                        <svg class="w-5 h-5 text-brand-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <div class="mb-8 p-4 bg-brand-background border-l-4 border-brand-secondary text-brand-secondary text-sm flex items-center gap-3">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         {{ session('success') }}
                     </div>
                 @endif
 
-                <form action="{{ route('contact.send') }}" method="POST" class="space-y-8">
+                <form action="{{ route('contact.send') }}" method="POST" class="space-y-6">
                     @csrf
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="group">
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary transition-colors">Nome Completo</label>
-                            <input type="text" name="name" required 
-                                   class="w-full bg-gray-50 border-0 border-b border-gray-200 px-0 py-3 focus:ring-0 focus:border-brand-cta transition-colors placeholder-gray-300 text-brand-primary" 
-                                   placeholder="Ex: João Silva">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group relative">
+                            <input type="text" name="name" required placeholder=" " 
+                                   class="peer w-full bg-gray-50 border-0 border-b-2 border-gray-100 px-3 py-3 focus:ring-0 focus:border-brand-primary transition-colors placeholder-transparent text-brand-secondary">
+                            <label class="absolute left-3 top-3 text-xs text-gray-400 uppercase tracking-widest transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs peer-placeholder-shown:text-gray-400 peer-focus:-top-2 peer-focus:text-[10px] peer-focus:text-brand-primary">Nome Completo</label>
                         </div>
-                        <div class="group">
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary transition-colors">Telemóvel</label>
-                            <input type="tel" name="phone" 
-                                   class="w-full bg-gray-50 border-0 border-b border-gray-200 px-0 py-3 focus:ring-0 focus:border-brand-cta transition-colors placeholder-gray-300 text-brand-primary" 
-                                   placeholder="+351">
+                        <div class="group relative">
+                            <input type="tel" name="phone" required placeholder=" " 
+                                   class="peer w-full bg-gray-50 border-0 border-b-2 border-gray-100 px-3 py-3 focus:ring-0 focus:border-brand-primary transition-colors placeholder-transparent text-brand-secondary">
+                            <label class="absolute left-3 top-3 text-xs text-gray-400 uppercase tracking-widest transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs peer-placeholder-shown:text-gray-400 peer-focus:-top-2 peer-focus:text-[10px] peer-focus:text-brand-primary">Telemóvel</label>
                         </div>
                     </div>
 
-                    <div class="group">
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary transition-colors">Email</label>
-                        <input type="email" name="email" required 
-                               class="w-full bg-gray-50 border-0 border-b border-gray-200 px-0 py-3 focus:ring-0 focus:border-brand-cta transition-colors placeholder-gray-300 text-brand-primary" 
-                               placeholder="exemplo@email.com">
+                    <div class="group relative">
+                        <input type="email" name="email" required placeholder=" " 
+                               class="peer w-full bg-gray-50 border-0 border-b-2 border-gray-100 px-3 py-3 focus:ring-0 focus:border-brand-primary transition-colors placeholder-transparent text-brand-secondary">
+                        <label class="absolute left-3 top-3 text-xs text-gray-400 uppercase tracking-widest transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs peer-placeholder-shown:text-gray-400 peer-focus:-top-2 peer-focus:text-[10px] peer-focus:text-brand-primary">Email Corporativo</label>
                     </div>
 
-                    <div class="group">
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary transition-colors">Motivo do Contacto</label>
-                        <select name="subject" class="w-full bg-gray-50 border-0 border-b border-gray-200 px-0 py-3 focus:ring-0 focus:border-brand-cta transition-colors text-brand-primary cursor-pointer">
-                            <option value="Comprar Imóvel">Interesse em Comprar</option>
-                            <option value="Vender Imóvel">Vender a minha Propriedade</option>
-                            <option value="Investimento">Consultoria de Investimento</option>
-                            <option value="Parcerias">Parcerias</option>
-                            <option value="Outros">Outros Assuntos</option>
-                        </select>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group relative">
+                            <select name="subject" class="w-full bg-gray-50 border-0 border-b-2 border-gray-100 px-3 py-3 focus:ring-0 focus:border-brand-primary transition-colors text-brand-secondary text-sm appearance-none">
+                                <option value="" disabled selected>Motivo do Contacto</option>
+                                <option value="Comprar Imóvel">Comprar Imóvel</option>
+                                <option value="Vender Imóvel">Vender Imóvel</option>
+                                <option value="Investimento">Investimento</option>
+                                <option value="Parcerias">Parcerias</option>
+                            </select>
+                        </div>
+                        <div class="group relative">
+                            <select name="timeline" class="w-full bg-gray-50 border-0 border-b-2 border-gray-100 px-3 py-3 focus:ring-0 focus:border-brand-primary transition-colors text-brand-secondary text-sm appearance-none">
+                                <option value="" disabled selected>Prazo Previsto</option>
+                                <option value="Imediato">Imediato</option>
+                                <option value="3 meses">Até 3 meses</option>
+                                <option value="6 meses">Até 6 meses</option>
+                                <option value="+6 meses">Longo Prazo</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="group">
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-brand-primary transition-colors">Mensagem</label>
-                        <textarea name="message" rows="4" required 
-                                  class="w-full bg-gray-50 border-0 border-b border-gray-200 px-0 py-3 focus:ring-0 focus:border-brand-cta transition-colors resize-none placeholder-gray-300 text-brand-primary" 
-                                  placeholder="Como podemos ajudar a realizar os seus objetivos?"></textarea>
+                    {{-- Campos Ocultos --}}
+                    <input type="hidden" name="goal" value="Contacto Geral">
+                    <input type="hidden" name="sell_to_buy" value="Não Aplicável">
+
+                    <div class="group relative">
+                        <textarea name="message" rows="4" required placeholder=" " 
+                                  class="peer w-full bg-gray-50 border-0 border-b-2 border-gray-100 px-3 py-3 focus:ring-0 focus:border-brand-primary transition-colors resize-none placeholder-transparent text-brand-secondary"></textarea>
+                        <label class="absolute left-3 top-3 text-xs text-gray-400 uppercase tracking-widest transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs peer-placeholder-shown:text-gray-400 peer-focus:-top-2 peer-focus:text-[10px] peer-focus:text-brand-primary">Mensagem</label>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" required class="text-brand-cta focus:ring-brand-cta border-gray-300 rounded-sm">
-                        <span class="text-xs text-gray-400">Aceito a <a href="#" class="underline hover:text-brand-primary">Política de Privacidade</a>.</span>
+                    <div class="flex items-start gap-3">
+                        <input type="checkbox" name="privacy_check" required class="mt-1 text-brand-primary focus:ring-brand-primary border-gray-300 rounded-sm w-4 h-4">
+                        <span class="text-[10px] text-gray-400 leading-tight">
+                            Li e aceito a <a href="{{ route('terms') }}" class="underline hover:text-brand-primary">Política de Privacidade</a>. Autorizo o tratamento dos dados para efeitos de contacto comercial.
+                        </span>
                     </div>
 
-                    <button type="submit" class="w-full bg-brand-primary text-white font-bold py-5 hover:bg-brand-cta transition-all duration-300 uppercase tracking-[0.2em] text-xs shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <button type="submit" class="w-full bg-brand-primary text-white font-bold py-5 hover:bg-brand-secondary transition-all duration-300 uppercase tracking-[0.2em] text-xs shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                         Enviar Mensagem
                     </button>
                 </form>
