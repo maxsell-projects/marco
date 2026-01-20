@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api; // <--- OBRIGATÓRIO: Tem de ter o \Api
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\Chatbot\ChatbotService;
@@ -11,9 +11,13 @@ class ChatbotController extends Controller
 {
     public function sendMessage(Request $request, ChatbotService $bot)
     {
+        // Capturar o locale enviado pelo front (padrão 'pt' se não vier)
+        $locale = $request->input('locale', 'pt');
+
         // LOG 1: Verificar se o pedido chega aqui
         Log::info('🤖 Chatbot: Pedido Recebido', [
             'ip' => $request->ip(),
+            'locale' => $locale, // <--- Log para confirmar que a língua chegou
             'message_length' => strlen($request->input('message', '')),
             'has_history' => $request->has('history')
         ]);
@@ -22,14 +26,16 @@ class ChatbotController extends Controller
             $validated = $request->validate([
                 'message' => 'required|string|max:1000',
                 'history' => 'array|nullable',
+                'locale'  => 'sometimes|string|in:pt,en', // <--- Validação extra de segurança
             ]);
 
             // LOG 2: Antes de chamar o serviço (testa se o Service foi injetado)
-            Log::info('🤖 Chatbot: A chamar o Serviço...');
+            Log::info("🤖 Chatbot: A chamar o Serviço em [{$locale}]...");
 
+            // Passamos o $locale para o método handleMessage
             $response = $bot->handleMessage(
                 $validated['message'],
-                'pt', 
+                $locale, // <--- AQUI ESTAVA 'pt' FIXO, AGORA É DINÂMICO
                 $validated['history'] ?? []
             );
 
@@ -43,7 +49,7 @@ class ChatbotController extends Controller
             return response()->json([
                 'status' => 'success',
                 'reply'  => $response['reply'],
-                'audio'  => $response['audio'], // <--- VOZ ADICIONADA AQUI
+                'audio'  => $response['audio'],
                 'data'   => $response['data'] 
             ]);
 

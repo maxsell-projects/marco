@@ -1,6 +1,10 @@
-<div x-data="chatbot()" x-init="initBot()" 
-     class="fixed z-[60] flex flex-col items-end print:hidden
-            bottom-4 right-4 left-4 md:left-auto md:bottom-6 md:right-6">
+<div x-data="chatbot({
+        initialMsg: '{!! __('chatbot.messages.initial') !!}',
+        errorComm: '{{ __('chatbot.messages.error_comm') }}',
+        errorConn: '{{ __('chatbot.messages.error_conn') }}'
+     })" 
+     x-init="initBot()" 
+     class="fixed z-[60] flex flex-col items-end print:hidden bottom-4 right-4 left-4 md:left-auto md:bottom-6 md:right-6">
     
     {{-- JANELA DO CHAT --}}
     <div x-show="open" 
@@ -13,15 +17,15 @@
          x-transition:leave-end="opacity-0 translate-y-4 scale-95"
          class="mb-4 w-full md:w-[380px] h-[70vh] md:h-[550px] bg-white rounded-lg shadow-2xl border border-brand-sand/30 flex flex-col overflow-hidden font-sans">
         
-        {{-- HEADER (Verde Inglês) --}}
+        {{-- HEADER --}}
         <div class="bg-brand-secondary p-4 text-white flex justify-between items-center shadow-md relative overflow-hidden flex-shrink-0 border-b-2 border-brand-primary">
             <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
             
             <div class="flex items-center gap-3 relative z-10">
                 <div class="w-2.5 h-2.5 rounded-full bg-brand-sand animate-pulse shadow-[0_0_8px_rgba(229,194,164,0.8)]"></div>
                 <div>
-                    <h3 class="font-serif text-sm tracking-widest uppercase text-white">Marco Moura</h3>
-                    <p class="text-[9px] text-brand-sand uppercase tracking-wider">Private AI Assistant</p>
+                    <h3 class="font-serif text-sm tracking-widest uppercase text-white">{{ __('chatbot.header.title') }}</h3>
+                    <p class="text-[9px] text-brand-sand uppercase tracking-wider">{{ __('chatbot.header.subtitle') }}</p>
                 </div>
             </div>
             <button @click="open = false" class="p-2 hover:bg-white/10 rounded-full transition relative z-10 text-white/70 hover:text-white">
@@ -68,11 +72,11 @@
             </div>
         </div>
 
-        {{-- INPUT --}}
+        {{-- INPUT AREA --}}
         <div class="p-3 bg-white border-t border-gray-100 flex-shrink-0">
             <div class="flex items-center gap-2 bg-gray-50 rounded-full px-4 py-2 border border-gray-200 focus-within:border-brand-primary/50 transition shadow-inner">
                 <input type="text" x-model="userInput" @keydown.enter="sendMessage()" 
-                    placeholder="Como posso ajudar hoje?" 
+                    placeholder="{{ __('chatbot.input.placeholder') }}" 
                     :disabled="isLoading"
                     class="flex-1 bg-transparent border-none focus:ring-0 text-sm text-brand-secondary placeholder-gray-400 px-0 font-light">
 
@@ -81,6 +85,14 @@
                     <svg class="w-5 h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                 </button>
             </div>
+        </div>
+
+        {{-- POWERED BY MAXSELL --}}
+        <div class="bg-gray-50 border-t border-gray-100 py-2 flex justify-center items-center gap-2 select-none">
+            <span class="text-[9px] text-gray-400 uppercase tracking-widest font-light">{{ __('chatbot.powered_by') }}</span>
+            <a href="https://www.maxselladvisor.com" target="_blank" class="opacity-50 hover:opacity-100 transition-opacity">
+                <img src="{{ asset('img/maxsell.png') }}" alt="Maxsell" class="h-3 w-auto grayscale">
+            </a>
         </div>
     </div>
 
@@ -98,16 +110,18 @@
     </button>
 
     <script>
-        function chatbot() {
+        function chatbot(config) {
             return {
                 open: false,
                 userInput: '',
-                messages: [
-                    { role: 'assistant', content: "Olá. Sou o assistente virtual do <strong>Marco Moura Private Office</strong>. <br>Procuro oferecer-lhe um atendimento exclusivo. <br><br>Deseja ver a nossa coleção privada ou agendar uma consultoria?" }
-                ],
+                messages: [],
                 isLoading: false,
+                config: config,
 
                 initBot() {
+                    // Inicializa com a mensagem traduzida
+                    this.messages.push({ role: 'assistant', content: this.config.initialMsg });
+
                     this.$watch('messages', () => {
                         this.$nextTick(() => {
                             const container = document.getElementById('chat-messages');
@@ -133,7 +147,8 @@
                             },
                             body: JSON.stringify({
                                 message: textToSend,
-                                history: this.messages.slice(-6)
+                                history: this.messages.slice(-6),
+                                locale: '{{ app()->getLocale() }}' // <--- ENVIA O IDIOMA ATUAL
                             })
                         });
 
@@ -151,10 +166,10 @@
                                 audio.play().catch(e => console.log("Audio block:", e));
                             }
                         } else {
-                            this.messages.push({ role: 'assistant', content: 'Lamento, ocorreu um erro na comunicação. Por favor, tente novamente.' });
+                            this.messages.push({ role: 'assistant', content: this.config.errorComm });
                         }
                     } catch (error) {
-                        this.messages.push({ role: 'assistant', content: 'Erro de conexão com o servidor.' });
+                        this.messages.push({ role: 'assistant', content: this.config.errorConn });
                     } finally {
                         this.isLoading = false;
                     }

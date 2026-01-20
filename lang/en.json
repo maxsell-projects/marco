@@ -363,5 +363,13 @@
     "legal.ral.text": "Under Law No. 144/2015, of September 8, we inform you that in the event of a consumer dispute, the client may resort to an Alternative Consumer Dispute Resolution Entity.",
     "legal.ral.entity_name": "National Center for Information and Arbitration of Consumer Conflicts",
     "legal.ral.competence": "General competence",
-    "legal.ral.more_info": "For more information, please consult the Consumer Portal: <a href=\"https://www.consumidor.gov.pt\" target=\"_blank\" class=\"hover:text-brand-primary underline\">www.consumidor.gov.pt</a>."
+    "legal.ral.more_info": "For more information, please consult the Consumer Portal: <a href=\"https://www.consumidor.gov.pt\" target=\"_blank\" class=\"hover:text-brand-primary underline\">www.consumidor.gov.pt</a>.", 
+
+    "chatbot.header.title": "Porthouse",
+    "chatbot.header.subtitle": "Private AI Assistant",
+    "chatbot.input.placeholder": "How can I help you today?",
+    "chatbot.messages.initial": "Hello. I am the virtual assistant for <strong>Porthouse Private Office</strong>. <br>I aim to offer you exclusive service. <br><br>Would you like to view our private collection or schedule a consultation?",
+    "chatbot.messages.error_comm": "Sorry, a communication error occurred. Please try again.",
+    "chatbot.messages.error_conn": "Connection error with the server.",
+    "chatbot.powered_by": "Powered by"
 }

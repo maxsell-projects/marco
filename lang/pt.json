@@ -363,5 +363,13 @@
     "legal.ral.text": "Nos termos da Lei n.º 144/2015, de 8 de setembro, informamos que em caso de litígio de consumo, o cliente pode recorrer a uma Entidade de Resolução Alternativa de Litígios de Consumo.",
     "legal.ral.entity_name": "Centro Nacional de Informação e Arbitragem de Conflitos de Consumo",
     "legal.ral.competence": "Competência genérica",
-    "legal.ral.more_info": "Para mais informações, consulte o Portal do Consumidor: <a href=\"https://www.consumidor.gov.pt\" target=\"_blank\" class=\"hover:text-brand-primary underline\">www.consumidor.gov.pt</a>."
+    "legal.ral.more_info": "Para mais informações, consulte o Portal do Consumidor: <a href=\"https://www.consumidor.gov.pt\" target=\"_blank\" class=\"hover:text-brand-primary underline\">www.consumidor.gov.pt</a>.",
+
+    "chatbot.header.title": "Porthouse",
+    "chatbot.header.subtitle": "Private AI Assistant",
+    "chatbot.input.placeholder": "Como posso ajudar hoje?",
+    "chatbot.messages.initial": "Olá. Sou o assistente virtual do <strong>Porthouse Private Office</strong>. <br>Procuro oferecer-lhe um atendimento exclusivo. <br><br>Deseja ver a nossa coleção privada ou agendar uma consultoria?",
+    "chatbot.messages.error_comm": "Lamento, ocorreu um erro na comunicação. Por favor, tente novamente.",
+    "chatbot.messages.error_conn": "Erro de conexão com o servidor.",
+    "chatbot.powered_by": "Powered by"
 }
