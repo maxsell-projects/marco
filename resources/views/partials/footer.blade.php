@@ -2,7 +2,7 @@
     
     {{-- Marca d'água decorativa --}}
     <div class="absolute top-0 right-0 p-0 opacity-[0.03] pointer-events-none select-none">
-        <span class="font-serif text-[15rem] leading-none text-white">MM</span>
+        <span class="font-serif text-[15rem] leading-none text-white">PH</span>
     </div>
 
     <div class="container mx-auto px-6 relative z-10">
@@ -11,25 +11,24 @@
         <div class="flex flex-col md:flex-row justify-between items-start border-b border-white/10 pb-16 mb-16 gap-12">
             <div class="max-w-md">
                 <a href="{{ route('home') }}" class="block mb-6 group">
-                    <span class="font-serif text-3xl text-brand-sand tracking-wide block">MARCO MOURA</span>
+                    <span class="font-serif text-3xl text-brand-sand tracking-wide block">PORTHOUSE</span>
                     <span class="text-[9px] uppercase tracking-[0.4em] text-white/60 group-hover:text-white transition-colors">Private Real Estate</span>
                 </a>
                 <p class="text-white/60 font-light leading-relaxed text-sm">
-                    Consultoria imobiliária independente especializada em ativos de investimento e propriedades de luxo em Portugal. 
-                    <br><span class="italic text-brand-sand/80">Rigor, Discrição e Estratégia.</span>
+                    {!! __('footer.brand_description') !!}
                 </p>
             </div>
 
             {{-- Newsletter --}}
             <div class="w-full md:w-auto">
-                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-sand mb-4">Junte-se ao Private Circle</h4>
+                <h4 class="text-xs font-bold uppercase tracking-widest text-brand-sand mb-4">{{ __('footer.newsletter.title') }}</h4>
                 <form class="flex flex-col md:flex-row gap-4">
-                    <input type="email" placeholder="O seu email corporativo" class="bg-white/5 border border-white/10 text-white px-4 py-3 w-full md:w-80 focus:outline-none focus:border-brand-sand transition-colors text-sm font-light placeholder-white/30">
+                    <input type="email" placeholder="{{ __('footer.newsletter.placeholder') }}" class="bg-white/5 border border-white/10 text-white px-4 py-3 w-full md:w-80 focus:outline-none focus:border-brand-sand transition-colors text-sm font-light placeholder-white/30">
                     <button type="button" class="bg-brand-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-brand-secondary transition-colors shadow-lg">
-                        Subscrever
+                        {{ __('footer.newsletter.btn') }}
                     </button>
                 </form>
-                <p class="text-[10px] text-white/30 mt-2">Apenas *Market Insights* relevantes. Zero spam.</p>
+                <p class="text-[10px] text-white/30 mt-2">{{ __('footer.newsletter.note') }}</p>
             </div>
         </div>
 
@@ -39,55 +38,55 @@
             {{-- 1. ESCRITÓRIO --}}
             <div>
                 <h5 class="text-xs font-bold uppercase tracking-widest mb-8 text-brand-sand flex items-center gap-2">
-                    <span class="w-2 h-2 bg-brand-sand rounded-full"></span> O Escritório
+                    <span class="w-2 h-2 bg-brand-sand rounded-full"></span> {{ __('footer.office.title') }}
                 </h5>
                 <ul class="space-y-4 text-sm text-white/70 font-light">
                     <li>
-                        <span class="block text-[10px] uppercase opacity-40 mb-1">Morada</span>
+                        <span class="block text-[10px] uppercase opacity-40 mb-1">{{ __('footer.office.address_label') }}</span>
                         Rua Manuel Marques nº8, 7.ºD<br>
                         1750-171 Lisboa, Portugal
                     </li>
                     <li>
-                        <span class="block text-[10px] uppercase opacity-40 mb-1">Contacto Directo</span>
+                        <span class="block text-[10px] uppercase opacity-40 mb-1">{{ __('footer.office.phone_label') }}</span>
                         <a href="tel:+351925587906" class="hover:text-white transition">925 587 906</a>
-                        <span class="text-[10px] opacity-50 ml-2">(Chamada para rede móvel nacional)</span>
+                        <span class="text-[10px] opacity-50 ml-2">({{ __('footer.office.phone_note') }})</span>
                     </li>
                     <li>
-                        <span class="block text-[10px] uppercase opacity-40 mb-1">Email</span>
+                        <span class="block text-[10px] uppercase opacity-40 mb-1">{{ __('footer.office.email_label') }}</span>
                         <a href="mailto:info@porthouserealestate.com" class="hover:text-white transition">info@porthouserealestate.com</a>
                     </li>
                     <li>
-                        <span class="block text-[10px] uppercase opacity-40 mb-1">Horário de Atendimento</span>
-                        9h às 20h
+                        <span class="block text-[10px] uppercase opacity-40 mb-1">{{ __('footer.office.hours_label') }}</span>
+                        {{ __('footer.office.hours') }}
                     </li>
                 </ul>
             </div>
 
             {{-- 2. NAVEGAÇÃO --}}
             <div>
-                <h5 class="text-xs font-bold uppercase tracking-widest mb-8 text-brand-sand">Menu</h5>
+                <h5 class="text-xs font-bold uppercase tracking-widest mb-8 text-brand-sand">{{ __('footer.menu.title') }}</h5>
                 <ul class="space-y-3 text-sm text-white/70 font-light">
-                    <li><a href="{{ route('home') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">Início</a></li>
-                    <li><a href="{{ route('portfolio') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">Coleção Privada</a></li>
-                    <li><a href="{{ route('about') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">A Visão</a></li>
-                    <li><a href="{{ route('contact') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">Contactos</a></li>
+                    <li><a href="{{ route('home') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">{{ __('footer.menu.home') }}</a></li>
+                    <li><a href="{{ route('portfolio') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">{{ __('footer.menu.portfolio') }}</a></li>
+                    <li><a href="{{ route('about') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">{{ __('footer.menu.about') }}</a></li>
+                    <li><a href="{{ route('contact') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">{{ __('footer.menu.contact') }}</a></li>
                     {{-- Link Trabalhe Conosco --}}
-                    <li><a href="mailto:info@porthouserealestate.com?subject=Candidatura%20Espontânea" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300 flex items-center gap-2">Trabalhe Conosco <span class="text-[10px] opacity-50">↗</span></a></li>
+                    <li><a href="mailto:info@porthouserealestate.com?subject=Candidatura%20Espontânea" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300 flex items-center gap-2">{{ __('footer.menu.careers') }} <span class="text-[10px] opacity-50">↗</span></a></li>
                 </ul>
             </div>
 
-            {{-- 3. LEGAL & COMPLIANCE (SOP) --}}
+            {{-- 3. LEGAL & COMPLIANCE --}}
             <div x-data>
                 <h5 class="text-xs font-bold uppercase tracking-widest mb-8 text-brand-sand">Legal & Compliance</h5>
                 <ul class="space-y-3 text-xs text-white/50 font-light font-mono">
                     <li>AMI: <span class="text-white">26720</span></li>
                     <li>NIF: <span class="text-white">518724220</span></li>
                     <li class="pt-4 border-t border-white/5">
-                        <a href="{{ route('terms') }}" class="hover:text-white transition">Termos e Condições</a>
+                        <a href="{{ route('terms') }}" class="hover:text-white transition">{{ __('footer.legal.terms') }}</a>
                     </li>
-                    <li><button @click="$dispatch('open-privacy-modal', {tab: 'privacy'})" class="hover:text-white transition text-left">Política de Privacidade</button></li>
-                    <li><button @click="$dispatch('open-privacy-modal', {tab: 'cookies'})" class="hover:text-white transition text-left">Política de Cookies</button></li>
-                    <li><button @click="$dispatch('open-privacy-modal', {tab: 'ral'})" class="hover:text-white transition text-left">Resolução de Litígios (RAL)</button></li>
+                    <li><button @click="$dispatch('open-privacy-modal', {tab: 'privacy'})" class="hover:text-white transition text-left">{{ __('footer.legal.privacy') }}</button></li>
+                    <li><button @click="$dispatch('open-privacy-modal', {tab: 'cookies'})" class="hover:text-white transition text-left">{{ __('footer.legal.cookies') }}</button></li>
+                    <li><button @click="$dispatch('open-privacy-modal', {tab: 'ral'})" class="hover:text-white transition text-left">{{ __('footer.legal.ral') }}</button></li>
                 </ul>
             </div>
 
@@ -111,10 +110,10 @@
                     </div>
                 </div>
 
-                {{-- Link Livro Reclamações (Texto Apenas) --}}
+                {{-- Link Livro Reclamações --}}
                 <div class="mt-8">
                     <a href="https://www.livroreclamacoes.pt" target="_blank" class="text-[10px] uppercase tracking-widest text-white/40 hover:text-brand-sand border-b border-transparent hover:border-brand-sand pb-1 transition-all">
-                        Livro de Reclamações Eletrónico
+                        {{ __('footer.complaints_book') }}
                     </a>
                 </div>
             </div>
@@ -122,11 +121,11 @@
 
         {{-- COPYRIGHT & MAXSELL --}}
         <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-widest text-white/30">
-            <p>&copy; {{ date('Y') }} Marco Moura. Todos os direitos reservados.</p>
+            <p>&copy; {{ date('Y') }} Porthouse. {{ __('footer.copyright') }}</p>
             
-            {{-- Logo Maxsell Restaurado --}}
+            {{-- Logo Maxsell --}}
             <div class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
-                <span>Desenvolvido por</span>
+                <span>{{ __('footer.developed_by') }}</span>
                 <a href="https://www.maxselladvisor.com" target="_blank" rel="noopener noreferrer">
                     <img src="{{ asset('img/maxsell.png') }}" alt="Maxsell Advisor" class="h-5 w-auto grayscale hover:grayscale-0 transition-all duration-500">
                 </a>

@@ -8,6 +8,8 @@ use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\RecruitmentController; 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,14 @@ use App\Http\Controllers\RecruitmentController;
 */
 
 // --- HOME & INSTITUCIONAL ---
+
+Route::get('locale/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'pt'])) {
+        Session::put('locale', $locale);
+        App::setLocale($locale);
+    }
+    return redirect()->back();
+})->name('locale');
 
 Route::get('/', function () {
     // Busca apenas 3 imóveis destaque para a Home (Performance otimizada)
