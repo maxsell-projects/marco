@@ -1,8 +1,8 @@
 <header x-data="{ mobileMenuOpen: false, toolsOpen: false, scrolled: false }" 
         @scroll.window="scrolled = (window.pageYOffset > 20)"
         :class="{ 
-            'bg-brand-secondary/95 backdrop-blur-md shadow-lg py-4': scrolled, 
-            'bg-brand-secondary py-6': !scrolled && mobileMenuOpen, 
+            'bg-brand-secondary shadow-none py-6': mobileMenuOpen, 
+            'bg-brand-secondary/95 backdrop-blur-md shadow-lg py-4': scrolled && !mobileMenuOpen, 
             'bg-transparent py-6': !scrolled && !mobileMenuOpen 
         }"
         class="fixed top-0 w-full z-50 transition-all duration-500 border-b border-white/5">

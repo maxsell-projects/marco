@@ -6,7 +6,8 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\Api\ChatbotController; // ✅ Import do Chatbot adicionado
+use App\Http\Controllers\Api\ChatbotController;
+use App\Http\Controllers\RecruitmentController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,7 @@ Route::get('/ferramentas/imt', function () {
 
 Route::get('/ferramentas/mais-valias', [ToolsController::class, 'showGainsSimulator'])->name('tools.gains');
 Route::post('/ferramentas/mais-valias/calcular', [ToolsController::class, 'calculateGains'])->name('tools.gains.calculate');
+Route::post('/recrutamento/enviar', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 
 
 // --- PÁGINAS LEGAIS ---

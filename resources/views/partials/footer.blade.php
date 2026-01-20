@@ -44,17 +44,21 @@
                 <ul class="space-y-4 text-sm text-white/70 font-light">
                     <li>
                         <span class="block text-[10px] uppercase opacity-40 mb-1">Morada</span>
-                        Avenida da Liberdade, nº 000<br>
-                        1250-000 Lisboa, Portugal
+                        Rua Manuel Marques nº8, 7.ºD<br>
+                        1750-171 Lisboa, Portugal
                     </li>
                     <li>
                         <span class="block text-[10px] uppercase opacity-40 mb-1">Contacto Directo</span>
-                        <a href="tel:+351000000000" class="hover:text-white transition">+351 000 000 000</a>
+                        <a href="tel:+351925587906" class="hover:text-white transition">925 587 906</a>
                         <span class="text-[10px] opacity-50 ml-2">(Chamada para rede móvel nacional)</span>
                     </li>
                     <li>
                         <span class="block text-[10px] uppercase opacity-40 mb-1">Email</span>
-                        <a href="mailto:privado@marcomoura.pt" class="hover:text-white transition">privado@marcomoura.pt</a>
+                        <a href="mailto:info@porthouserealestate.com" class="hover:text-white transition">info@porthouserealestate.com</a>
+                    </li>
+                    <li>
+                        <span class="block text-[10px] uppercase opacity-40 mb-1">Horário de Atendimento</span>
+                        9h às 20h
                     </li>
                 </ul>
             </div>
@@ -67,6 +71,8 @@
                     <li><a href="{{ route('portfolio') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">Coleção Privada</a></li>
                     <li><a href="{{ route('about') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">A Visão</a></li>
                     <li><a href="{{ route('contact') }}" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300">Contactos</a></li>
+                    {{-- Link Trabalhe Conosco --}}
+                    <li><a href="mailto:info@porthouserealestate.com?subject=Candidatura%20Espontânea" class="hover:text-brand-sand transition-colors hover:pl-2 duration-300 flex items-center gap-2">Trabalhe Conosco <span class="text-[10px] opacity-50">↗</span></a></li>
                 </ul>
             </div>
 
@@ -74,12 +80,11 @@
             <div x-data>
                 <h5 class="text-xs font-bold uppercase tracking-widest mb-8 text-brand-sand">Legal & Compliance</h5>
                 <ul class="space-y-3 text-xs text-white/50 font-light font-mono">
-                    <li>AMI: <span class="text-white">12345</span></li>
-                    <li>NIF: <span class="text-white">999999999</span></li>
+                    <li>AMI: <span class="text-white">26720</span></li>
+                    <li>NIF: <span class="text-white">518724220</span></li>
                     <li class="pt-4 border-t border-white/5">
                         <a href="{{ route('terms') }}" class="hover:text-white transition">Termos e Condições</a>
                     </li>
-                    {{-- GATILHOS DO MODAL --}}
                     <li><button @click="$dispatch('open-privacy-modal', {tab: 'privacy'})" class="hover:text-white transition text-left">Política de Privacidade</button></li>
                     <li><button @click="$dispatch('open-privacy-modal', {tab: 'cookies'})" class="hover:text-white transition text-left">Política de Cookies</button></li>
                     <li><button @click="$dispatch('open-privacy-modal', {tab: 'ral'})" class="hover:text-white transition text-left">Resolução de Litígios (RAL)</button></li>
@@ -130,11 +135,7 @@
     </div>
 </footer>
 
-{{-- INTEGRAR O MODAL DE PRIVACIDADE AQUI PARA EVITAR ERROS DE Z-INDEX --}}
-{{-- O Event Listener no Alpine do Modal vai apanhar os cliques do Footer --}}
 <div x-data="{ showPrivacyModal: false, activeTab: 'privacy' }"
      @open-privacy-modal.window="showPrivacyModal = true; activeTab = $event.detail.tab || 'privacy'">
-    
     @include('partials.privacy-consent')
-
 </div>

@@ -6,6 +6,11 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+/* --- CORREÇÃO: Esconde elementos antes do Alpine carregar (Evita piscar o menu) --- */
+[x-cloak] {
+    display: none !important;
+}
+
 @theme {
     /* 🔠 Tipografia - Mantendo a elegância, mas moderna */
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
