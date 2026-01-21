@@ -7,7 +7,7 @@
      x-transition:leave="transition ease-in duration-300"
      x-transition:leave-start="translate-y-0 opacity-100"
      x-transition:leave-end="translate-y-full opacity-0"
-     class="fixed bottom-0 left-0 w-full z-[60] bg-brand-secondary/95 backdrop-blur-md border-t border-brand-sand/20 p-6 md:p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+     class="fixed bottom-0 left-0 w-full z-[100] bg-brand-secondary/95 backdrop-blur-md border-t border-brand-sand/20 p-6 md:p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.2)] print:hidden">
     
     <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="text-center md:text-left flex-1">
@@ -16,8 +16,8 @@
                 <button @click="showPrivacyModal = true" class="text-brand-sand hover:text-white underline decoration-brand-sand/50 hover:decoration-white transition-all">{{ __('legal.consent_banner.link') }}</button>.
             </p>
         </div>
-        <div class="flex gap-4">
-            <button @click="acceptCookies()" class="px-8 py-3 bg-brand-primary text-white text-xs font-bold uppercase tracking-widest hover:bg-brand-sand hover:text-brand-primary transition-all duration-300 rounded-sm whitespace-nowrap shadow-lg">
+        <div class="flex gap-4 w-full md:w-auto">
+            <button @click="acceptCookies()" class="w-full md:w-auto px-8 py-3 bg-brand-primary text-white text-xs font-bold uppercase tracking-widest hover:bg-brand-sand hover:text-brand-primary transition-all duration-300 rounded-sm whitespace-nowrap shadow-lg">
                 {{ __('legal.consent_banner.accept_btn') }}
             </button>
         </div>
@@ -34,7 +34,7 @@
      x-transition:leave="transition ease-in duration-200"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
-     class="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-brand-secondary/90 backdrop-blur-sm overflow-hidden">
+     class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-brand-secondary/90 backdrop-blur-sm overflow-hidden">
     
     <div @click.outside="showPrivacyModal = false" 
          class="bg-white w-full max-w-5xl max-h-[85vh] flex flex-col rounded-sm shadow-2xl relative border-t-8 border-brand-primary font-sans overflow-hidden"
@@ -77,7 +77,7 @@
             {{-- TAB: PRIVACIDADE --}}
             <div x-show="activeTab === 'privacy'" class="prose prose-sm max-w-none text-gray-600 font-light text-justify">
                 <p>{!! __('legal.privacy.intro') !!}</p>
-                <p>{{ __('legal.privacy.commitment') }}</p>
+                <p class="font-bold text-brand-secondary">{{ __('legal.privacy.commitment') }}</p>
                 
                 <h3 class="text-brand-secondary font-serif font-bold mt-8 mb-2 text-lg">1. {{ __('legal.privacy.scope_title') }}</h3>
                 <p>{{ __('legal.privacy.scope_text') }}</p>
@@ -110,7 +110,7 @@
                     <li>{!! __('legal.cookies.cat_3') !!}</li>
                 </ul>
 
-                <p class="mt-6">{{ __('legal.cookies.manage') }}</p>
+                <p class="mt-6 text-xs italic">{{ __('legal.cookies.manage') }}</p>
             </div>
 
             {{-- TAB: RAL --}}
