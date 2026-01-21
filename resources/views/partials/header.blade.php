@@ -10,14 +10,11 @@
     <div class="container mx-auto px-6">
         <div class="flex items-center justify-between">
             
-            {{-- 1. LOGO (PORTHOUSE) --}}
-            <a href="{{ route('home') }}" class="relative z-50 group flex flex-col items-start leading-none" @click="mobileMenuOpen = false">
-                <span class="font-serif text-2xl md:text-3xl text-brand-sand tracking-wide group-hover:text-white transition-colors duration-500">
-                    PORTHOUSE
-                </span>
-                <span class="text-[8px] uppercase tracking-[0.3em] text-white/50 group-hover:text-brand-sand transition-colors pl-0.5">
-                    {{ __('header.brand_subtitle') }}
-                </span>
+            {{-- 1. LOGO (IMAGEM PORTHOUSE) --}}
+            <a href="{{ route('home') }}" class="relative z-50 group block" @click="mobileMenuOpen = false">
+                <img src="{{ asset('img/Ativo_5.png') }}" 
+                     alt="Porthouse Private Real Estate" 
+                     class="h-10 md:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105">
             </a>
 
             {{-- 2. DESKTOP MENU (Hidden on Mobile) --}}

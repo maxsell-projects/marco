@@ -32,9 +32,10 @@
             "{{ __('about.manifesto.quote_part1') }} <span class="italic text-brand-primary border-b border-brand-primary/20 pb-1">{{ __('about.manifesto.quote_part2') }}</span>"
         </h2>
         
-        <p class="text-brand-text/70 font-light text-lg leading-relaxed text-justify md:text-center max-w-3xl mx-auto">
-            {!! __('about.manifesto.text') !!}
-        </p>
+        <div class="text-brand-text/70 font-light text-lg leading-relaxed text-justify md:text-center max-w-3xl mx-auto space-y-6">
+            <p>{!! __('about.manifesto.text_p1') !!}</p>
+            <p>{!! __('about.manifesto.text_p2') !!}</p>
+        </div>
     </div>
 </section>
 
@@ -46,8 +47,9 @@
             {{-- Coluna da Foto --}}
             <div class="lg:col-span-5 relative" data-aos="fade-right">
                 <div class="relative overflow-hidden aspect-[3/4] group shadow-2xl">
-                    <img src="{{ asset('img/placeholder.jpg') }}" 
-                         alt="Porthouse Founder" 
+                    {{-- FOTO DO MARCO AQUI --}}
+                    <img src="{{ asset('img/marco.jpg') }}" 
+                         alt="Marco Moura - Founder" 
                          class="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105">
                     
                     {{-- Badge Flutuante --}}
@@ -80,8 +82,8 @@
 
                 {{-- Assinatura --}}
                 <div data-aos="fade-up" data-aos-delay="200" class="border-t border-gray-100 pt-8">
-                    <p class="font-serif italic text-3xl text-brand-secondary">Porthouse</p>
-                    <p class="text-xs text-brand-primary uppercase tracking-widest mt-2">Private Office</p>
+                    <p class="font-serif italic text-3xl text-brand-secondary">Marco Moura</p>
+                    <p class="text-xs text-brand-primary uppercase tracking-widest mt-2">Private Office Consultant</p>
                 </div>
             </div>
 

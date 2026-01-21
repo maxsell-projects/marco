@@ -1,4 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /nova
+Disallow: /storage/*.pdf
 
-Sitemap: https://diogomaiaconsultor.pt/sitemap.xml
+Sitemap: https://porthouserealestate.com/sitemap.xml

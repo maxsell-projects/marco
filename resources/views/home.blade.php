@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Porthouse | Private Real Estate')
+@section('title', __('home.meta.title') . ' | Porthouse Private Office')
 
 @section('content')
 
@@ -23,11 +23,14 @@
             </p>
         </div>
         
-        <div class="text-right">
-            {{-- Ajustei o tamanho da fonte (text-[6rem]) para "PORTHOUSE" caber numa linha --}}
-            <h1 class="font-serif text-5xl md:text-[6rem] leading-[0.9] text-brand-sand mix-blend-overlay opacity-90 uppercase" data-aos="fade-left" data-aos-duration="1500">
-                PORTHOUSE
-            </h1>
+        <div class="text-right flex flex-col items-end">
+            {{-- LOGO GRANDE NA HERO (Tamanho Reduzido) --}}
+            <img src="{{ asset('img/Ativo_5.png') }}" 
+                 alt="Porthouse Logo" 
+                 class="h-16 md:h-32 w-auto object-contain mix-blend-overlay opacity-90 mb-4"
+                 data-aos="fade-left" data-aos-duration="1500">
+                 
+            {{-- Nome (Texto) Removido --}}
         </div>
     </div>
 
@@ -64,8 +67,9 @@
     <div class="container mx-auto px-6 relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
             <div class="md:col-span-5 relative">
-                <div class="aspect-[4/5] bg-gray-200 relative overflow-hidden" data-aos="fade-right">
-                    <img src="{{ asset('img/placeholder.jpg') }}" alt="Porthouse Founder" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000">
+                <div class="aspect-[4/5] bg-gray-200 relative overflow-hidden shadow-2xl" data-aos="fade-right">
+                    {{-- FOTO DO MARCO --}}
+                    <img src="{{ asset('img/marco.jpg') }}" alt="Marco Moura - Founder" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000">
                     
                     {{-- Badge --}}
                     <div class="absolute bottom-8 -right-8 bg-brand-primary text-white p-6 md:p-8 max-w-[200px] shadow-2xl" data-aos="zoom-in" data-aos-delay="400">
@@ -90,7 +94,7 @@
                 
                 <div class="mt-12 flex items-center gap-4">
                     <span class="h-[1px] w-12 bg-brand-primary"></span>
-                    <span class="font-signature text-4xl text-brand-primary">Porthouse</span>
+                    <span class="font-signature text-4xl text-brand-primary">Marco Moura</span>
                 </div>
             </div>
         </div>

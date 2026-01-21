@@ -371,5 +371,13 @@
     "chatbot.messages.initial": "Hello. I am the virtual assistant for <strong>Porthouse Private Office</strong>. <br>I aim to offer you exclusive service. <br><br>Would you like to view our private collection or schedule a consultation?",
     "chatbot.messages.error_comm": "Sorry, a communication error occurred. Please try again.",
     "chatbot.messages.error_conn": "Connection error with the server.",
-    "chatbot.powered_by": "Powered by"
+    "chatbot.powered_by": "Powered by", 
+
+    "layout.whatsapp_title": "Direct WhatsApp",
+    "layout.back_btn": "Go Back",
+    "layout.exit.title": "Don't leave with doubts.",
+    "layout.exit.text": "The real estate market changes fast. <br>If you're looking for strategic advice, I am available now on WhatsApp.",
+    "layout.exit.cta": "Chat on WhatsApp",
+    "layout.exit.dismiss": "No thanks. Continue browsing.",
+    "home.meta.title": "Home"
 }
