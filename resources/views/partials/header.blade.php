@@ -14,10 +14,11 @@
             <a href="{{ route('home') }}" class="relative z-50 group block" @click="mobileMenuOpen = false">
                 <img src="{{ asset('img/Ativo_5.png') }}" 
                      alt="Porthouse Private Real Estate" 
-                     class="h-10 md:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105">
+                     :class="{ 'scale-90': mobileMenuOpen }"
+                     class="h-10 md:h-12 w-auto object-contain transition-all duration-500 group-hover:scale-105">
             </a>
 
-            {{-- 2. DESKTOP MENU (Hidden on Mobile) --}}
+            {{-- 2. DESKTOP MENU --}}
             <nav class="hidden lg:flex items-center gap-10">
                 <a href="{{ route('home') }}" class="text-[10px] font-bold uppercase tracking-[0.2em] text-white hover:text-brand-sand transition-colors relative group">
                     {{ __('header.menu.home') }}
@@ -28,14 +29,12 @@
                     <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-sand group-hover:w-full transition-all duration-300"></span>
                 </a>
                 
-                {{-- Dropdown Ferramentas (Desktop) --}}
                 <div class="relative group" @mouseenter="toolsOpen = true" @mouseleave="toolsOpen = false">
                     <button class="text-[10px] font-bold uppercase tracking-[0.2em] text-white hover:text-brand-sand transition-colors flex items-center gap-2 focus:outline-none py-2">
                         {{ __('header.menu.market_intelligence') }}
                         <svg class="w-3 h-3 text-brand-sand/70 transition-transform duration-300" :class="{'rotate-180': toolsOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     
-                    {{-- Dropdown Content --}}
                     <div x-show="toolsOpen" 
                          x-cloak
                          x-transition:enter="transition ease-out duration-300"
@@ -65,13 +64,11 @@
                     <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-brand-sand group-hover:w-full transition-all duration-300"></span>
                 </a>
                 
-                {{-- CTA Button --}}
                 <a href="{{ route('contact') }}" 
                    class="bg-brand-primary text-white px-8 py-3 uppercase text-[9px] font-bold tracking-[0.2em] border border-transparent hover:bg-transparent hover:border-brand-sand hover:text-brand-sand transition-all duration-500 shadow-lg">
                     {{ __('header.menu.schedule') }}
                 </a>
 
-                {{-- LANGUAGE SWITCHER (Desktop) --}}
                 <div class="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-white pl-6 border-l border-white/20 h-6">
                     <a href="{{ route('locale', 'pt') }}" class="{{ app()->getLocale() == 'pt' ? 'text-brand-sand' : 'text-white/40 hover:text-white' }} transition-colors">PT</a>
                     <a href="{{ route('locale', 'en') }}" class="{{ app()->getLocale() == 'en' ? 'text-brand-sand' : 'text-white/40 hover:text-white' }} transition-colors">EN</a>
@@ -100,9 +97,8 @@
          x-transition:leave="transition ease-in duration-300"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-full"
-         class="fixed inset-0 bg-brand-secondary z-40 flex flex-col justify-center overflow-y-auto">
+         class="fixed inset-0 bg-brand-secondary z-40 flex flex-col pt-32 overflow-y-auto">
         
-        {{-- Background Pattern --}}
         <div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
         <div class="container mx-auto px-6 relative z-10 py-12">
@@ -113,7 +109,6 @@
                 
                 <div class="w-12 h-[1px] bg-white/10 my-4"></div>
                 
-                {{-- Ferramentas Expandidas no Mobile --}}
                 <p class="text-[10px] uppercase tracking-widest text-brand-sand mb-2">{{ __('header.menu.tools_label') }}</p>
                 <a href="{{ route('tools.credit') }}" @click="mobileMenuOpen = false" class="text-lg font-light text-white/70 hover:text-white transition-colors">{{ __('header.menu.credit_simulator') }}</a>
                 <a href="{{ route('tools.imt') }}" @click="mobileMenuOpen = false" class="text-lg font-light text-white/70 hover:text-white transition-colors">{{ __('header.menu.imt_simulator') }}</a>
@@ -125,7 +120,6 @@
                     {{ __('header.menu.schedule') }}
                 </a>
 
-                {{-- LANGUAGE SWITCHER (Mobile) --}}
                 <div class="flex items-center gap-6 mt-8">
                     <a href="{{ route('locale', 'pt') }}" class="text-xs font-bold uppercase tracking-widest {{ app()->getLocale() == 'pt' ? 'text-brand-sand border-b border-brand-sand' : 'text-white/40' }} pb-1">PT</a>
                     <a href="{{ route('locale', 'en') }}" class="text-xs font-bold uppercase tracking-widest {{ app()->getLocale() == 'en' ? 'text-brand-sand border-b border-brand-sand' : 'text-white/40' }} pb-1">EN</a>
@@ -133,7 +127,7 @@
             </nav>
         </div>
 
-        <div class="absolute bottom-8 w-full text-center">
+        <div class="mt-auto pb-8 w-full text-center">
             <p class="text-[9px] text-white/20 uppercase tracking-widest">Porthouse Private Office &copy; {{ date('Y') }}</p>
         </div>
     </div>
