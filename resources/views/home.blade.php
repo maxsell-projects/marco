@@ -4,275 +4,258 @@
 
 @section('content')
 
-{{-- 1. HERO SECTION --}}
-<section class="relative h-screen w-full overflow-hidden bg-brand-secondary text-brand-sand flex flex-col justify-between pt-32 pb-10">
-    
-    {{-- Background --}}
-    <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-brand-secondary/40 z-10"></div>
-        <img src="{{ asset('img/porto_dark.jpeg') }}" 
-             class="w-full h-full object-cover opacity-60 animate-[kenburns_20s_infinite_alternate]" 
-             alt="Porthouse Private Real Estate">
-    </div>
+{{-- 
+    ESTRUTURA BOUTIQUE & ASSIMÉTRICA 
+    Cor de Fundo: Brand Sand (#E5C2A4)
+    Texto: Brand Secondary (#1D4C42)
+--}}
 
-    {{-- Conteúdo Superior --}}
-    <div class="container mx-auto px-6 relative z-20 flex justify-between items-start">
-        <div class="hidden md:block">
-            <p class="text-[10px] font-bold uppercase tracking-[0.4em] text-white writing-vertical-rl rotate-180 border-l border-white/20 pl-4 h-32">
-                {{ __('home.hero.locations') }}
-            </p>
-        </div>
+<div x-data="{ 
+        loaded: false, 
+        init() { 
+            setTimeout(() => this.loaded = true, 800) 
+        } 
+    }" 
+    class="bg-brand-sand min-h-screen relative overflow-hidden selection:bg-brand-secondary selection:text-brand-sand">
+
+    {{-- 1. INTRO / LOADING SCREEN --}}
+    <div x-show="!loaded" 
+         x-transition:leave="transition ease-in-out duration-1000"
+         x-transition:leave-start="transform translate-y-0"
+         x-transition:leave-end="transform -translate-y-full"
+         class="fixed inset-0 z-[100] bg-brand-secondary flex items-center justify-center">
         
-        <div class="text-right flex flex-col items-end">
-            {{-- LOGO GRANDE NA HERO (Tamanho Reduzido) --}}
-            <img src="{{ asset('img/Ativo_5.png') }}" 
-                 alt="Porthouse Logo" 
-                 class="h-16 md:h-32 w-auto object-contain mix-blend-overlay opacity-90 mb-4"
-                 data-aos="fade-left" data-aos-duration="1500">
-                 
-            {{-- Nome (Texto) Removido --}}
+        <div class="text-center" x-transition:leave="transition duration-500 opacity-0">
+            <img src="{{ asset('img/Ativo_5.png') }}" alt="Porthouse" class="h-24 w-auto object-contain brightness-0 invert opacity-80 mb-6 animate-pulse">
+            <p class="text-brand-sand font-serif italic text-xl tracking-[0.3em]">PRIVATE OFFICE</p>
         </div>
     </div>
 
-    {{-- Conteúdo Inferior --}}
-    <div class="container mx-auto px-6 relative z-20 mt-auto">
-        <div class="flex flex-col md:flex-row items-end justify-between gap-8 border-t border-brand-sand/20 pt-8">
-            <div class="max-w-xl" data-aos="fade-up" data-aos-delay="500">
-                <h2 class="text-2xl md:text-3xl font-light text-white leading-snug mb-6">
-                    {{ __('home.hero.title_part1') }} <br>
-                    <span class="font-serif italic text-brand-sand">{{ __('home.hero.title_part2') }}</span>
-                </h2>
-                <div class="flex gap-4">
-                    <a href="#private-collection" class="px-8 py-3 bg-brand-primary text-white font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-brand-secondary transition-all duration-500">
-                        {{ __('home.hero.cta_collection') }}
-                    </a>
-                    <a href="#contact-focus" class="px-8 py-3 border border-white/30 text-white font-bold text-xs uppercase tracking-widest hover:border-brand-sand hover:text-brand-sand transition-all duration-300">
-                        {{ __('home.hero.cta_office') }}
-                    </a>
+    {{-- 2. HERO --}}
+    <section class="relative min-h-screen pt-48 pb-0 px-0 flex flex-col justify-center">
+        <div class="absolute inset-0 pointer-events-none opacity-10 flex justify-between px-6 md:px-20">
+            <div class="w-px h-full bg-brand-secondary"></div>
+            <div class="w-px h-full bg-brand-secondary hidden md:block"></div>
+            <div class="w-px h-full bg-brand-secondary"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-7 mix-blend-multiply" data-aos="fade-right" data-aos-duration="1200">
+                    <h1 class="text-brand-secondary font-serif text-7xl md:text-[9rem] leading-[0.85] tracking-tight">
+                        Port<br>
+                        <span class="italic ml-12 md:ml-24 opacity-80">house</span><br>
+                        <span class="text-3xl md:text-5xl tracking-widest font-sans font-light uppercase mt-4 block border-t border-brand-secondary/30 pt-6">
+                            Private Office
+                        </span>
+                    </h1>
                 </div>
-            </div>
 
-            {{-- Scroll Hint --}}
-            <div class="animate-bounce hidden md:block">
-                <svg class="w-6 h-6 text-brand-sand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- 2. THE MANIFESTO --}}
-<section class="py-24 md:py-40 bg-brand-background text-brand-secondary relative overflow-hidden">
-    <span class="absolute -left-20 top-20 text-[20rem] font-serif text-brand-sand/10 leading-none select-none pointer-events-none">&</span>
-
-    <div class="container mx-auto px-6 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-            <div class="md:col-span-5 relative">
-                <div class="aspect-[4/5] bg-gray-200 relative overflow-hidden shadow-2xl" data-aos="fade-right">
-                    {{-- FOTO DO MARCO --}}
-                    <img src="{{ asset('img/marco.jpg') }}" alt="Marco Moura - Founder" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000">
-                    
-                    {{-- Badge --}}
-                    <div class="absolute bottom-8 -right-8 bg-brand-primary text-white p-6 md:p-8 max-w-[200px] shadow-2xl" data-aos="zoom-in" data-aos-delay="400">
-                        <p class="font-serif text-2xl italic leading-none mb-2">15+</p>
-                        <p class="text-[10px] uppercase tracking-widest leading-tight opacity-80">{{ __('home.manifesto.experience_badge') }}</p>
+                <div class="md:col-span-5 relative mt-12 md:mt-0" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-t-[100px] shadow-2xl border border-brand-secondary/20">
+                        <img src="{{ asset('img/porto_dark.jpeg') }}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80'"
+                             class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 scale-110 hover:scale-100" 
+                             alt="Luxury Real Estate Porto">
                     </div>
                 </div>
             </div>
-            
-            <div class="md:col-span-1"></div>
-
-            <div class="md:col-span-6" data-aos="fade-up">
-                <h3 class="text-xs font-bold text-brand-primary uppercase tracking-[0.3em] mb-4">{{ __('home.manifesto.subtitle') }}</h3>
-                <p class="font-serif text-4xl md:text-5xl leading-tight mb-8">
-                    "{{ __('home.manifesto.quote_part1') }}<br> 
-                    <span class="text-brand-primary">{{ __('home.manifesto.quote_part2') }}</span>"
-                </p>
-                <div class="prose prose-lg text-brand-text font-light">
-                    <p>{{ __('home.manifesto.text_paragraph1') }}</p>
-                    <p class="mt-4">{{ __('home.manifesto.text_paragraph2') }}</p>
-                </div>
-                
-                <div class="mt-12 flex items-center gap-4">
-                    <span class="h-[1px] w-12 bg-brand-primary"></span>
-                    <span class="font-signature text-4xl text-brand-primary">Marco Moura</span>
-                </div>
-            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-{{-- 3. INTERACTIVE SLIDER --}}
-<section id="private-collection" class="py-32 bg-brand-secondary text-white overflow-hidden">
-    <div class="container mx-auto px-6 mb-16 flex flex-col md:flex-row justify-between items-end">
-        <div>
-            <h2 class="font-serif text-5xl md:text-7xl text-brand-sand">{{ __('home.collection.title') }}</h2>
-            <p class="text-white/60 mt-4 max-w-md font-light">
-                {{ __('home.collection.subtitle') }}
-            </p>
+    {{-- 3. O MANIFESTO (TRADUZIDO) --}}
+    <section class="py-32 px-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 text-[30rem] font-serif text-brand-secondary opacity-5 leading-none -mr-20 select-none pointer-events-none">
+            &
         </div>
-        
-        <div class="flex gap-4 mt-8 md:mt-0">
-            <button class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-primary hover:border-brand-primary transition-all">←</button>
-            <button class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-primary hover:border-brand-primary transition-all">→</button>
-        </div>
-    </div>
 
-    {{-- SCROLL SNAP --}}
-    <div class="pl-6 md:pl-[max(2rem,calc((100vw-1280px)/2))] overflow-x-auto pb-12 scrollbar-hide flex gap-8 snap-x snap-mandatory">
-        
-        @foreach($properties as $property)
-        <div class="snap-center shrink-0 w-[85vw] md:w-[400px] group relative" data-aos="fade-up">
-            <a href="{{ route('properties.show', $property->slug) }}" class="block relative aspect-[3/4] overflow-hidden bg-gray-800">
-                <div class="absolute inset-0 bg-brand-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-500 mix-blend-multiply"></div>
-                
-                <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/placeholder.jpg') }}" 
-                     loading="lazy"
-                     class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0">
-                
-                <div class="absolute top-6 right-6 bg-white/10 backdrop-blur-md px-4 py-2 border border-white/20">
-                    <span class="font-serif text-lg text-brand-sand">{{ number_format($property->price, 0, ',', '.') }} €</span>
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div data-aos="fade-up">
+                      <p class="text-brand-secondary font-bold text-xs uppercase tracking-[0.4em] mb-12 flex items-center gap-4">
+                        <span class="w-12 h-px bg-brand-secondary"></span> {{ __('home.manifesto.label') }}
+                      </p>
+                      
+                      <div class="space-y-8">
+                          <h2 class="text-4xl md:text-6xl font-serif text-brand-secondary leading-tight">
+                              {!! __('home.manifesto.title_1') !!}
+                          </h2>
+                          <p class="text-xl md:text-2xl font-light text-brand-secondary/80 ml-8 md:ml-16 border-l border-brand-secondary/30 pl-6">
+                              {!! __('home.manifesto.subtitle') !!}
+                          </p>
+                          <h2 class="text-4xl md:text-6xl font-serif text-brand-secondary leading-tight text-right">
+                              {!! __('home.manifesto.title_2') !!}
+                          </h2>
+                      </div>
                 </div>
 
-                <div class="absolute inset-x-0 bottom-0 p-8 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 z-20">
-                    <span class="inline-block px-3 py-1 bg-brand-primary text-white text-[10px] uppercase tracking-widest mb-3">
-                        {{ $property->type }}
-                    </span>
-                    <button class="flex items-center gap-2 text-xs uppercase tracking-widest border-b border-white pb-1">
-                        {{ __('home.collection.view_details') }} <span class="group-hover:translate-x-2 transition-transform">→</span>
-                    </button>
+                <div class="relative pt-20 md:pt-0" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-brand-secondary p-12 text-brand-sand shadow-2xl relative transform md:rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <span class="absolute -top-4 -left-4 text-6xl text-brand-primary">“</span>
+                        <p class="font-serif text-2xl leading-relaxed">
+                            {{ __('home.manifesto.quote_text') }} <br>
+                            <span class="text-brand-primary italic">{!! __('home.manifesto.quote_emphasis') !!}</span>
+                        </p>
+                        <div class="mt-8 flex justify-end">
+                            <span class="font-signature text-3xl">Marco Moura</span>
+                        </div>
+                    </div>
                 </div>
-            </a>
-
-            <div class="mt-6">
-                <p class="text-xs font-bold text-brand-sand uppercase tracking-widest mb-1">{{ $property->location }}</p>
-                <h3 class="font-serif text-2xl leading-tight group-hover:text-brand-primary transition-colors">
-                    <a href="{{ route('properties.show', $property->slug) }}">{{ $property->title }}</a>
-                </h3>
-                <p class="text-white/40 text-sm mt-2 font-mono">
-                    {{ $property->bedrooms }} {{ __('home.collection.bedrooms') }} • {{ $property->area_gross }} m²
-                </p>
             </div>
         </div>
-        @endforeach
+    </section>
 
-        {{-- "View All" Card --}}
-        <div class="snap-center shrink-0 w-[85vw] md:w-[300px] flex items-center justify-center bg-brand-primary/10 border border-white/10 aspect-[3/4] hover:bg-brand-primary transition-colors group cursor-pointer">
-            <a href="{{ route('portfolio') }}" class="text-center">
-                <span class="block text-4xl mb-4 group-hover:rotate-90 transition-transform duration-500">→</span>
-                <span class="font-serif text-2xl italic text-brand-sand">{!! __('home.collection.explore_all') !!}</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-{{-- 4. SERVICES --}}
-<section class="py-32 bg-white text-brand-text">
-    <div class="container mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-            
-            {{-- Pillar 1 --}}
-            <div class="px-6 py-8 hover:bg-brand-background transition-colors duration-500 group">
-                <span class="text-brand-primary text-5xl font-serif block mb-6 opacity-30 group-hover:opacity-100 transition-opacity">01.</span>
-                <h3 class="text-lg font-bold uppercase tracking-widest mb-4">{{ __('home.services.1_title') }}</h3>
-                <p class="font-light text-gray-500 leading-relaxed">{{ __('home.services.1_desc') }}</p>
-            </div>
-
-            {{-- Pillar 2 --}}
-            <div class="px-6 py-8 hover:bg-brand-background transition-colors duration-500 group">
-                <span class="text-brand-primary text-5xl font-serif block mb-6 opacity-30 group-hover:opacity-100 transition-opacity">02.</span>
-                <h3 class="text-lg font-bold uppercase tracking-widest mb-4">{{ __('home.services.2_title') }}</h3>
-                <p class="font-light text-gray-500 leading-relaxed">{{ __('home.services.2_desc') }}</p>
-            </div>
-
-            {{-- Pillar 3 --}}
-            <div class="px-6 py-8 hover:bg-brand-background transition-colors duration-500 group">
-                <span class="text-brand-primary text-5xl font-serif block mb-6 opacity-30 group-hover:opacity-100 transition-opacity">03.</span>
-                <h3 class="text-lg font-bold uppercase tracking-widest mb-4">{{ __('home.services.3_title') }}</h3>
-                <p class="font-light text-gray-500 leading-relaxed">{{ __('home.services.3_desc') }}</p>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-{{-- 5. CONTACT FORM --}}
-<section id="contact-focus" class="relative py-32 bg-brand-primary overflow-hidden">
-    <div class="absolute top-0 right-0 w-2/3 h-full bg-[#962235] skew-x-12 transform origin-top-right mix-blend-multiply"></div>
-    
-    <div class="container mx-auto px-6 relative z-10">
-        <div class="max-w-4xl mx-auto">
-            
-            <div class="text-center mb-16">
-                <p class="text-brand-sand font-mono text-xs uppercase tracking-[0.4em] mb-4">{{ __('home.contact.subtitle') }}</p>
-                <h2 class="font-serif text-5xl md:text-6xl text-white mb-6">{{ __('home.contact.title') }}</h2>
-                <p class="text-white/70 font-light max-w-lg mx-auto">
-                    {{ __('home.contact.description') }}
-                    <span class="italic text-brand-sand">{{ __('home.contact.privacy_note') }}</span>
+    {{-- 4. PRIVATE COLLECTION --}}
+    <section id="private-collection" class="py-32 bg-brand-secondary text-brand-sand relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 border-b border-brand-sand/20 pb-8">
+                <h3 class="font-serif text-5xl md:text-7xl">Private<br><span class="italic text-brand-primary">Collection</span></h3>
+                <p class="text-brand-sand/60 max-w-sm text-right mt-6 md:mt-0 font-light">
+                    {{ __('home.collection.subtitle') }}
                 </p>
             </div>
 
-            <div class="bg-white/5 backdrop-blur-lg border border-white/10 p-8 md:p-12 shadow-2xl">
-                <form action="{{ route('contact.send') }}" method="POST" class="space-y-8">
-                    @csrf
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="relative">
-                            <input type="text" name="name" required placeholder="{{ __('home.form.name') }}" 
-                                   class="w-full bg-transparent border-b border-white/30 py-4 text-white placeholder-white/30 focus:outline-none focus:border-brand-sand transition-colors font-light">
-                        </div>
-                        <div class="relative">
-                            <input type="email" name="email" required placeholder="{{ __('home.form.email') }}" 
-                                   class="w-full bg-transparent border-b border-white/30 py-4 text-white placeholder-white/30 focus:outline-none focus:border-brand-sand transition-colors font-light">
-                        </div>
-                    </div>
+            {{-- TOP 3 --}}
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-y-24 mb-32">
+                @foreach($properties->take(3) as $index => $property)
+                    @php
+                        $colClass = match($index) {
+                            0 => 'md:col-span-7',
+                            1 => 'md:col-span-5 md:mt-32',
+                            2 => 'md:col-span-10 md:col-start-2',
+                            default => 'md:col-span-6'
+                        };
+                        $aspectClass = match($index) {
+                            0 => 'aspect-[16/10]',
+                            1 => 'aspect-[3/4]',
+                            2 => 'aspect-[21/9]',
+                            default => 'aspect-[4/3]'
+                        };
+                    @endphp
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="relative">
-                            <input type="tel" name="phone" required placeholder="{{ __('home.form.phone') }}" 
-                                   class="w-full bg-transparent border-b border-white/30 py-4 text-white placeholder-white/30 focus:outline-none focus:border-brand-sand transition-colors font-light">
-                        </div>
-                        <div class="relative">
-                            <select name="goal" required class="w-full bg-transparent border-b border-white/30 py-4 text-white focus:outline-none focus:border-brand-sand transition-colors font-light appearance-none">
-                                <option value="" class="text-black">{{ __('home.form.goal_default') }}</option>
-                                <option value="Comprar" class="text-black">{{ __('home.form.goal_buy') }}</option>
-                                <option value="Vender" class="text-black">{{ __('home.form.goal_sell') }}</option>
-                                <option value="Investir" class="text-black">{{ __('home.form.goal_invest') }}</option>
-                            </select>
-                        </div>
+                    <div class="{{ $colClass }} group relative" data-aos="fade-up">
+                        <a href="{{ route('properties.show', $property->slug) }}" class="block w-full h-full">
+                            <div class="relative w-full {{ $aspectClass }} overflow-hidden bg-brand-primary/10">
+                                <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/placeholder.jpg') }}" 
+                                     class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                     alt="{{ $property->title }}">
+                                <div class="absolute top-0 right-0 bg-brand-sand text-brand-secondary px-6 py-4 font-serif text-xl z-20">
+                                    {{ number_format($property->price, 0, ',', '.') }} €
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-start mt-6 border-t border-brand-sand/20 pt-4">
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-widest text-brand-primary mb-2">{{ $property->location }}</p>
+                                    <h4 class="font-serif text-3xl group-hover:text-brand-primary transition-colors">{{ $property->title }}</h4>
+                                </div>
+                                <div class="hidden md:block">
+                                    <span class="inline-flex items-center justify-center w-12 h-12 rounded-full border border-brand-sand/30 group-hover:bg-brand-sand group-hover:text-brand-secondary transition-all">→</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
+                @endforeach
+            </div>
 
-                    {{-- Hidden fields atualizados para Porthouse --}}
-                    <input type="hidden" name="timeline" value="Não especificado (Homepage)">
-                    <input type="hidden" name="sell_to_buy" value="Não especificado">
-                    <input type="hidden" name="subject" value="Novo Contacto via Porthouse Homepage">
+            {{-- GRID MENOR (4 COLUNAS) --}}
+            @if($properties->count() > 3)
+            <div class="mb-24" data-aos="fade-up">
+                <div class="flex items-center gap-4 mb-12">
+                      <span class="h-px w-12 bg-brand-sand/30"></span>
+                      <p class="text-xs uppercase tracking-[0.3em] opacity-60">More from our portfolio</p>
+                </div>
 
-                    <div class="flex items-start gap-3 mt-4">
-                        <input type="checkbox" name="privacy_check" id="privacy_check" required 
-                               class="mt-1 bg-transparent border-white/40 rounded-sm text-brand-sand focus:ring-0">
-                        <label for="privacy_check" class="text-xs text-white/50 font-light">
-                            {{ __('home.form.accept') }} <a href="#" class="underline hover:text-white">{{ __('home.form.privacy_policy') }}</a>. 
-                            {{ __('home.form.privacy_disclaimer') }}
-                        </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-10">
+                    @foreach($properties->skip(3)->take(6) as $property)
+                    <div class="group cursor-pointer">
+                        <a href="{{ route('properties.show', $property->slug) }}" class="block">
+                            <div class="aspect-[3/2] overflow-hidden bg-brand-primary/5 mb-4 relative">
+                                <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/placeholder.jpg') }}" 
+                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[30%] group-hover:grayscale-0">
+                                <div class="absolute inset-0 bg-brand-secondary/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <span class="bg-brand-sand text-brand-secondary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">View</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-end border-b border-brand-sand/10 pb-3 group-hover:border-brand-sand/40 transition-colors">
+                                <div>
+                                    <h4 class="font-serif text-base text-brand-sand leading-tight group-hover:text-white transition-colors truncate max-w-[150px]">{{ $property->title }}</h4>
+                                    <p class="text-[9px] font-bold uppercase tracking-widest text-brand-sand/50 mt-1">{{ $property->location }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-xs font-serif opacity-80">{{ number_format($property->price, 0, ',', '.') }} €</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
-                    <div class="text-center pt-8">
-                        <button type="submit" class="group relative px-12 py-5 bg-brand-sand text-brand-primary font-bold uppercase tracking-widest overflow-hidden transition-all hover:scale-105 shadow-xl">
-                            <span class="relative z-10">{{ __('home.form.submit_btn') }}</span>
-                            <div class="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
-                        </button>
-                    </div>
-                </form>
+            {{-- LINK COM BR CORRIGIDO (USO DE {!! !!}) --}}
+            <div class="text-center pt-12">
+                <a href="{{ route('portfolio') }}" class="inline-block border-b border-brand-sand pb-1 text-2xl font-serif italic hover:text-brand-primary hover:border-brand-primary transition-all leading-tight">
+                    {!! __('home.collection.explore_all') !!}
+                </a>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    {{-- 5. SERVICES --}}
+    <section class="py-32 px-6 bg-brand-sand text-brand-secondary">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-20">
+                <p class="font-bold text-xs uppercase tracking-[0.3em] mb-4">Expertise</p>
+                <h3 class="font-serif text-5xl">Bespoke Services</h3>
+            </div>
+            <div class="space-y-0 divide-y divide-brand-secondary/20 border-t border-b border-brand-secondary/20">
+                <div class="group py-12 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/20 transition-colors px-4 cursor-default" data-aos="fade-up">
+                    <div class="flex items-baseline gap-8">
+                        <span class="font-serif text-brand-secondary/30 text-3xl group-hover:text-brand-primary transition-colors">01</span>
+                        <h4 class="text-2xl font-serif">{{ __('home.services.1_title') }}</h4>
+                    </div>
+                    <p class="mt-4 md:mt-0 max-w-sm text-sm opacity-70 font-light group-hover:opacity-100 transition-opacity">{{ __('home.services.1_desc') }}</p>
+                </div>
+                <div class="group py-12 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/20 transition-colors px-4 cursor-default" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-baseline gap-8">
+                        <span class="font-serif text-brand-secondary/30 text-3xl group-hover:text-brand-primary transition-colors">02</span>
+                        <h4 class="text-2xl font-serif">{{ __('home.services.2_title') }}</h4>
+                    </div>
+                    <p class="mt-4 md:mt-0 max-w-sm text-sm opacity-70 font-light group-hover:opacity-100 transition-opacity">{{ __('home.services.2_desc') }}</p>
+                </div>
+                <div class="group py-12 flex flex-col md:flex-row md:items-center justify-between hover:bg-white/20 transition-colors px-4 cursor-default" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-baseline gap-8">
+                        <span class="font-serif text-brand-secondary/30 text-3xl group-hover:text-brand-primary transition-colors">03</span>
+                        <h4 class="text-2xl font-serif">{{ __('home.services.3_title') }}</h4>
+                    </div>
+                    <p class="mt-4 md:mt-0 max-w-sm text-sm opacity-70 font-light group-hover:opacity-100 transition-opacity">{{ __('home.services.3_desc') }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 6. CONTACTO --}}
+    <section id="contact-focus" class="py-32 px-6 pb-40">
+        <div class="container mx-auto max-w-6xl relative">
+            <div class="bg-brand-secondary text-brand-sand rounded-t-[50px] md:rounded-t-[100px] p-12 md:p-24 text-center shadow-2xl overflow-hidden relative" data-aos="zoom-in-up">
+                <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
+                <p class="font-mono text-xs uppercase tracking-[0.4em] mb-8 text-brand-primary">Inquiry</p>
+                <h2 class="text-5xl md:text-8xl font-serif mb-12 leading-none">Start the <br><span class="italic text-brand-primary">Conversation</span></h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 relative z-10">
+                      <a href="https://wa.me/351910000000" target="_blank" class="px-10 py-4 bg-brand-sand text-brand-secondary font-bold uppercase tracking-widest hover:bg-white transition-all duration-500 min-w-[200px]">WhatsApp</a>
+                      <span class="font-serif italic text-2xl opacity-50">or</span>
+                      <a href="mailto:contact@porthouse.pt" class="px-10 py-4 border border-brand-sand text-brand-sand font-bold uppercase tracking-widest hover:bg-brand-primary hover:border-brand-primary hover:text-white transition-all duration-500 min-w-[200px]">Email Us</a>
+                </div>
+                <div class="mt-16 pt-8 border-t border-brand-sand/10 text-xs opacity-40 font-light uppercase tracking-widest">Porthouse Private Office • Porto, Portugal</div>
+            </div>
+        </div>
+    </section>
+
+</div>
 
 <style>
-    @keyframes kenburns {
-        0% { transform: scale(1); }
-        100% { transform: scale(1.1); }
-    }
     .writing-vertical-rl { writing-mode: vertical-rl; }
+    [x-cloak] { display: none !important; }
 </style>
 
 @endsection

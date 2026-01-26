@@ -379,7 +379,23 @@
     "layout.exit.text": "O mercado imobiliário muda rapidamente. <br>Se procura um conselho estratégico, estou disponível agora no WhatsApp.",
     "layout.exit.cta": "Falar no WhatsApp",
     "layout.exit.dismiss": "Não, obrigado. Continuar a navegar.",
-    "home.meta.title": "Início"
+    "home.meta.title": "Início", 
+
+    "home.meta.title": "Início",
+    "home.manifesto.label": "Manifesto",
+    "home.manifesto.title_1": "Não acreditamos em <span class=\"italic text-brand-primary\">volume</span>.",
+    "home.manifesto.subtitle": "Nem em ruído. <br> Nem em promessas apressadas.",
+    "home.manifesto.title_2": "Acreditamos em <br><span class=\"italic border-b-2 border-brand-primary\">critério</span>.",
+    "home.manifesto.quote_text": "Trabalhamos com menos imóveis porque escolhemos trabalhar melhor. Aqui, a discrição não é ausência. É controlo. Porque vender bem não é vender rápido.",
+    "home.manifesto.quote_emphasis": "É vender certo.",
+    "home.collection.subtitle": "Uma seleção curada de propriedades exclusivas e off-market.",
+    "home.collection.explore_all": "Explorar a coleção<br>integral",
+    "home.services.1_title": "Consultoria de Investimento",
+    "home.services.1_desc": "Análise estratégica e personalizada para maximizar o retorno dos seus ativos imobiliários.",
+    "home.services.2_title": "Gestão de Propriedade",
+    "home.services.2_desc": "Cuidamos do seu património com a máxima discrição, eficiência e relatórios transparentes.",
+    "home.services.3_title": "Golden Visa & Relocation",
+    "home.services.3_desc": "Suporte jurídico e logístico completo para a sua mudança e instalação em Portugal."
 
 
     

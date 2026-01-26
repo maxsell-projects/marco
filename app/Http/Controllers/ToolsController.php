@@ -22,6 +22,15 @@ class ToolsController extends Controller
         return view('tools.gains');
     }
 
+    public function changeLocale($locale)
+{
+    if (in_array($locale, ['en', 'pt'])) {
+        \Illuminate\Support\Facades\Session::put('locale', $locale);
+        \Illuminate\Support\Facades\App::setLocale($locale);
+    }
+    return redirect()->back();
+}
+
     // Processa o cálculo
     public function calculateGains(Request $request)
     {

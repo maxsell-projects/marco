@@ -218,6 +218,20 @@ class PropertyController extends Controller
         return $data;
     }
 
+    public function home()
+    {
+        // Busca 9 imóveis no total:
+        // - Os 3 primeiros (is_featured) vão para o topo "Private Collection"
+        // - Os 6 seguintes vão para o grid "More from our portfolio"
+        $properties = Property::where('is_visible', true)
+            ->orderBy('is_featured', 'desc') // Garante que os marcados como Destaque apareçam primeiro
+            ->latest() // Depois, os mais recentes
+            ->take(9)  // Limite total de 9 (3 + 6)
+            ->get();
+
+        return view('home', compact('properties'));
+    }
+
     private function handleGalleryUpload(Request $request, Property $property)
     {
         if ($request->hasFile('gallery')) {

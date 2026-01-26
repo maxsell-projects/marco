@@ -379,5 +379,21 @@
     "layout.exit.text": "The real estate market changes fast. <br>If you're looking for strategic advice, I am available now on WhatsApp.",
     "layout.exit.cta": "Chat on WhatsApp",
     "layout.exit.dismiss": "No thanks. Continue browsing.",
-    "home.meta.title": "Home"
+    "home.meta.title": "Home",
+
+    "home.meta.title": "Home",
+    "home.manifesto.label": "Manifesto",
+    "home.manifesto.title_1": "We do not believe in <span class=\"italic text-brand-primary\">volume</span>.",
+    "home.manifesto.subtitle": "Nor in noise. <br> Nor in rushed promises.",
+    "home.manifesto.title_2": "We believe in <br><span class=\"italic border-b-2 border-brand-primary\">criteria</span>.",
+    "home.manifesto.quote_text": "We work with fewer properties because we choose to work better. Here, discretion is not absence. It is control. Because selling well is not selling fast.",
+    "home.manifesto.quote_emphasis": "It is selling right.",
+    "home.collection.subtitle": "A curated selection of exclusive and off-market properties.",
+    "home.collection.explore_all": "Explore the full<br>collection",
+    "home.services.1_title": "Investment Consulting",
+    "home.services.1_desc": "Strategic and personalized analysis to maximize returns on your real estate assets.",
+    "home.services.2_title": "Property Management",
+    "home.services.2_desc": "We care for your assets with maximum discretion, efficiency, and transparent reporting.",
+    "home.services.3_title": "Golden Visa & Relocation",
+    "home.services.3_desc": "Full legal and logistical support for your move and settlement in Portugal."
 }

@@ -1,15 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Property;
-use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\PropertyController;
-use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ToolsController;
+use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\Api\ChatbotController;
-use App\Http\Controllers\RecruitmentController; 
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\App;
+use App\Http\Controllers\AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,93 +14,55 @@ use Illuminate\Support\Facades\App;
 |--------------------------------------------------------------------------
 */
 
-// --- HOME & INSTITUCIONAL ---
+// --- UTILITÁRIOS ---
+// Movi para o ToolsController para permitir cache de rotas
+Route::get('locale/{locale}', [ToolsController::class, 'changeLocale'])->name('locale');
 
-Route::get('locale/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'pt'])) {
-        Session::put('locale', $locale);
-        App::setLocale($locale);
-    }
-    return redirect()->back();
-})->name('locale');
+// --- INSTITUCIONAL ---
+Route::view('/sobre', 'about')->name('about');
+Route::view('/termos-e-condicoes', 'legal.terms')->name('terms');
 
-Route::get('/', function () {
-    // Busca apenas 3 imóveis destaque para a Home (Performance otimizada)
-    $properties = Property::where('is_visible', true)
-        ->where('is_featured', true)
-        ->latest()
-        ->take(3)
-        ->get();
-        
-    return view('home', compact('properties'));
-})->name('home');
+// --- HOME ---
+// ADAPTAÇÃO: Aponta para um método novo no PropertyController
+Route::get('/', [PropertyController::class, 'home'])->name('home');
 
-Route::get('/sobre', function () {
-    return view('about');
-})->name('about');
+// --- IMÓVEIS (PORTFÓLIO) ---
+Route::controller(PropertyController::class)->group(function () {
+    Route::get('/imoveis', 'publicIndex')->name('portfolio');
+    Route::get('/imoveis/{property:slug}', 'show')->name('properties.show');
+});
 
-
-// --- CONTACTOS (Landing Page de Conversão) ---
-
-Route::get('/contactos', function () {
-    return view('contact');
-})->name('contact');
-
-// Processamento do Formulário (SOP Compliance)
+// --- CONTACTOS & RECRUTAMENTO ---
+Route::view('/contactos', 'contact')->name('contact');
 Route::post('/contactos/enviar', [ContactController::class, 'send'])->name('contact.send');
-
-
-// --- PORTFÓLIO (IMÓVEIS) ---
-
-Route::get('/imoveis', [PropertyController::class, 'publicIndex'])->name('portfolio');
-Route::get('/imoveis/{property:slug}', [PropertyController::class, 'show'])->name('properties.show');
-
-
-// --- FERRAMENTAS (Iscas Digitais) ---
-
-Route::get('/ferramentas/simulador-credito', function () {
-    return view('tools.credit');
-})->name('tools.credit');
-
-Route::get('/ferramentas/imt', function () {
-    return view('tools.imt');
-})->name('tools.imt');
-
-Route::get('/ferramentas/mais-valias', [ToolsController::class, 'showGainsSimulator'])->name('tools.gains');
-Route::post('/ferramentas/mais-valias/calcular', [ToolsController::class, 'calculateGains'])->name('tools.gains.calculate');
 Route::post('/recrutamento/enviar', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 
+// --- FERRAMENTAS ---
+Route::prefix('ferramentas')->name('tools.')->group(function () {
+    Route::view('/simulador-credito', 'tools.credit')->name('credit');
+    Route::view('/imt', 'tools.imt')->name('imt');
+    
+    Route::controller(ToolsController::class)->group(function () {
+        Route::get('/mais-valias', 'showGainsSimulator')->name('gains');
+        Route::post('/mais-valias/calcular', 'calculateGains')->name('gains.calculate');
+    });
+});
 
-// --- PÁGINAS LEGAIS ---
-
-Route::get('/termos-e-condicoes', function () {
-    return view('legal.terms');
-})->name('terms');
-
-
-// --- CHATBOT (AI Assistant) ---
-
-// Rota POST para processar as mensagens da IA
+// --- CHATBOT ---
 Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
 
-
-// --- BACKOFFICE (ADMINISTRAÇÃO) ---
-
-Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-    
-    // Proteção contra Brute Force (5 tentativas/minuto)
-    Route::post('/login', [AdminAuthController::class, 'login'])
-        ->middleware('throttle:5,1')
-        ->name('admin.login.submit');
+// --- BACKOFFICE ---
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [AdminAuthController::class, 'login'])
+            ->middleware('throttle:5,1')
+            ->name('login.submit');
+    });
 
     Route::middleware('auth')->group(function () {
-        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-        
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
-
-        Route::resource('properties', PropertyController::class)->names('admin.properties');
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+        Route::resource('properties', PropertyController::class);
     });
 });
