@@ -6,43 +6,35 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-/* --- CORREÇÃO: Esconde elementos antes do Alpine carregar (Evita piscar o menu) --- */
 [x-cloak] {
     display: none !important;
 }
 
 @theme {
-    /* 🔠 Tipografia - Mantendo a elegância, mas moderna */
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    /* 🔠 Tipografia */
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
     --font-serif: 'Playfair Display', serif;
 
-    /* 🎨 PALETA DE CORES - "Novo Cliente" */
+    /* 🎨 NOVA PALETA "CLEAN LUXURY" */
     
-    /* PRIMÁRIA: Bordeaux (#8D182B) */
-    /* Uso: bg-brand-primary, text-brand-primary, border-brand-primary */
+    /* PRIMÁRIA: Bordeaux (Mantido para CTAs específicos/Hover) */
     --color-brand-primary: #8D182B; 
     
-    /* SECUNDÁRIA: Verde Inglês (#1D4C42) */
-    /* Uso: bg-brand-secondary, text-brand-secondary */
+    /* SECUNDÁRIA: Verde Inglês (A cor "Signature" para detalhes finos) */
     --color-brand-secondary: #1D4C42; 
     
-    /* COMPLEMENTAR: Areia de Praia (#E5C2A4) */
-    /* Uso: bg-brand-sand, text-brand-sand */
+    /* AREIA: (Agora usado APENAS para detalhes muito sutis, nunca fundo total) */
     --color-brand-sand: #E5C2A4; 
 
-    /* VARIAÇÕES FUNCIONAIS */
+    /* VARIAÇÕES FUNCIONAIS (REDEFINIDAS) */
     
-    /* Background Geral: Um tom muito suave derivado do Areia para não cansar a vista */
-    --color-brand-background: #FDFBF7; 
+    /* Background Geral: BRANCO PURO */
+    --color-brand-background: #FFFFFF; 
     
-    /* Texto Base: Usaremos o Verde Inglês escuro em vez de preto puro (mais sofisticado) */
-    --color-brand-text: #1D4C42; 
-    
-    /* Ações/CTA: Bordeaux para chamar atenção */
-    --color-brand-cta: #8D182B;
+    /* Texto Base: PRETO NEUTRO (Visualmente preto, tecnicamente #1a1a1a para conforto) */
+    --color-brand-text: #1a1a1a; 
 }
 
-/* Utilitários Customizados (se necessário) */
 @layer utilities {
     .text-shadow {
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
