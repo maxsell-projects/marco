@@ -25,16 +25,44 @@
     </div>
 </section>
 
-{{-- 2. MANIFESTO (TEXTO DE IMPACTO) --}}
-<section class="py-32 bg-brand-background">
-    <div class="container mx-auto px-6 max-w-5xl text-center" data-aos="fade-up">
-        <h2 class="text-3xl md:text-5xl font-serif text-brand-secondary leading-tight mb-12">
-            "{{ __('about.manifesto.quote_part1') }} <span class="italic text-brand-primary border-b border-brand-primary/20 pb-1">{{ __('about.manifesto.quote_part2') }}</span>"
-        </h2>
-        
-        <div class="text-brand-text/70 font-light text-lg leading-relaxed text-justify md:text-center max-w-3xl mx-auto space-y-6">
-            <p>{!! __('about.manifesto.text_p1') !!}</p>
-            <p>{!! __('about.manifesto.text_p2') !!}</p>
+{{-- 2. MANIFESTO (Design Editorial da Home) --}}
+<section class="py-32 md:py-48 px-6 bg-brand-background relative overflow-hidden">
+    {{-- Elemento Decorativo: & Gigante --}}
+    <div class="absolute top-20 left-0 text-[20rem] font-serif text-brand-secondary/5 leading-none -ml-20 select-none pointer-events-none">
+        &
+    </div>
+
+    <div class="container mx-auto max-w-6xl relative z-10">
+        <div class="flex flex-col gap-20">
+            
+            {{-- Título Manifesto --}}
+            <div class="max-w-2xl" data-aos="fade-up">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="w-12 h-px bg-brand-secondary"></span> 
+                    <span class="text-xs font-bold uppercase tracking-[0.4em] text-brand-secondary">{{ __('home.manifesto.label') }}</span>
+                </div>
+                <h2 class="font-serif text-4xl md:text-6xl text-brand-text leading-tight">
+                    {!! __('home.manifesto.title_1') !!}
+                </h2>
+            </div>
+
+            {{-- Texto Fluido --}}
+            <div class="self-end max-w-3xl text-right" data-aos="fade-up" data-aos-delay="200">
+                <p class="font-sans font-light text-xl md:text-3xl text-neutral-600 leading-relaxed">
+                    {!! __('home.manifesto.subtitle') !!}
+                </p>
+                
+                <div class="mt-16 flex flex-col items-end gap-6">
+                    <p class="font-serif text-2xl md:text-4xl text-brand-secondary leading-snug max-w-xl">
+                        “{{ __('home.manifesto.quote_text') }} <span class="italic text-brand-primary">{!! __('home.manifesto.quote_emphasis') !!}</span>”
+                    </p>
+                    <div class="flex items-center gap-4 mt-4">
+                            <span class="h-px w-20 bg-brand-secondary/20"></span>
+                            <span class="font-signature text-3xl text-brand-secondary">Marco Moura</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -49,8 +77,8 @@
                 <div class="relative overflow-hidden aspect-[3/4] group shadow-2xl">
                     {{-- FOTO DO MARCO AQUI --}}
                     <img src="{{ asset('img/marco.jpg') }}" 
-                         alt="Marco Moura - Founder" 
-                         class="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105">
+                            alt="Marco Moura - Founder" 
+                            class="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105">
                     
                     {{-- Badge Flutuante --}}
                     <div class="absolute bottom-0 left-0 bg-brand-primary text-white p-8 max-w-[85%] border-t-4 border-brand-sand">

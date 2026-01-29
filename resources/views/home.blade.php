@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    {{-- 2. HERO VIDEO (Cinematográfica & Conceitual) --}}
+    {{-- 2. HERO VIDEO (Cinematográfica Clean - Sem Texto) --}}
     <section class="relative h-screen w-full overflow-hidden flex items-center justify-center">
         
         {{-- Vídeo de Background --}}
@@ -49,17 +49,11 @@
         </video>
 
         {{-- Overlay Escuro --}}
-        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        <div class="absolute inset-0 bg-black/20 z-10"></div>
 
-        {{-- Conteúdo Central --}}
+        {{-- Conteúdo Central (Apenas Botão Play) --}}
         <div class="relative z-20 container mx-auto px-6 text-center text-white flex flex-col items-center justify-center h-full" data-aos="fade-up" data-aos-duration="1500">
             
-            {{-- FRASE CONCEITO (Traduzida) --}}
-            <h1 class="font-sans font-thin text-5xl md:text-7xl lg:text-8xl tracking-widest uppercase leading-tight mb-12">
-                {{ __('home.hero.title_1') }} <br>
-                <span class="font-light">{{ __('home.hero.title_2') }}</span>
-            </h1>
-
             {{-- Play Button --}}
             <button @click="toggleVideo()" 
                     class="group flex flex-col items-center gap-4 transition-all duration-500 hover:scale-110 focus:outline-none">
@@ -70,7 +64,7 @@
                     <span x-show="videoPlaying" class="block w-3 h-3 bg-current rounded-sm"></span>
                 </div>
                 
-                {{-- Texto do Botão (Traduzido) --}}
+                {{-- Texto do Botão --}}
                 <span class="text-[10px] uppercase tracking-[0.3em] opacity-80 group-hover:opacity-100 transition-opacity">
                     {{ __('home.hero.cta') }}
                 </span>
@@ -83,49 +77,7 @@
         </div>
     </section>
 
-    {{-- 3. O MANIFESTO (Traduzido) --}}
-    <section class="py-32 md:py-48 px-6 bg-white relative overflow-hidden">
-        {{-- Elemento Decorativo --}}
-        <div class="absolute top-20 left-0 text-[20rem] font-serif text-brand-secondary/5 leading-none -ml-20 select-none pointer-events-none">
-            &
-        </div>
-
-        <div class="container mx-auto max-w-6xl relative z-10">
-            <div class="flex flex-col gap-20">
-                
-                {{-- Título Manifesto --}}
-                <div class="max-w-2xl" data-aos="fade-up">
-                    <div class="flex items-center gap-4 mb-8">
-                        <span class="w-12 h-px bg-brand-secondary"></span> 
-                        <span class="text-xs font-bold uppercase tracking-[0.4em] text-brand-secondary">{{ __('home.manifesto.label') }}</span>
-                    </div>
-                    <h2 class="font-serif text-4xl md:text-6xl text-brand-text leading-tight">
-                        {!! __('home.manifesto.title_1') !!}
-                    </h2>
-                </div>
-
-                {{-- Texto Fluido --}}
-                <div class="self-end max-w-3xl text-right" data-aos="fade-up" data-aos-delay="200">
-                    <p class="font-sans font-light text-xl md:text-3xl text-neutral-600 leading-relaxed">
-                        {!! __('home.manifesto.subtitle') !!}
-                    </p>
-                    
-                    <div class="mt-16 flex flex-col items-end gap-6">
-                        <p class="font-serif text-2xl md:text-4xl text-brand-secondary leading-snug max-w-xl">
-                            “{{ __('home.manifesto.quote_text') }} <span class="italic text-brand-primary">{!! __('home.manifesto.quote_emphasis') !!}</span>”
-                        </p>
-                        <div class="flex items-center gap-4 mt-4">
-                             <span class="h-px w-20 bg-brand-secondary/20"></span>
-                             <span class="font-signature text-3xl text-brand-secondary">Marco Moura</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    {{-- 4. PRIVATE COLLECTION --}}
+    {{-- 3. PRIVATE COLLECTION (Apenas Top 3) --}}
     <section id="private-collection" class="py-32 bg-neutral-50 border-t border-neutral-100">
         <div class="container mx-auto px-6">
             
@@ -171,25 +123,6 @@
                 @endforeach
             </div>
 
-            {{-- Lista Compacta --}}
-            @if($properties->count() > 3)
-            <div class="mt-32 border-t border-neutral-200 pt-16" data-aos="fade-up">
-                <p class="text-xs font-bold uppercase tracking-[0.3em] text-neutral-400 mb-12 text-center">{{ __('home.collection.more_opportunities') }}</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    @foreach($properties->skip(3)->take(4) as $property)
-                    <a href="{{ route('properties.show', $property->slug) }}" class="group block">
-                        <div class="aspect-[3/2] bg-gray-100 mb-4 overflow-hidden relative">
-                             <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/placeholder.jpg') }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale">
-                        </div>
-                        <h5 class="font-serif text-lg text-brand-text truncate">{{ $property->title }}</h5>
-                        <p class="text-xs text-neutral-500 font-light">{{ number_format($property->price, 0, ',', '.') }} €</p>
-                    </a>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-
             <div class="text-center mt-16 md:hidden">
                 <a href="{{ route('portfolio') }}" class="inline-block border-b border-brand-secondary pb-1 text-brand-secondary uppercase text-xs font-bold tracking-widest">
                     {{ __('home.collection.explore_all') }}
@@ -198,7 +131,7 @@
         </div>
     </section>
 
-    {{-- 5. SERVICES --}}
+    {{-- 4. SERVICES --}}
     <section class="py-32 px-6 bg-white">
         <div class="container mx-auto max-w-5xl">
             <div class="text-center mb-24">
@@ -231,7 +164,7 @@
         </div>
     </section>
 
-    {{-- 6. CONTACTO --}}
+    {{-- 5. CONTACTO --}}
     <section id="contact-focus" class="py-32 px-6 border-t border-neutral-100 bg-white">
         <div class="container mx-auto max-w-4xl text-center" data-aos="zoom-in">
             <p class="font-mono text-xs uppercase tracking-[0.4em] mb-8 text-brand-secondary">{{ __('home.contact.label') }}</p>
