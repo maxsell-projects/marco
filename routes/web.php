@@ -1,68 +1,103 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// Controllers Originais
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ToolsController;
 use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\Api\ChatbotController;
-use App\Http\Controllers\AdminAuthController;
+
+// Novos Controllers (Arquitetura Nova)
+use App\Http\Controllers\AuthController; 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\Admin\ClientAccessController;
+use App\Http\Controllers\Admin\AccessRequestController; // <--- ADICIONADO NOVO CONTROLLER
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - José Carvalho Real Estate
+| Web Routes - José Carvalho Real Estate (Versão Definitiva)
 |--------------------------------------------------------------------------
 */
 
-// --- UTILITÁRIOS ---
-// Movi para o ToolsController para permitir cache de rotas
+// --- 1. UTILITÁRIOS & CONFIG ---
 Route::get('locale/{locale}', [ToolsController::class, 'changeLocale'])->name('locale');
 
-// --- INSTITUCIONAL ---
+// --- 2. AUTENTICAÇÃO (Global) ---
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:5,1')
+        ->name('login.submit');
+});
+
+// Logout Global (Para o site público/novo painel)
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+
+// --- 3. ÁREA PÚBLICA (Site) ---
+Route::get('/', [PropertyController::class, 'home'])->name('home');
 Route::view('/sobre', 'about')->name('about');
 Route::view('/termos-e-condicoes', 'legal.terms')->name('terms');
 
-// --- HOME ---
-// ADAPTAÇÃO: Aponta para um método novo no PropertyController
-Route::get('/', [PropertyController::class, 'home'])->name('home');
-
-// --- IMÓVEIS (PORTFÓLIO) ---
 Route::controller(PropertyController::class)->group(function () {
-    Route::get('/imoveis', 'publicIndex')->name('portfolio');
+    Route::get('/imoveis', 'publicIndex')->name('portfolio'); 
     Route::get('/imoveis/{property:slug}', 'show')->name('properties.show');
 });
 
-// --- CONTACTOS & RECRUTAMENTO ---
 Route::view('/contactos', 'contact')->name('contact');
 Route::post('/contactos/enviar', [ContactController::class, 'send'])->name('contact.send');
 Route::post('/recrutamento/enviar', [RecruitmentController::class, 'submit'])->name('recruitment.submit');
 
-// --- FERRAMENTAS ---
 Route::prefix('ferramentas')->name('tools.')->group(function () {
     Route::view('/simulador-credito', 'tools.credit')->name('credit');
     Route::view('/imt', 'tools.imt')->name('imt');
-    
     Route::controller(ToolsController::class)->group(function () {
         Route::get('/mais-valias', 'showGainsSimulator')->name('gains');
         Route::post('/mais-valias/calcular', 'calculateGains')->name('gains.calculate');
     });
 });
 
-// --- CHATBOT ---
 Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
 
-// --- BACKOFFICE ---
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::middleware('guest')->group(function () {
-        Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'login'])
-            ->middleware('throttle:5,1')
-            ->name('login.submit');
+
+// --- 4. ÁREA PROTEGIDA (Backoffice & Cliente) ---
+Route::middleware(['auth'])->group(function () {
+
+    // HUB CENTRAL
+    Route::get('/painel', [DashboardController::class, 'index'])->name('dashboard');
+    // Alias para compatibilidade com eventuais links antigos
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // --- A) Área do Cliente ---
+    Route::prefix('minha-conta')->name('client.')->group(function () {
+        Route::get('/favoritos', [FavoriteController::class, 'index'])->name('favorites.index');
+        Route::post('/favoritos/{property}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+        Route::get('/exclusivos', [PropertyController::class, 'myAccess'])->name('properties.exclusive');
     });
 
-    Route::middleware('auth')->group(function () {
-        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
-        Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-        Route::resource('properties', PropertyController::class);
+    // --- B) Backoffice (Admin & Devs) ---
+    Route::prefix('admin')->name('admin.')->group(function () {
+        
+        // Rota de compatibilidade de Logout
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+        // CRUD Imóveis
+        Route::resource('properties', PropertyController::class)->except(['show']);
+        
+        // Off-Market (Atribuir imóvel a cliente)
+        Route::post('/acesso-cliente', [ClientAccessController::class, 'store'])->name('client-access.store');
+        Route::delete('/acesso-cliente', [ClientAccessController::class, 'destroy'])->name('client-access.destroy');
+
+        // --- NOVO: Solicitações de Acesso (Access Requests) ---
+        Route::get('/solicitacoes', [AccessRequestController::class, 'index'])->name('requests.index');
+        Route::get('/solicitacoes/{user}', [AccessRequestController::class, 'show'])->name('requests.show');
+        Route::post('/solicitacoes/{user}/aprovar', [AccessRequestController::class, 'approve'])->name('requests.approve');
+        Route::delete('/solicitacoes/{user}/rejeitar', [AccessRequestController::class, 'reject'])->name('requests.reject');
     });
+
 });

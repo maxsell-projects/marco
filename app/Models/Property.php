@@ -2,90 +2,92 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Property extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'user_id',       // Necessário para a importação via CLI
-        'reference_code', 
-        'title', 
-        'slug', 
-        'description', 
-        'type', 
+        'user_id',
+        'title',
+        'slug', // <--- ADICIONADO
+        'description',
+        'price',
+        'area',
+        'address',
+        'city',
+        'state',
+        'zip_code',
+        'bedrooms',
+        'bathrooms',
+        'garage',
+        'features', // <--- ADICIONADO
         'status',
-        'location', 
-        'address', 
-        'postal_code', 
-        'city', 
-        'latitude', 
-        'longitude',
-        'price', 
-        'area_gross', 
-        'area_useful', 
-        'area_land',
-        'bedrooms', 
-        'bathrooms', 
-        'garages', 
-        'floor', 
-        'orientation', 
-        'built_year', 
-        'condition', 
-        'energy_rating',
-        'has_lift', 
-        'has_garden', 
-        'has_pool', 
-        'has_terrace', 
-        'has_balcony', 
-        'has_air_conditioning', 
-        'has_heating', 
-        'is_accessible', 
-        'is_furnished', 
-        'is_kitchen_equipped',
-        'cover_image', 
-        'video_url', 
-        'whatsapp_number',
-        'is_featured', 
-        'is_visible',
+        'visibility',
+        'approved_at'
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'area_gross' => 'decimal:2',
-        'area_useful' => 'decimal:2', 
-        'area_land' => 'decimal:2',   
-        
-        // Booleanos - Garante retorno true/false em vez de 1/0
-        'has_pool' => 'boolean',
-        'has_garden' => 'boolean',
-        'has_lift' => 'boolean',
-        'has_terrace' => 'boolean',
-        'has_balcony' => 'boolean',
-        'has_air_conditioning' => 'boolean',
-        'has_heating' => 'boolean',
-        'is_accessible' => 'boolean',
-        'is_furnished' => 'boolean',
-        'is_kitchen_equipped' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_visible' => 'boolean',
+        'area' => 'decimal:2',
+        'approved_at' => 'datetime',
+        'features' => 'array',
     ];
 
-    /**
-     * Relacionamento com a galeria de imagens
-     */
-    public function images()
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function images(): HasMany
     {
         return $this->hasMany(PropertyImage::class);
     }
 
-    /**
-     * Relacionamento com o Usuário (Dono/Consultor)
-     */
-    public function user()
+    public function authorizedUsers(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'property_user_access', 'property_id', 'user_id')
+                    ->withPivot('granted_by')
+                    ->withTimestamps();
+    }
+
+    public function favoritedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'property_id', 'user_id');
+    }
+
+    // --- SCOPES ---
+
+    public function scopeVisibleTo(Builder $query, ?User $user): Builder
+    {
+        // 1. Admin vê tudo
+        if ($user && $user->isAdmin()) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($user) {
+            // Regra A: Imóveis Públicos e Publicados (Todo mundo vê)
+            $q->where('visibility', 'public')
+              ->where('status', 'published');
+
+            // Regra B: Se estiver logado...
+            if ($user) {
+                // ...vê os seus próprios imóveis (Dev/Owner)
+                $q->orWhere('user_id', $user->id);
+
+                // ...vê imóveis Off-Market/Privados onde tem permissão explícita
+                $q->orWhereHas('authorizedUsers', function ($subQ) use ($user) {
+                    $subQ->where('users.id', $user->id);
+                });
+            }
+        });
+    }
+
+    public function scopeOffMarket(Builder $query): Builder
+    {
+        return $query->where('visibility', '!=', 'public');
     }
 }

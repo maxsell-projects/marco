@@ -4,12 +4,6 @@
 
 @section('content')
 
-{{-- 
-    ESTRUTURA CLEAN LUXURY 
-    Base: Branco (#FFFFFF)
-    Texto: Escuro (#1a1a1a) / Detalhes: Verde (#1D4C42)
---}}
-
 <div x-data="{ 
         loaded: false, 
         videoPlaying: true,
@@ -24,7 +18,7 @@
     }" 
     class="bg-white min-h-screen relative overflow-hidden selection:bg-brand-secondary selection:text-white">
 
-    {{-- 1. INTRO / LOADING SCREEN (Fundo Branco Clean) --}}
+    {{-- 1. INTRO / LOADING --}}
     <div x-show="!loaded" 
          x-transition:leave="transition ease-in-out duration-1000"
          x-transition:leave-start="transform translate-y-0"
@@ -32,55 +26,59 @@
          class="fixed inset-0 z-[100] bg-white flex items-center justify-center">
         
         <div class="text-center" x-transition:leave="transition duration-500 opacity-0">
-            {{-- Logo Apenas Ícone/Imagem --}}
             <img src="{{ asset('img/Ativo_5.png') }}" alt="Porthouse" class="h-24 w-auto object-contain opacity-80 mb-6 animate-pulse">
             <p class="text-brand-secondary font-sans font-light text-xs tracking-[0.4em] uppercase">Private Office</p>
         </div>
     </div>
 
-    {{-- 2. HERO VIDEO (Cinematográfica Clean - Sem Texto) --}}
+    {{-- 2. HERO SECTION --}}
     <section class="relative h-screen w-full overflow-hidden flex items-center justify-center">
         
-        {{-- Vídeo de Background --}}
+        {{-- Video BG --}}
         <video id="heroVideo" autoplay muted loop playsinline 
                poster="{{ asset('img/porto_dark.jpeg') }}"
                class="absolute inset-0 w-full h-full object-cover z-0">
             <source src="{{ asset('video/hero.mp4') }}" type="video/mp4">
         </video>
 
-        {{-- Overlay Escuro --}}
-        <div class="absolute inset-0 bg-black/20 z-10"></div>
+        <div class="absolute inset-0 bg-black/30 z-10"></div>
 
-        {{-- Conteúdo Central (Apenas Botão Play) --}}
-        <div class="relative z-20 container mx-auto px-6 text-center text-white flex flex-col items-center justify-center h-full" data-aos="fade-up" data-aos-duration="1500">
+        {{-- TOP BAR: Login Button --}}
+        <div class="absolute top-0 left-0 w-full z-30 p-8 flex justify-between items-start">
+            <div class="w-10"></div> {{-- Spacer --}}
             
-            {{-- Play Button --}}
-            <button @click="toggleVideo()" 
-                    class="group flex flex-col items-center gap-4 transition-all duration-500 hover:scale-110 focus:outline-none">
-                
-                {{-- Círculo do Play --}}
-                <div class="w-20 h-20 rounded-full border border-white/40 backdrop-blur-md flex items-center justify-center group-hover:bg-white group-hover:text-brand-secondary transition-all duration-500">
+            <a href="{{ route('login') }}" 
+               class="px-8 py-3 border border-white/30 backdrop-blur-sm bg-white/5 hover:bg-white hover:text-brand-secondary text-white text-xs font-bold uppercase tracking-[0.2em] transition-all duration-500 rounded-sm">
+                Member Login
+            </a>
+        </div>
+
+        {{-- Center Play --}}
+        <div class="relative z-20 text-center text-white" data-aos="fade-up" data-aos-duration="1500">
+            <button @click="toggleVideo()" class="group flex flex-col items-center gap-6 focus:outline-none">
+                <div class="w-24 h-24 rounded-full border border-white/40 backdrop-blur-md flex items-center justify-center group-hover:bg-white group-hover:text-brand-secondary transition-all duration-500 transform group-hover:scale-110">
                     <span x-show="!videoPlaying" x-cloak class="ml-1 text-2xl">▶</span>
                     <span x-show="videoPlaying" class="block w-3 h-3 bg-current rounded-sm"></span>
                 </div>
-                
-                {{-- Texto do Botão --}}
-                <span class="text-[10px] uppercase tracking-[0.3em] opacity-80 group-hover:opacity-100 transition-opacity">
-                    {{ __('home.hero.cta') }}
-                </span>
             </button>
         </div>
 
-        {{-- Scroll Indicator --}}
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce opacity-60">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+        {{-- BOTTOM: Discover Button --}}
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
+            <a href="#private-collection" class="group flex flex-col items-center gap-2 text-white/80 hover:text-white transition-colors cursor-pointer">
+                <span class="text-[10px] uppercase tracking-[0.4em] font-light group-hover:tracking-[0.5em] transition-all duration-500">
+                    Discover
+                </span>
+                <svg class="w-6 h-6 animate-bounce mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </a>
         </div>
     </section>
 
-    {{-- 3. PRIVATE COLLECTION (Apenas Top 3) --}}
+    {{-- 3. PRIVATE COLLECTION --}}
     <section id="private-collection" class="py-32 bg-neutral-50 border-t border-neutral-100">
         <div class="container mx-auto px-6">
-            
             <div class="flex flex-col md:flex-row justify-between items-end mb-24">
                 <div>
                     <h3 class="font-sans font-light text-5xl md:text-7xl text-brand-text uppercase tracking-tight">
@@ -96,11 +94,11 @@
                 </a>
             </div>
 
-            {{-- GRID CLEAN (3 Colunas) --}}
+            {{-- Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-                @foreach($properties->take(3) as $property)
+                @foreach($properties as $property)
                     <div class="group cursor-pointer" data-aos="fade-up">
-                        <a href="{{ route('properties.show', $property->slug) }}" class="block">
+                        <a href="{{ route('properties.show', $property->slug ?? $property->id) }}" class="block">
                             <div class="relative overflow-hidden aspect-[4/5] bg-gray-200 mb-6">
                                 <img src="{{ $property->cover_image ? asset('storage/' . $property->cover_image) : asset('img/placeholder.jpg') }}" 
                                      class="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 filter grayscale-[20%] group-hover:grayscale-0"
@@ -109,6 +107,13 @@
                                 <div class="absolute top-0 right-0 bg-white/90 backdrop-blur text-brand-secondary px-4 py-2 text-sm font-serif">
                                     {{ number_format($property->price, 0, ',', '.') }} €
                                 </div>
+
+                                {{-- Badge Off-Market se aplicável --}}
+                                @if($property->visibility === 'off_market')
+                                    <div class="absolute top-0 left-0 bg-brand-secondary text-white px-3 py-1 text-[10px] uppercase tracking-widest">
+                                        Private Access
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="flex justify-between items-start border-t border-neutral-200 pt-4 group-hover:border-brand-secondary/50 transition-colors">
@@ -122,16 +127,39 @@
                     </div>
                 @endforeach
             </div>
+        </div>
+    </section>
 
-            <div class="text-center mt-16 md:hidden">
-                <a href="{{ route('portfolio') }}" class="inline-block border-b border-brand-secondary pb-1 text-brand-secondary uppercase text-xs font-bold tracking-widest">
-                    {{ __('home.collection.explore_all') }}
-                </a>
+    {{-- 4. NOVO: OFF-MARKET ACCESS CTA --}}
+    <section class="py-24 bg-[#1a1a1a] text-white relative overflow-hidden">
+        {{-- Background Decoration --}}
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-brand-secondary/5 skew-x-12"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <span class="inline-block border border-white/20 px-4 py-1 rounded-full text-[10px] uppercase tracking-[0.3em] mb-8 text-neutral-300">
+                    Members Only
+                </span>
+                <h2 class="font-serif text-4xl md:text-6xl mb-6">
+                    Acesso Off-Market
+                </h2>
+                <p class="font-light text-neutral-400 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+                    Obtenha acesso exclusivo a propriedades que não estão listadas publicamente. Entre na sua conta ou solicite acesso ao nosso portfólio privado.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="{{ route('login') }}" class="px-10 py-4 bg-white text-brand-text font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors min-w-[200px]">
+                        Acessar Conta
+                    </a>
+                    <a href="{{ route('contact') }}" class="px-10 py-4 border border-white/30 text-white font-bold uppercase tracking-widest hover:bg-white/10 transition-colors min-w-[200px]">
+                        Solicitar Convite
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    {{-- 4. SERVICES --}}
+    {{-- 5. SERVICES --}}
     <section class="py-32 px-6 bg-white">
         <div class="container mx-auto max-w-5xl">
             <div class="text-center mb-24">
@@ -140,21 +168,16 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-neutral-100">
-                {{-- Service 1 --}}
                 <div class="pt-8 md:pt-0 md:px-8 text-center group" data-aos="fade-up">
                     <span class="block font-serif text-4xl text-neutral-200 mb-6 group-hover:text-brand-primary transition-colors">01</span>
                     <h4 class="text-xl font-serif text-brand-text mb-4">{{ __('home.services.1_title') }}</h4>
                     <p class="font-light text-sm text-neutral-500 leading-relaxed">{{ __('home.services.1_desc') }}</p>
                 </div>
-
-                {{-- Service 2 --}}
                 <div class="pt-8 md:pt-0 md:px-8 text-center group" data-aos="fade-up" data-aos-delay="100">
                     <span class="block font-serif text-4xl text-neutral-200 mb-6 group-hover:text-brand-primary transition-colors">02</span>
                     <h4 class="text-xl font-serif text-brand-text mb-4">{{ __('home.services.2_title') }}</h4>
                     <p class="font-light text-sm text-neutral-500 leading-relaxed">{{ __('home.services.2_desc') }}</p>
                 </div>
-
-                {{-- Service 3 --}}
                 <div class="pt-8 md:pt-0 md:px-8 text-center group" data-aos="fade-up" data-aos-delay="200">
                     <span class="block font-serif text-4xl text-neutral-200 mb-6 group-hover:text-brand-primary transition-colors">03</span>
                     <h4 class="text-xl font-serif text-brand-text mb-4">{{ __('home.services.3_title') }}</h4>
@@ -164,7 +187,7 @@
         </div>
     </section>
 
-    {{-- 5. CONTACTO --}}
+    {{-- 6. CONTACTO --}}
     <section id="contact-focus" class="py-32 px-6 border-t border-neutral-100 bg-white">
         <div class="container mx-auto max-w-4xl text-center" data-aos="zoom-in">
             <p class="font-mono text-xs uppercase tracking-[0.4em] mb-8 text-brand-secondary">{{ __('home.contact.label') }}</p>
