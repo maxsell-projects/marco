@@ -27,7 +27,6 @@
         Solicitações
         
         @php
-            // Conta solicitações pendentes (is_active = 0)
             $pendingCount = \App\Models\User::where('is_active', false)->where('role', '!=', 'admin')->count();
         @endphp
         
@@ -35,6 +34,28 @@
             <span class="ml-auto bg-brand-gold text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">{{ $pendingCount }}</span>
         @endif
     </a>
+
+    <div x-data="{ open: {{ request()->routeIs('admin.users.*') ? 'true' : 'false' }} }" class="space-y-1">
+        <button @click="open = !open" 
+                class="{{ $itemClass }} w-full justify-between {{ request()->routeIs('admin.users.*') ? 'text-white bg-white/10' : 'text-gray-400 hover:bg-white/10 hover:text-white' }}">
+            <div class="flex items-center gap-3">
+                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Usuários
+            </div>
+            <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        
+        <div x-show="open" x-cloak class="pl-11 space-y-1">
+            <a href="{{ route('admin.users.index') }}" 
+               class="block py-2 px-2 rounded-md text-xs transition-colors {{ request()->routeIs('admin.users.index') ? 'text-white bg-white/10 font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+               Todos
+            </a>
+            <a href="{{ route('admin.users.devs') }}" 
+               class="block py-2 px-2 rounded-md text-xs transition-colors {{ request()->routeIs('admin.users.devs') ? 'text-white bg-white/10 font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+               Equipe & Clientes
+            </a>
+        </div>
+    </div>
 
     <a href="#" class="{{ $itemClass }} {{ $inactiveClass }}">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>

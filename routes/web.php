@@ -14,11 +14,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Admin\ClientAccessController;
-use App\Http\Controllers\Admin\AccessRequestController; // <--- ADICIONADO NOVO CONTROLLER
+use App\Http\Controllers\Admin\AccessRequestController;
+use App\Http\Controllers\Admin\UserController; // <--- NOVO: Import do UserController
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - José Carvalho Real Estate (Versão Definitiva)
+| Web Routes - José Carvalho Real Estate (Versão Completa)
 |--------------------------------------------------------------------------
 */
 
@@ -33,7 +34,7 @@ Route::middleware('guest')->group(function () {
         ->name('login.submit');
 });
 
-// Logout Global (Para o site público/novo painel)
+// Logout Global
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
@@ -70,8 +71,7 @@ Route::middleware(['auth'])->group(function () {
 
     // HUB CENTRAL
     Route::get('/painel', [DashboardController::class, 'index'])->name('dashboard');
-    // Alias para compatibilidade com eventuais links antigos
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); // Alias
 
     // --- A) Área do Cliente ---
     Route::prefix('minha-conta')->name('client.')->group(function () {
@@ -83,21 +83,26 @@ Route::middleware(['auth'])->group(function () {
     // --- B) Backoffice (Admin & Devs) ---
     Route::prefix('admin')->name('admin.')->group(function () {
         
-        // Rota de compatibilidade de Logout
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
         // CRUD Imóveis
         Route::resource('properties', PropertyController::class)->except(['show']);
         
-        // Off-Market (Atribuir imóvel a cliente)
+        // Off-Market
         Route::post('/acesso-cliente', [ClientAccessController::class, 'store'])->name('client-access.store');
         Route::delete('/acesso-cliente', [ClientAccessController::class, 'destroy'])->name('client-access.destroy');
 
-        // --- NOVO: Solicitações de Acesso (Access Requests) ---
+        // Solicitações de Acesso
         Route::get('/solicitacoes', [AccessRequestController::class, 'index'])->name('requests.index');
         Route::get('/solicitacoes/{user}', [AccessRequestController::class, 'show'])->name('requests.show');
         Route::post('/solicitacoes/{user}/aprovar', [AccessRequestController::class, 'approve'])->name('requests.approve');
         Route::delete('/solicitacoes/{user}/rejeitar', [AccessRequestController::class, 'reject'])->name('requests.reject');
+
+        // --- NOVO: Gestão de Usuários & Equipe ---
+        // Lista geral de usuários com filtros
+        Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
+        // Visão hierárquica (Devs e seus Clientes)
+        Route::get('/equipe', [UserController::class, 'devs'])->name('users.devs');
     });
 
 });
