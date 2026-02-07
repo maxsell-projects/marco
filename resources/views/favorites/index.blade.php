@@ -14,7 +14,7 @@
             <h3 class="mt-2 text-sm font-semibold text-gray-900">Nenhum favorito ainda</h3>
             <p class="mt-1 text-sm text-gray-500">Comece a explorar e salve o que gostar.</p>
             <div class="mt-6">
-                <a href="{{ route('properties.index') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                <a href="{{ route('portfolio') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
                     Explorar Imóveis
                 </a>
             </div>

@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    {{-- ALERTA DE SENHA GERADA (IMPORTANTE) --}}
+    {{-- ALERTA DE SENHA GERADA --}}
     @if(session('temp_password'))
         <div class="bg-brand-dark text-white p-6 rounded-xl shadow-xl mb-8 border-l-4 border-brand-gold animate-pulse">
             <div class="flex items-start gap-4">
@@ -45,18 +45,10 @@
                 </div>
                 <div class="flex-grow">
                     <h3 class="text-sm font-bold text-brand-gold uppercase tracking-widest mb-1">Atenção: Copie a Senha Agora!</h3>
-                    <p class="text-xs text-gray-400 mb-4">Esta senha é temporária e não será exibida novamente por motivos de segurança.</p>
-                    
-                    <div class="flex flex-wrap gap-4 items-center bg-white/5 p-4 rounded border border-white/10">
-                        <div>
-                            <span class="text-[10px] text-gray-500 block uppercase">E-mail de acesso</span>
-                            <span class="text-sm font-mono select-all">{{ session('approved_user_email') ?? 'Verifique na lista abaixo' }}</span>
-                        </div>
-                        <div class="h-8 w-px bg-white/10 hidden md:block"></div>
-                        <div>
-                            <span class="text-[10px] text-gray-500 block uppercase">Senha Provisória</span>
-                            <span class="text-brand-gold text-lg font-mono font-bold select-all tracking-wider">{{ session('temp_password') }}</span>
-                        </div>
+                    <p class="text-xs text-gray-400 mb-4">Senha gerada para o e-mail: <span class="text-white font-mono">{{ session('approved_user_email') }}</span></p>
+                    <div class="bg-white/5 p-4 rounded border border-white/10">
+                        <span class="text-[10px] text-gray-500 block uppercase">Senha Provisória</span>
+                        <span class="text-brand-gold text-lg font-mono font-bold select-all tracking-wider">{{ session('temp_password') }}</span>
                     </div>
                 </div>
             </div>
@@ -126,13 +118,17 @@
                         </td>
                         <td class="p-6 text-right">
                             <div class="flex justify-end gap-2">
-                                <a href="{{ route('admin.users.index', ['edit' => $user->id]) }}" class="p-2 text-gray-400 hover:text-brand-dark hover:bg-gray-100 rounded transition-all">
+                                {{-- EDITAR CORRIGIDO --}}
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="p-2 text-gray-400 hover:text-brand-dark hover:bg-gray-100 rounded transition-all">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                 </a>
+
+                                {{-- EXCLUIR CORRIGIDO --}}
                                 @if(Auth::id() !== $user->id)
-                                    <form action="{{ route('admin.users.index', $user->id) }}" method="POST" onsubmit="return confirm('Apagar este usuário permanentemente?')">
-                                        @csrf @method('DELETE')
-                                        <button class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-all">
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Apagar este usuário permanentemente?')">
+                                        @csrf 
+                                        @method('DELETE')
+                                        <button type="submit" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-all">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </button>
                                     </form>
