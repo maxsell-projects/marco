@@ -40,48 +40,47 @@ class UserController extends Controller
         return view('panel.users.index', compact('users'));
     }
 
-    // 2. Visão Hierárquica (Devs e seus Clientes)
+    // 2. Visão Hierárquica (Apenas para Admins)
     public function devs()
     {
-        // Apenas Admins podem ver a visão geral de todos os Devs
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Acesso restrito a administradores.');
         }
 
-        // Busca apenas DEVs e já traz seus clientes junto (Eager Loading)
         $devs = User::where('role', 'dev')
-            ->with(['clients' => function($q) {
-                $q->latest(); // Ordena os clientes do dev
+            ->with(['team' => function($q) { // Usando o nome do relacionamento que definimos no Model
+                $q->latest();
             }])
-            ->withCount('clients') // Conta quantos clientes cada um tem
+            ->withCount('team')
             ->latest()
             ->paginate(10);
 
         return view('panel.users.devs', compact('devs'));
     }
 
-    // 3. Formulário de Criação (NOVO)
+    // 3. Formulário de Criação
     public function create()
     {
         return view('panel.users.create');
     }
 
-    // 4. Salvar Novo Usuário (NOVO)
+    // 4. Salvar Novo Usuário
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'role' => 'sometimes|in:admin,dev,client', // Dev não envia role, Admin sim
+            'email' => 'required|email|unique:users,email',
+            'phone_number' => 'nullable|string|max:20',
+            'role' => 'sometimes|in:admin,dev,client', 
         ]);
 
-        // Lógica de Hierarquia
+        // Lógica de Hierarquia Blindada
         if (Auth::user()->isDev()) {
             // Se quem cria é DEV, o novo user OBRIGATORIAMENTE é Client e filho dele
             $role = 'client';
             $parentId = Auth::id();
         } else {
-            // Se é Admin, ele escolhe a role. Se não escolher, assume client. Parent é null (root)
+            // Se é Admin, ele escolhe a role.
             $role = $request->role ?? 'client';
             $parentId = null; 
         }
@@ -92,15 +91,33 @@ class UserController extends Controller
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'],
             'password' => Hash::make($tempPassword),
             'role' => $role,
             'parent_id' => $parentId,
-            'is_active' => true, // Criado manual já nasce ativo
+            'is_active' => true, 
             'email_verified_at' => now(),
         ]);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Usuário cadastrado com sucesso!')
-            ->with('temp_password', $tempPassword); // Enviamos a senha para mostrar no alerta
+            ->with('temp_password', $tempPassword); 
+    }
+
+    // 5. Exclusão (Segura)
+    public function destroy(User $user)
+    {
+        // Trava: Dev só deleta quem é dele. Admin deleta qualquer um menos ele mesmo.
+        if (Auth::user()->isDev() && $user->parent_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (Auth::id() === $user->id) {
+            return back()->with('error', 'Você não pode excluir sua própria conta.');
+        }
+
+        $user->delete();
+
+        return back()->with('success', 'Usuário removido com sucesso.');
     }
 }

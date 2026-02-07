@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\AuthController; 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\BlogPostController; // <--- NOVO: Import do Blog
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\Admin\ClientAccessController;
 use App\Http\Controllers\Admin\AccessRequestController;
 use App\Http\Controllers\Admin\UserController;
@@ -36,6 +36,7 @@ Route::middleware('guest')->group(function () {
         ->name('login.submit');
 });
 
+// Solicitação de Acesso (Pública)
 Route::controller(RequestAccessController::class)->group(function () {
     Route::get('/solicitar-acesso', 'show')->name('access.request');
     Route::post('/solicitar-acesso', 'submit')->name('access.submit');
@@ -57,7 +58,7 @@ Route::controller(PropertyController::class)->group(function () {
     Route::get('/imoveis/{property:slug}', 'show')->name('properties.show');
 });
 
-// Blog Público (NOVO)
+// Blog Público
 Route::get('/blog', [BlogPostController::class, 'publicIndex'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogPostController::class, 'show'])->name('blog.show');
 
@@ -99,7 +100,11 @@ Route::middleware(['auth'])->group(function () {
         // CRUD Imóveis
         Route::resource('properties', PropertyController::class)->except(['show']);
         
-        // CRUD Blog (NOVO)
+        // --- NOVAS ROTAS: APROVAÇÃO DE IMÓVEIS ---
+        Route::patch('/properties/{property}/approve', [PropertyController::class, 'approve'])->name('properties.approve');
+        Route::patch('/properties/{property}/reject', [PropertyController::class, 'reject'])->name('properties.reject');
+        
+        // CRUD Blog
         Route::resource('blog', BlogPostController::class)->except(['show']);
 
         // Gestão de Acesso (Off-Market)

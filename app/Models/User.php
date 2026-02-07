@@ -21,12 +21,15 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',         // Importante: Adicionado para bater com o Controller
         'password',
         'role',                 // admin, dev, client
-        'parent_id',            // ID do Dev (se for cliente)
-        'is_active',            // true/false
-        'registration_message', // Mensagem de motivação
-        'document_path',        // Caminho do PDF/Imagem
+        'parent_id',            // ID do Pai (Dev ou Admin)
+        'is_active',            // Status da conta
+        'notes',                // Notas internas ou motivação
+        'document_path',        // Caminho do documento (upload)
+        'registration_message', // Mensagem original do form de solicitação
+        'email_verified_at'
     ];
 
     /**
@@ -55,18 +58,19 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | Relacionamentos Hierárquicos (Dev <-> Cliente)
+    | Relacionamentos Hierárquicos (Sistema de Equipe)
     |--------------------------------------------------------------------------
     */
 
-    // Quem é o "Pai" deste usuário? (Ex: O Dev dono deste Cliente)
+    // Quem cadastrou este usuário? (O "Pai" / Líder)
     public function parent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'parent_id');
     }
 
-    // Quem são os "Filhos" deste usuário? (Ex: Clientes deste Dev)
-    public function clients(): HasMany
+    // Quem são os liderados por este usuário? (A "Equipe" / Clientes)
+    // Se for Dev, traz os Clientes. Se for Admin, pode trazer Devs ou Clientes diretos.
+    public function team(): HasMany
     {
         return $this->hasMany(User::class, 'parent_id');
     }
@@ -77,15 +81,16 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    // Imóveis Off-Market que este usuário tem permissão para ver
-    public function accessibleProperties(): BelongsToMany
+    // Imóveis Off-Market que este usuário tem permissão explícita para ver
+    // (Renomeado de accessibleProperties para authorizedProperties para manter padrão)
+    public function authorizedProperties(): BelongsToMany
     {
         return $this->belongsToMany(Property::class, 'property_user_access', 'user_id', 'property_id')
                     ->withPivot('granted_by')
                     ->withTimestamps();
     }
 
-    // Imóveis favoritados pelo usuário
+    // Imóveis que o usuário favoritou
     public function favorites(): BelongsToMany
     {
         return $this->belongsToMany(Property::class, 'favorites', 'user_id', 'property_id')
@@ -94,7 +99,7 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | Helpers de Função (Roles)
+    | Helpers de Permissão & Papéis (Roles)
     |--------------------------------------------------------------------------
     */
 
@@ -111,5 +116,12 @@ class User extends Authenticatable
     public function isClient(): bool
     {
         return $this->role === 'client';
+    }
+
+    // Verifica se um determinado ID pertence à equipe deste usuário
+    // Útil para impedir que um Dev veja clientes de outro Dev
+    public function isTeamMember($userId): bool
+    {
+        return $this->team()->where('id', $userId)->exists();
     }
 }

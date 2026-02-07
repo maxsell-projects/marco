@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Services\PropertyService;
-use App\Http\Requests\StorePropertyRequest; // <--- Importante: Cria este arquivo se não criou!
+use App\Http\Requests\StorePropertyRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,9 +21,11 @@ class PropertyController extends Controller
 
     public function home()
     {
+        // Na Home, mostra APENAS o que está publicado e público
+        // Removido o 'is_featured' obrigatório para não esconder imóveis normais
         $properties = Property::where('status', 'published')
             ->where('visibility', 'public')
-            ->where('is_featured', true) // Opcional: só destaques na home?
+            // ->where('is_featured', true) // Opcional: descomente se quiser apenas destaques
             ->latest()
             ->take(6)
             ->get();
@@ -43,12 +45,35 @@ class PropertyController extends Controller
             });
         }
 
-        // Filtros adicionais (Exemplo)
+        // Filtros adicionais
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
+        
+        if ($request->filled('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+        
+        if ($request->filled('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
 
-        $properties = $query->latest()->paginate(12);
+        if ($request->filled('bedrooms')) {
+            $query->where('bedrooms', '>=', $request->bedrooms);
+        }
+        
+        // Ordenação
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'price_high': $query->orderBy('price', 'desc'); break;
+                case 'price_low': $query->orderBy('price', 'asc'); break;
+                default: $query->latest(); break;
+            }
+        } else {
+            $query->latest();
+        }
+
+        $properties = $query->paginate(12);
 
         return view('properties.index', compact('properties'));
     }
@@ -61,21 +86,24 @@ class PropertyController extends Controller
             })
             ->firstOrFail();
 
-        // Lógica de Permissão (Mantida igual ao seu original)
+        // 1. Público e Publicado -> Acesso Livre
         if ($property->visibility === 'public' && $property->status === 'published') {
             return view('properties.show', compact('property'));
         }
 
+        // 2. Bloqueio para não logados (se não for público)
         if (!Auth::check()) {
             abort(403, 'Acesso restrito. Faça login.');
         }
 
         $user = Auth::user();
 
+        // 3. Admin e Dono (Dev) veem tudo
         if ($user->isAdmin() || $user->id === $property->user_id) {
             return view('properties.show', compact('property'));
         }
 
+        // 4. Cliente com permissão explícita (Off-Market)
         if ($property->authorizedUsers->contains($user->id)) {
             return view('properties.show', compact('property'));
         }
@@ -97,17 +125,39 @@ class PropertyController extends Controller
 
     // --- PAINEL GESTÃO (Admin / Dev) ---
 
-    public function index()
+    public function index(Request $request)
     {
         $query = Property::query();
 
+        // 1. Regra de Visibilidade (Dev vê apenas os seus)
         if (Auth::user()->isDev()) {
             $query->where('user_id', Auth::id());
         }
 
-        $properties = $query->latest()->paginate(15);
+        // 2. Filtro por Status (Abas)
+        $filter = $request->get('filter', 'all');
+        
+        if ($filter === 'pending') {
+            $query->where('status', 'pending');
+        } elseif ($filter === 'published') {
+            $query->where('status', 'published');
+        } elseif ($filter === 'draft') {
+            $query->where('status', 'draft');
+        }
 
-        return view('panel.properties.index', compact('properties'));
+        $properties = $query->with('owner')->latest()->paginate(15);
+
+        // 3. Contadores para as Abas
+        $isDev = Auth::user()->isDev();
+        $userId = Auth::id();
+
+        $counts = [
+            'all' => $isDev ? Property::where('user_id', $userId)->count() : Property::count(),
+            'pending' => $isDev ? Property::where('user_id', $userId)->where('status', 'pending')->count() : Property::where('status', 'pending')->count(),
+            'published' => $isDev ? Property::where('user_id', $userId)->where('status', 'published')->count() : Property::where('status', 'published')->count(),
+        ];
+
+        return view('panel.properties.index', compact('properties', 'counts', 'filter'));
     }
 
     public function create()
@@ -115,17 +165,14 @@ class PropertyController extends Controller
         return view('panel.properties.create');
     }
 
-    // AQUI ESTÁ A CORREÇÃO PRINCIPAL
     public function store(StorePropertyRequest $request) 
     {
-        // 1. Pega os dados validados (incluindo arquivos)
         $data = $request->validated();
 
-        // 2. Chama o Service
+        // O Service já lida com o upload e status inicial (Dev = Pending)
         $this->service->createProperty($data, Auth::user());
 
-        // 3. Feedback
-        $msg = (Auth::user()->isDev() && ($data['status'] ?? '') === 'pending') 
+        $msg = (Auth::user()->isDev() && ($data['status'] ?? '') !== 'draft') 
             ? 'Imóvel enviado para aprovação do Admin!' 
             : 'Imóvel criado com sucesso.';
 
@@ -149,15 +196,19 @@ class PropertyController extends Controller
 
         $data = $request->validated();
 
-        // Regra: Dev editou -> volta para pendente
+        // Regra de Ouro: Se Dev editar algo, volta para aprovação (exceto se for rascunho)
         if (Auth::user()->isDev()) {
-            $data['status'] = 'pending';
+            $data['status'] = ($request->status === 'draft') ? 'draft' : 'pending';
             $data['approved_at'] = null;
         }
 
         $this->service->updateProperty($property, $data);
 
-        return redirect()->route('admin.properties.index')->with('success', 'Imóvel atualizado.');
+        $msg = (Auth::user()->isDev() && $data['status'] === 'pending') 
+            ? 'Alterações enviadas para aprovação.' 
+            : 'Imóvel atualizado com sucesso.';
+
+        return redirect()->route('admin.properties.index')->with('success', $msg);
     }
 
     public function destroy(Property $property)
@@ -166,12 +217,39 @@ class PropertyController extends Controller
             abort(403);
         }
 
-        // Remover Imagens do disco antes de deletar? 
-        // Se configurou 'cascade' no banco e Model Events, pode ser automático.
-        // Por segurança, o Service poderia ter um método deleteProperty para limpar arquivos.
-        
         $property->delete();
 
         return redirect()->route('admin.properties.index')->with('success', 'Imóvel removido.');
+    }
+
+    // --- AÇÕES ADMINISTRATIVAS (Apenas Admin) ---
+
+    public function approve(Property $property)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Ação não autorizada.');
+        }
+
+        $property->update([
+            'status' => 'published',
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'Imóvel aprovado e publicado!');
+    }
+
+    public function reject(Property $property)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Ação não autorizada.');
+        }
+
+        // Rejeitar move para Rascunho para o Dev corrigir
+        $property->update([
+            'status' => 'draft',
+            'approved_at' => null
+        ]);
+
+        return back()->with('success', 'Imóvel rejeitado e movido para Rascunhos.');
     }
 }
