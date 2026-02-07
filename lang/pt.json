@@ -374,5 +374,30 @@
     "chatbot.messages.initial": "Olá. Sou o assistente virtual do <strong>Porthouse Private Office</strong>. <br>Procuro oferecer-lhe um atendimento exclusivo. <br><br>Deseja ver a nossa coleção privada ou agendar uma consultoria?",
     "chatbot.messages.error_comm": "Lamento, ocorreu um erro na comunicação. Por favor, tente novamente.",
     "chatbot.messages.error_conn": "Erro de conexão com o servidor.",
-    "chatbot.powered_by": "Powered by"
+    "chatbot.powered_by": "Powered by", 
+
+    "access.meta.title": "Solicitar Acesso Exclusivo",
+    "access.hero.subtitle": "Private Office",
+    "access.hero.title": "Acesso Exclusivo",
+    "access.hero.description": "O nosso portfólio Private inclui propriedades off-market que exigem total discrição. Solicite o seu acesso para visualizar a nossa coleção completa.",
+    "access.features.off_market": "Imóveis Off-Market",
+    "access.features.privacy": "Privacidade Total",
+    
+    "access.form.heading": "Solicitação de Acesso",
+    "access.form.subheading": "Preencha os seus dados. A nossa equipa analisará o seu perfil e entrará em contacto.",
+    "access.form.name": "Nome Completo",
+    "access.form.name_placeholder": "Ex: João Silva",
+    "access.form.email": "E-mail Profissional",
+    "access.form.email_placeholder": "seu@email.com",
+    "access.form.phone": "Telefone / WhatsApp",
+    "access.form.phone_placeholder": "+351 912 345 678",
+    "access.form.motivation": "O que procura?",
+    "access.form.motivation_placeholder": "Descreva o tipo de imóvel, zona de interesse e orçamento estimado...",
+    "access.form.consent": "Concordo com o processamento dos dados para análise de perfil.",
+    "access.form.terms": "Política de Privacidade",
+    "access.form.submit_btn": "Enviar Solicitação",
+    "access.form.success_message": "Solicitação recebida com sucesso! Em breve receberá um contacto.", 
+
+    "access.type.client": "Investidor Private",
+"access.type.partner": "Parceiro / Dev"
 }

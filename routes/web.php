@@ -17,6 +17,7 @@ use App\Http\Controllers\BlogPostController; // <--- NOVO: Import do Blog
 use App\Http\Controllers\Admin\ClientAccessController;
 use App\Http\Controllers\Admin\AccessRequestController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\RequestAccessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('throttle:5,1')
         ->name('login.submit');
+});
+
+Route::controller(RequestAccessController::class)->group(function () {
+    Route::get('/solicitar-acesso', 'show')->name('access.request');
+    Route::post('/solicitar-acesso', 'submit')->name('access.submit');
 });
 
 // Logout Global

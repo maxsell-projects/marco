@@ -31,7 +31,13 @@
                     <span class="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-brand-primary group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
                 </a>
 
-                {{-- NOVO: BLOG LINK --}}
+                {{-- NOVO LINK: OFF-MARKET / ACESSO --}}
+                <a href="{{ route('access.request') }}" class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold hover:text-brand-primary transition-colors relative group flex items-center gap-1">
+                    <svg class="w-3 h-3 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    PRIVATE
+                    <span class="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-brand-gold group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
+                </a>
+
                 <a href="{{ route('blog.index') }}" class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-text hover:text-brand-primary transition-colors relative group">
                     JOURNAL
                     <span class="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-brand-primary group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
@@ -126,15 +132,21 @@
                         <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">02.</span>
                         {{ __('header.menu.collection') }}
                     </a>
+                    
+                    {{-- NOVO LINK MOBILE --}}
+                    <a href="{{ route('access.request') }}" @click="mobileMenuOpen = false" class="text-4xl font-serif text-brand-gold hover:text-brand-primary transition-colors duration-500 group flex items-center justify-center gap-3">
+                         <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top">03.</span>
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        PRIVATE
+                    </a>
 
-                    {{-- NOVO: BLOG MOBILE --}}
                     <a href="{{ route('blog.index') }}" @click="mobileMenuOpen = false" class="text-4xl font-serif text-brand-secondary hover:text-brand-primary transition-colors duration-500 group">
-                        <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">03.</span>
+                        <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">04.</span>
                         JOURNAL
                     </a>
 
                     <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="text-4xl font-serif text-brand-secondary hover:text-brand-primary transition-colors duration-500 group">
-                        <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">04.</span>
+                        <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">05.</span>
                         {{ __('header.menu.about') }}
                     </a>
                     
