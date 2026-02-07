@@ -96,7 +96,7 @@
                                         <p class="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                             {{ $property->city ?? 'Sem Localização' }}
-                                        </span>
+                                        </p>
                                         <div class="flex gap-2 mt-2">
                                             <span class="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">
                                                 {{ $property->type }}
@@ -171,6 +171,15 @@
                                         </div>
                                     @endif
 
+                                    {{-- NOVO: BOTÃO DE GERIR ACESSO (Cadeado) --}}
+                                    @if($property->visibility !== 'public')
+                                        <a href="{{ route('admin.properties.access', $property->id) }}" class="p-2 text-brand-gold hover:bg-brand-gold/10 rounded transition-colors" title="Gerir Acessos">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
+                                        </a>
+                                    @endif
+
                                     {{-- Botões Padrão --}}
                                     <a href="{{ route('admin.properties.edit', $property->id) }}" class="p-2 text-gray-400 hover:text-brand-dark hover:bg-gray-100 rounded transition-colors" title="Editar">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -182,7 +191,7 @@
                                         </a>
                                     @endif
 
-                                    {{-- Delete (Somente Admin ou Dono se for Draft) --}}
+                                    {{-- Delete --}}
                                     <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja apagar este imóvel permanentemente?');">
                                         @csrf
                                         @method('DELETE')
@@ -199,9 +208,6 @@
                                 <div class="flex flex-col items-center justify-center">
                                     <svg class="w-12 h-12 text-gray-200 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                                     <p class="text-sm font-medium">Nenhum imóvel encontrado nesta categoria.</p>
-                                    @if($filter === 'pending')
-                                        <p class="text-xs mt-1 text-gray-400">Não há imóveis aguardando aprovação no momento.</p>
-                                    @endif
                                 </div>
                             </td>
                         </tr>

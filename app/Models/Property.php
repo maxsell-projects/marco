@@ -13,7 +13,7 @@ class Property extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'slug', // <--- ADICIONADO
+        'slug',
         'description',
         'price',
         'area',
@@ -24,9 +24,9 @@ class Property extends Model
         'bedrooms',
         'bathrooms',
         'garage',
-        'features', // <--- ADICIONADO
+        'features',
         'status',
-        'visibility',
+        'visibility', // public, private, off-market
         'approved_at'
     ];
 
@@ -59,26 +59,29 @@ class Property extends Model
         return $this->belongsToMany(User::class, 'favorites', 'property_id', 'user_id');
     }
 
-    // --- SCOPES ---
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes de Segurança e Visibilidade
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeVisibleTo(Builder $query, ?User $user): Builder
     {
-        // 1. Admin vê tudo
+        // 1. Admin: Omnipresente (vê absolutamente tudo)
         if ($user && $user->isAdmin()) {
             return $query;
         }
 
         return $query->where(function ($q) use ($user) {
-            // Regra A: Imóveis Públicos e Publicados (Todo mundo vê)
+            // Regra 1: O que é público e está publicado, todos vêem
             $q->where('visibility', 'public')
               ->where('status', 'published');
 
-            // Regra B: Se estiver logado...
             if ($user) {
-                // ...vê os seus próprios imóveis (Dev/Owner)
+                // Regra 2: O dono do imóvel (Dev que cadastrou) sempre vê o seu
                 $q->orWhere('user_id', $user->id);
 
-                // ...vê imóveis Off-Market/Privados onde tem permissão explícita
+                // Regra 3: Acesso granular via Pivot (O Admin deu acesso ao Dev, ou o Dev ao Cliente)
                 $q->orWhereHas('authorizedUsers', function ($subQ) use ($user) {
                     $subQ->where('users.id', $user->id);
                 });

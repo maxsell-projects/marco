@@ -4,93 +4,69 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Property;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
-class AccessRequestController extends Controller
+class ClientAccessController extends Controller
 {
     /**
-     * Lista todas as solicitações pendentes.
-     * Apenas Admin tem acesso.
+     * Mostra a tela de gestão de acesso.
+     * Sincronizado com a variável $myClients da View.
      */
-    public function index()
+    public function manage(Property $property)
     {
-        // TRAVA DE SEGURANÇA: Apenas Admin acessa
-        if (!Auth::user()->isAdmin()) {
-            abort(403, 'Acesso restrito a administradores.');
-        }
+        $user = Auth::user();
 
-        // Busca usuários inativos (pendentes) que NÃO sejam admins
-        $requests = User::where('is_active', false)
-            ->where('role', '!=', 'admin')
-            ->latest()
-            ->paginate(10);
+        // Eager Loading para evitar erro N+1 na verificação de acesso da View
+        $property->load('authorizedUsers');
 
-        return view('panel.requests.index', compact('requests'));
-    }
-
-    /**
-     * Mostra detalhes da solicitação (doc + mensagem).
-     */
-    public function show(User $user)
-    {
-        if (!Auth::user()->isAdmin()) {
+        // RBAC: Admin vê todos (Devs/Clients). Dev vê apenas sua equipe.
+        if ($user->isAdmin()) {
+            $myClients = User::whereIn('role', ['dev', 'client'])->get();
+        } elseif ($user->isDev()) {
+            $myClients = $user->team; 
+        } else {
             abort(403);
         }
 
-        return view('panel.requests.show', compact('user'));
+        return view('panel.properties.access', compact('property', 'myClients'));
     }
 
     /**
-     * Aprova o usuário, gera senha e ativa.
+     * Liga/Desliga o acesso.
+     * Sincronizado com o input 'client_id' do formulário.
      */
-    public function approve(User $user)
+    public function toggle(Request $request, Property $property)
     {
-        if (!Auth::user()->isAdmin()) {
-            abort(403);
+        $adminOrDev = Auth::user();
+        
+        // Buscamos pelo client_id enviado pela sua View
+        $targetUser = User::findOrFail($request->client_id);
+
+        // Validação de Segurança (RBAC)
+        if ($adminOrDev->isDev()) {
+            // 1. Um Dev só gere quem é da equipe dele
+            if ($targetUser->parent_id !== $adminOrDev->id) {
+                return back()->with('error', 'Acesso negado: Este cliente não pertence à sua carteira.');
+            }
+
+            // 2. Um Dev só compartilha o que ele tem acesso ou o que ele cadastrou
+            $hasAccess = $adminOrDev->authorizedProperties()->where('property_id', $property->id)->exists();
+            $isOwner = ($property->user_id === $adminOrDev->id);
+
+            if (!$hasAccess && !$isOwner) {
+                return back()->with('error', 'Você não tem permissão para partilhar este imóvel.');
+            }
         }
 
-        // 1. Gerar senha provisória
-        $tempPassword = Str::random(10); // Ex: aB3dE9fG2h
-
-        // 2. Ativar usuário
-        $user->update([
-            'is_active' => true,
-            'password' => Hash::make($tempPassword),
-            'email_verified_at' => now(),
+        // Toggle na pivot com registro de quem deu o acesso (granted_by)
+        $property->authorizedUsers()->toggle($targetUser->id, [
+            'granted_by' => $adminOrDev->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        // 3. (Futuro) Disparar E-mail de Boas-vindas
-        // Mail::to($user)->send(new AccountApproved($tempPassword));
-
-        // 4. Retornar com a senha para o Admin ver na tela
-        return redirect()->route('admin.requests.index')
-            ->with('success', 'Usuário aprovado com sucesso!')
-            ->with('temp_password', $tempPassword) // Enviamos a senha para a view (via session)
-            ->with('approved_user', $user->name);
-    }
-
-    /**
-     * Rejeita e exclui os dados.
-     */
-    public function reject(User $user)
-    {
-        if (!Auth::user()->isAdmin()) {
-            abort(403);
-        }
-
-        // Excluir documento físico se existir
-        if ($user->document_path) {
-            Storage::disk('public')->delete($user->document_path);
-        }
-
-        // Exclui o registro do banco
-        $user->delete();
-
-        return redirect()->route('admin.requests.index')
-            ->with('success', 'Solicitação rejeitada e dados removidos.');
+        return back()->with('success', 'Acesso atualizado com sucesso!');
     }
 }

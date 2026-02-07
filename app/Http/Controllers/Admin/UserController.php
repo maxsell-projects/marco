@@ -4,163 +4,112 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\UserService;
+use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
     {
-        $query = User::query();
+        $this->userService = $userService;
+    }
 
-        if (Auth::user()->isDev()) {
-            $query->where('parent_id', Auth::id());
-        }
-
-        if ($request->filled('role')) {
-            $query->where('role', $request->role);
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $users = $query->latest()->paginate(15)->withQueryString();
-
+    public function index(Request $request): View
+    {
+        $users = $this->userService->listUsers($request->all(), Auth::user());
+        
         return view('panel.users.index', compact('users'));
     }
 
-    public function devs()
+    /**
+     * Exibe a listagem de equipe (hierarquia).
+     * Corrigido para garantir que o relacionamento 'team' esteja sempre presente.
+     */
+    public function devs(): View
     {
-        // CORREÇÃO: Permitir ADMIN e DEV
-        if (!Auth::user()->isAdmin() && !Auth::user()->isDev()) {
-            abort(403, 'Acesso restrito.');
+        $currentUser = Auth::user();
+
+        if (!$currentUser->isAdmin() && !$currentUser->isDev()) {
+            abort(403);
         }
 
-        // Se for Admin, vê todos os Devs. Se for Dev, vê apenas a si mesmo ou sua equipe (dependendo da regra de negócio, aqui mantive lista de Devs geral para Admin, ou ajustado para o contexto)
-        // Se a intenção é "Minha Equipe" (clientes do Dev), o método index já cobre.
-        // Se a intenção é ver "Outros Devs", mantemos restrito a Admin. 
-        // ASSUMINDO QUE "Minha Equipe" refere-se à visão hierárquica:
-        
-        if (Auth::user()->isDev()) {
-             // Se for Dev acessando /equipe, redireciona para seus clientes ou mostra apenas seus dados
-             // Ajuste conforme necessidade exata. Por hora, vou liberar visualização mas filtrar se não for admin.
-             $devs = User::where('id', Auth::id())->withCount('team')->paginate(10);
+        // Iniciamos a query com Eager Loading da equipe e o contador
+        // Isso garante que $dev->team nunca seja null na View
+        $query = User::query()
+            ->with(['team' => fn($q) => $q->latest()])
+            ->withCount('team');
+
+        if ($currentUser->isDev()) {
+            // Se for Dev, foca apenas no registro dele (que contém sua equipe)
+            $query->where('id', $currentUser->id);
         } else {
-             $devs = User::where('role', 'dev')
-                ->with(['team' => function($q) {
-                    $q->latest();
-                }])
-                ->withCount('team')
-                ->latest()
-                ->paginate(10);
+            // Se for Admin, lista todos os que possuem role 'dev'
+            $query->where('role', 'dev')->latest();
         }
+
+        $devs = $query->paginate(10);
 
         return view('panel.users.devs', compact('devs'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('panel.users.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'phone_number' => 'nullable|string|max:20',
-            'role' => 'sometimes|in:admin,dev,client', 
-        ]);
-
-        if (Auth::user()->isDev()) {
-            $role = 'client';
-            $parentId = Auth::id();
-        } else {
-            $role = $request->role ?? 'client';
-            $parentId = null; 
-        }
-
-        $tempPassword = Str::random(8); 
-
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'],
-            'password' => Hash::make($tempPassword),
-            'role' => $role,
-            'parent_id' => $parentId,
-            'is_active' => true, 
-            'email_verified_at' => now(),
-        ]);
+        $result = $this->userService->createUser($request->validated(), Auth::user());
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Usuário cadastrado com sucesso!')
-            ->with('temp_password', $tempPassword); 
+            ->with('temp_password', $result['temp_password']);
     }
 
-    // --- NOVOS MÉTODOS ADICIONADOS ---
-
-    public function edit(User $user)
+    public function edit(User $user): View
     {
-        // Trava de Segurança
-        if (Auth::user()->isDev() && $user->parent_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->checkAuthorization($user);
 
         return view('panel.users.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        // Trava de Segurança
-        if (Auth::user()->isDev() && $user->parent_id !== Auth::id()) {
-            abort(403);
-        }
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'phone_number' => 'nullable|string|max:20',
-            'role' => 'sometimes|in:admin,dev,client',
-        ]);
-
-        // Proteção para não mudar role se for Dev editando
-        if (Auth::user()->isDev()) {
-            $role = $user->role; // Mantém a role original
-        } else {
-            $role = $request->role ?? $user->role;
-        }
-
-        $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone_number' => $validated['phone_number'],
-            'role' => $role,
-        ]);
+        $this->checkAuthorization($user);
+        $this->userService->updateUser($user, $request->validated(), Auth::user());
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Usuário atualizado com sucesso!');
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
-        if (Auth::user()->isDev() && $user->parent_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->checkAuthorization($user);
 
         if (Auth::id() === $user->id) {
             return back()->with('error', 'Você não pode excluir sua própria conta.');
         }
 
-        $user->delete();
+        $this->userService->deleteUser($user);
 
         return back()->with('success', 'Usuário removido com sucesso.');
+    }
+
+    /**
+     * Centraliza a lógica de autorização para garantir que 
+     * Devs operem apenas sobre seus liderados.
+     */
+    private function checkAuthorization(User $user): void
+    {
+        if (Auth::user()->isDev() && $user->parent_id !== Auth::id()) {
+            abort(403);
+        }
     }
 }
