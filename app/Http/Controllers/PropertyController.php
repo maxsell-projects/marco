@@ -16,11 +16,13 @@ class PropertyController extends Controller
         $this->service = $service;
     }
 
-    // --- ÁREA PÚBLICA ---
+    // --- ÁREA PÚBLICA (Site) ---
 
     public function home()
     {
-        $properties = Property::visibleTo(Auth::user())
+        // Na Home, mostra APENAS o que está 100% público e aprovado
+        $properties = Property::where('status', 'published')
+            ->where('visibility', 'public')
             ->latest()
             ->take(6)
             ->get();
@@ -30,11 +32,15 @@ class PropertyController extends Controller
 
     public function publicIndex(Request $request)
     {
-        $query = Property::visibleTo(Auth::user());
+        // Busca apenas PUBLICADOS e PÚBLICOS
+        $query = Property::where('status', 'published')
+            ->where('visibility', 'public');
 
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%')
+            $query->where(function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
                   ->orWhere('city', 'like', '%' . $request->search . '%');
+            });
         }
 
         $properties = $query->latest()->paginate(12);
@@ -44,46 +50,72 @@ class PropertyController extends Controller
 
     public function show($id) 
     {
-        $property = Property::visibleTo(Auth::user())
-            ->with(['images', 'owner'])
+        // Tenta achar o imóvel (por ID ou Slug)
+        $property = Property::with(['images', 'owner'])
             ->where(function($q) use ($id) {
                 $q->where('id', $id)->orWhere('slug', $id);
             })
             ->firstOrFail();
 
-        return view('properties.show', compact('property'));
+        // BLINDAGEM DE ACESSO
+        // 1. Se for público e publicado -> Libera geral
+        if ($property->visibility === 'public' && $property->status === 'published') {
+            return view('properties.show', compact('property'));
+        }
+
+        // 2. Se não for público, usuário tem que estar logado
+        if (!Auth::check()) {
+            abort(403, 'Acesso restrito. Faça login.');
+        }
+
+        $user = Auth::user();
+
+        // 3. Admin e Dono veem tudo (mesmo rascunho/pendente)
+        if ($user->isAdmin() || $user->id === $property->user_id) {
+            return view('properties.show', compact('property'));
+        }
+
+        // 4. Se for Off-Market/Privado, verifica se tem permissão explícita
+        if ($property->authorizedUsers->contains($user->id)) {
+            return view('properties.show', compact('property'));
+        }
+
+        // Se chegou aqui, não tem acesso
+        abort(403, 'Você não tem permissão para ver este imóvel.');
     }
 
-    // --- ÁREA DO CLIENTE ---
+    // --- ÁREA DO CLIENTE (Minha Conta) ---
 
     public function myAccess()
     {
         $user = Auth::user();
 
-        // Lista apenas imóveis onde o cliente tem permissão explícita na tabela pivô
+        // Lista imóveis onde o cliente tem permissão EXPLÍCITA (Off-Market)
         $properties = Property::whereHas('authorizedUsers', function ($q) use ($user) {
             $q->where('users.id', $user->id);
         })->latest()->paginate(12);
 
-        // Reutilizamos a view pública de listagem, ou crie uma 'panel.client.exclusive' se quiser algo diferente
         return view('properties.index', compact('properties'));
     }
 
-    // --- ÁREA DE GESTÃO (ADMIN / DEV) ---
+    // --- ÁREA DE GESTÃO (Painel Admin / Dev) ---
 
     public function index()
     {
-        $properties = Property::visibleTo(Auth::user())
-            ->latest()
-            ->paginate(15);
+        $query = Property::query();
 
-        // CORREÇÃO: Mudamos de admin.properties.index para panel.properties.index
+        // REGRA DE OURO: Dev só vê os SEUS imóveis. Admin vê todos.
+        if (Auth::user()->isDev()) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $properties = $query->latest()->paginate(15);
+
         return view('panel.properties.index', compact('properties'));
     }
 
     public function create()
     {
-        // CORREÇÃO: Mudamos de admin.properties.create para panel.properties.create
         return view('panel.properties.create');
     }
 
@@ -105,26 +137,47 @@ class PropertyController extends Controller
             'status' => 'sometimes|string'
         ]);
 
-        $this->service->createProperty($validated, Auth::user());
+        $data = $validated;
+        
+        // FORÇA O DONO A SER QUEM ESTÁ LOGADO
+        $data['user_id'] = Auth::id();
+
+        // TRAVA DE SEGURANÇA: Status
+        if (Auth::user()->isDev()) {
+            // Se for Dev, só pode ser 'draft' ou 'pending'. NUNCA 'published'.
+            $data['status'] = ($request->status === 'draft') ? 'draft' : 'pending';
+        } else {
+            // Admin manda o que quiser (default published)
+            $data['status'] = $request->status ?? 'published';
+        }
+
+        // Passa os dados para o Service
+        // ATENÇÃO: Verifique se seu PropertyService aceita (array $data, User $user) ou apenas ($data)
+        // Vou assumir que ele aceita array direto ou você ajusta lá.
+        // Se o createProperty pede User como 2º parametro, mantenha Auth::user()
+        $this->service->createProperty($data, Auth::user());
+
+        $msg = (Auth::user()->isDev() && $data['status'] === 'pending') 
+            ? 'Imóvel enviado para aprovação do Admin!' 
+            : 'Imóvel criado com sucesso.';
 
         return redirect()->route('admin.properties.index')
-            ->with('success', 'Imóvel criado com sucesso.');
+            ->with('success', $msg);
     }
 
     public function edit(Property $property)
     {
-        if (Auth::user()->cannot('update', $property) && !Auth::user()->isAdmin()) {
-             if ($property->user_id !== Auth::id()) {
-                abort(403);
-             }
+        // Segurança: Só dono ou Admin mexe
+        if (Auth::user()->id !== $property->user_id && !Auth::user()->isAdmin()) {
+            abort(403);
         }
 
-        // CORREÇÃO: Mudamos de admin.properties.edit para panel.properties.edit
         return view('panel.properties.edit', compact('property'));
     }
 
     public function update(Request $request, Property $property)
     {
+        // Segurança: Só dono ou Admin mexe
         if (Auth::user()->id !== $property->user_id && !Auth::user()->isAdmin()) {
             abort(403);
         }
@@ -145,7 +198,16 @@ class PropertyController extends Controller
             'status' => 'sometimes|string'
         ]);
 
-        $this->service->updateProperty($property, $validated);
+        $data = $validated;
+
+        // TRAVA DE SEGURANÇA: Se Dev editar algo publicado, volta para aprovação?
+        // Política Comum: Sim. Mexeu = Pendente.
+        if (Auth::user()->isDev()) {
+            $data['status'] = ($request->status === 'draft') ? 'draft' : 'pending';
+        }
+        // Se for Admin, ele mantém o status que veio no request ou o que já estava
+
+        $this->service->updateProperty($property, $data);
 
         return redirect()->route('admin.properties.index')
             ->with('success', 'Imóvel atualizado.');

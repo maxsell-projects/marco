@@ -13,13 +13,14 @@ use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\AuthController; 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\BlogPostController; // <--- NOVO: Import do Blog
 use App\Http\Controllers\Admin\ClientAccessController;
 use App\Http\Controllers\Admin\AccessRequestController;
-use App\Http\Controllers\Admin\UserController; // <--- NOVO: Import do UserController
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - José Carvalho Real Estate (Versão Completa)
+| Web Routes - José Carvalho Real Estate (Versão Definitiva)
 |--------------------------------------------------------------------------
 */
 
@@ -49,6 +50,10 @@ Route::controller(PropertyController::class)->group(function () {
     Route::get('/imoveis', 'publicIndex')->name('portfolio'); 
     Route::get('/imoveis/{property:slug}', 'show')->name('properties.show');
 });
+
+// Blog Público (NOVO)
+Route::get('/blog', [BlogPostController::class, 'publicIndex'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogPostController::class, 'show'])->name('blog.show');
 
 Route::view('/contactos', 'contact')->name('contact');
 Route::post('/contactos/enviar', [ContactController::class, 'send'])->name('contact.send');
@@ -88,9 +93,12 @@ Route::middleware(['auth'])->group(function () {
         // CRUD Imóveis
         Route::resource('properties', PropertyController::class)->except(['show']);
         
-        // Off-Market
-        Route::post('/acesso-cliente', [ClientAccessController::class, 'store'])->name('client-access.store');
-        Route::delete('/acesso-cliente', [ClientAccessController::class, 'destroy'])->name('client-access.destroy');
+        // CRUD Blog (NOVO)
+        Route::resource('blog', BlogPostController::class)->except(['show']);
+
+        // Gestão de Acesso (Off-Market)
+        Route::get('/imoveis/{property}/acesso', [ClientAccessController::class, 'manage'])->name('properties.access');
+        Route::post('/imoveis/{property}/acesso', [ClientAccessController::class, 'toggle'])->name('properties.access.toggle');
 
         // Solicitações de Acesso
         Route::get('/solicitacoes', [AccessRequestController::class, 'index'])->name('requests.index');
@@ -98,10 +106,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/solicitacoes/{user}/aprovar', [AccessRequestController::class, 'approve'])->name('requests.approve');
         Route::delete('/solicitacoes/{user}/rejeitar', [AccessRequestController::class, 'reject'])->name('requests.reject');
 
-        // --- NOVO: Gestão de Usuários & Equipe ---
-        // Lista geral de usuários com filtros
+        // Gestão de Usuários
         Route::get('/usuarios', [UserController::class, 'index'])->name('users.index');
-        // Visão hierárquica (Devs e seus Clientes)
+        Route::get('/usuarios/novo', [UserController::class, 'create'])->name('users.create');
+        Route::post('/usuarios', [UserController::class, 'store'])->name('users.store');
+        
+        // Visão hierárquica
         Route::get('/equipe', [UserController::class, 'devs'])->name('users.devs');
     });
 

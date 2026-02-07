@@ -28,7 +28,7 @@
                 <tr class="hover:bg-gray-50 transition-colors group">
                     <td class="p-6">
                         <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                            <div class="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0 relative">
                                 @if($property->images->count() > 0)
                                     <img src="{{ asset('storage/' . $property->images->first()->path) }}" class="w-full h-full object-cover">
                                 @else
@@ -57,9 +57,15 @@
                                 'pending' => 'bg-yellow-50 text-yellow-700 border-yellow-200',
                             ];
                             $class = $statusClasses[$property->status] ?? 'bg-gray-100 text-gray-600';
+                            
+                            $labels = [
+                                'published' => 'Publicado',
+                                'draft' => 'Rascunho',
+                                'pending' => 'Pendente',
+                            ];
                         @endphp
                         <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border {{ $class }}">
-                            {{ $property->status }}
+                            {{ $labels[$property->status] ?? $property->status }}
                         </span>
                     </td>
                     <td class="p-6">
@@ -82,9 +88,15 @@
                     </td>
                     <td class="p-6 text-right">
                         <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                            
+                            <a href="{{ route('admin.properties.access', $property->id) }}" class="text-gray-400 hover:text-purple-600 transition-colors" title="Gerenciar Acessos (Off-Market)">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                            </a>
+
                             <a href="{{ route('admin.properties.edit', $property->id) }}" class="text-gray-400 hover:text-brand-gold transition-colors" title="Editar">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </a>
+                            
                             <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este imóvel?');">
                                 @csrf
                                 @method('DELETE')

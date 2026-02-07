@@ -30,6 +30,12 @@
                     {{ __('header.menu.collection') }}
                     <span class="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-brand-primary group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
                 </a>
+
+                {{-- NOVO: BLOG LINK --}}
+                <a href="{{ route('blog.index') }}" class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-text hover:text-brand-primary transition-colors relative group">
+                    JOURNAL
+                    <span class="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-brand-primary group-hover:w-full group-hover:left-0 transition-all duration-300"></span>
+                </a>
                 
                 {{-- Dropdown Tools --}}
                 <div class="relative group" @mouseenter="toolsOpen = true" @mouseleave="toolsOpen = false">
@@ -89,7 +95,7 @@
         </div>
     </div>
 
-    {{-- 4. MOBILE MENU OVERLAY (TELEPORTADO & CORRIGIDO) --}}
+    {{-- 4. MOBILE MENU OVERLAY --}}
     <template x-teleport="body">
         <div x-show="mobileMenuOpen" 
              x-cloak
@@ -100,7 +106,7 @@
              x-transition:leave="transition ease-in duration-500"
              x-transition:leave-start="opacity-100 translate-y-0"
              x-transition:leave-end="opacity-0 translate-y-full"
-             class="fixed inset-0 bg-white z-40 w-full h-full overflow-y-auto"> {{-- Adicionado overflow-y-auto --}}
+             class="fixed inset-0 bg-white z-40 w-full h-full overflow-y-auto"> 
             
             {{-- Background Lines --}}
             <div class="fixed inset-0 flex justify-between px-10 opacity-5 pointer-events-none z-0">
@@ -109,7 +115,6 @@
             </div>
 
             {{-- Container do Menu --}}
-            {{-- Adicionado pt-32 para dar espaço ao Header fixo e pb-12 para scroll --}}
             <div class="relative z-10 min-h-screen flex flex-col items-center pt-32 pb-12 px-6 text-center">
                 
                 <nav class="flex flex-col space-y-6 w-full max-w-md">
@@ -121,18 +126,24 @@
                         <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">02.</span>
                         {{ __('header.menu.collection') }}
                     </a>
-                    <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="text-4xl font-serif text-brand-secondary hover:text-brand-primary transition-colors duration-500 group">
+
+                    {{-- NOVO: BLOG MOBILE --}}
+                    <a href="{{ route('blog.index') }}" @click="mobileMenuOpen = false" class="text-4xl font-serif text-brand-secondary hover:text-brand-primary transition-colors duration-500 group">
                         <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">03.</span>
+                        JOURNAL
+                    </a>
+
+                    <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="text-4xl font-serif text-brand-secondary hover:text-brand-primary transition-colors duration-500 group">
+                        <span class="text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg align-top mr-2">04.</span>
                         {{ __('header.menu.about') }}
                     </a>
                     
-                    {{-- Ferramentas (Completo) --}}
+                    {{-- Ferramentas --}}
                     <div class="py-8 border-t border-brand-secondary/10 border-b border-brand-secondary/10 w-full mt-6">
                         <p class="text-[10px] uppercase tracking-[0.3em] text-brand-primary mb-6">{{ __('header.menu.tools_label') }}</p>
                         <div class="flex flex-col gap-4">
                             <a href="{{ route('tools.credit') }}" class="text-sm font-light text-brand-text hover:text-brand-primary tracking-widest uppercase">{{ __('header.menu.credit_simulator') }}</a>
                             <a href="{{ route('tools.imt') }}" class="text-sm font-light text-brand-text hover:text-brand-primary tracking-widest uppercase">{{ __('header.menu.imt_simulator') }}</a>
-                            {{-- ADICIONADO: Link que faltava --}}
                             <a href="{{ route('tools.gains') }}" class="text-sm font-light text-brand-text hover:text-brand-primary tracking-widest uppercase">{{ __('header.menu.gains_simulator') }}</a>
                         </div>
                     </div>
